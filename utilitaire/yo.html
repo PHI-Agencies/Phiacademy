@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PHI ACADEMY | Trading & Mentoring</title>
+
+    <meta
+        name="description"
+        content="PHI Academy — Formations, guides et accompagnement en trading."
+    >
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- FontAwesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <script>
+
+        tailwind.config = {
+
+            theme: {
+
+                extend: {
+
+                    colors: {
+
+                        phi: {
+
+                            navy: '#0B132B',
+
+                            navyHover: '#070C1A',
+
+                            gold: '#D4AF37',
+
+                            goldLight: '#FBF7EE',
+
+                            goldSoft: '#F7F1DF',
+
+                            border: '#E2E8F0',
+
+                            cardBg: '#FFFFFF',
+
+                            softGray: '#F8FAFC'
+
+                        }
+
+                    },
+
+                    fontFamily: {
+
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+
+                    },
+
+                    boxShadow: {
+
+                        phi: '0 15px 40px rgba(11, 19, 43, 0.10)',
+
+                        gold: '0 12px 30px rgba(212, 175, 55, 0.18)'
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    </script>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            background:
+
+                radial-gradient(
+                    circle at 10% 5%,
+                    rgba(212, 175, 55, 0.08),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at 95% 90%,
+                    rgba(11, 19, 43, 0.06),
+                    transparent 32%
+                ),
+
+                #ffffff;
+
+            color: #0F172A;
+
+            font-family: 'Plus Jakarta Sans', sans-serif;
+
+            -webkit-font-smoothing: antialiased;
+
+            text-rendering: optimizeLegibility;
+
+        }
+
+
+        /* =========================================
+           CONTENEUR PRINCIPAL
+        ========================================== */
+
+        .phi-container {
+
+            position: relative;
+
+        }
+
+
+        /* =========================================
+           LOGO
+        ========================================== */
+
+        .logo-card {
+
+            position: relative;
+
+            background: rgba(255, 255, 255, 0.96);
+
+            border: 1px solid rgba(226, 232, 240, 0.95);
+
+            box-shadow:
+                0 8px 30px rgba(11, 19, 43, 0.06);
+
+            transition:
+                transform 0.35s ease,
+                box-shadow 0.35s ease,
+                border-color 0.35s ease;
+
+        }
+
+
+        .logo-card:hover {
+
+            transform: translateY(-2px);
+
+            border-color: rgba(212, 175, 55, 0.55);
+
+            box-shadow:
+                0 14px 35px rgba(11, 19, 43, 0.09);
+
+        }
+
+
+        .logo-glow {
+
+            position: absolute;
+
+            inset: -20px;
+
+            background:
+
+                radial-gradient(
+                    circle,
+                    rgba(212, 175, 55, 0.10),
+                    transparent 65%
+                );
+
+            filter: blur(12px);
+
+            pointer-events: none;
+
+            z-index: -1;
+
+        }
+
+
+        /* =========================================
+           BOUTONS PRINCIPAUX
+        ========================================== */
+
+        .phi-button {
+
+            position: relative;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #0B132B 0%,
+                    #111B38 100%
+                );
+
+            border: 1px solid rgba(212, 175, 55, 0.18);
+
+            box-shadow:
+                0 7px 18px rgba(11, 19, 43, 0.10);
+
+            transition:
+                transform 0.30s ease,
+                box-shadow 0.30s ease,
+                border-color 0.30s ease;
+
+            overflow: hidden;
+
+        }
+
+
+        .phi-button::before {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            border-radius: inherit;
+
+            background:
+
+                linear-gradient(
+                    110deg,
+                    transparent 25%,
+                    rgba(255,255,255,0.06) 50%,
+                    transparent 75%
+                );
+
+            transform: translateX(-100%);
+
+            transition: transform 0.7s ease;
+
+            pointer-events: none;
+
+        }
+
+
+        .phi-button:hover::before {
+
+            transform: translateX(100%);
+
+        }
+
+
+        .phi-button:hover {
+
+            transform: translateY(-3px);
+
+            border-color: rgba(212, 175, 55, 0.75);
+
+            box-shadow:
+
+                0 14px 30px rgba(11, 19, 43, 0.17),
+
+                0 8px 25px rgba(212, 175, 55, 0.08);
+
+        }
+
+
+        .phi-button:active {
+
+            transform: translateY(-1px);
+
+        }
+
+
+        /* =========================================
+           ICÔNES
+        ========================================== */
+
+        .icon-box {
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,0.12),
+                    rgba(255,255,255,0.04)
+                );
+
+            border: 1px solid rgba(212, 175, 55, 0.32);
+
+            transition:
+                background 0.3s ease,
+                color 0.3s ease,
+                transform 0.3s ease;
+
+        }
+
+
+        .phi-button:hover .icon-box {
+
+            background: #D4AF37;
+
+            color: #0B132B;
+
+            transform: scale(1.05);
+
+        }
+
+
+        /* =========================================
+           BADGES
+        ========================================== */
+
+        .gold-badge {
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #E2C45A,
+                    #D4AF37
+                );
+
+            color: #0B132B;
+
+            box-shadow:
+                0 4px 12px rgba(212, 175, 55, 0.20);
+
+        }
+
+
+        /* =========================================
+           MARQUEE
+        ========================================== */
+
+        .marquee-wrapper {
+
+            overflow: hidden;
+
+            position: relative;
+
+            border-radius: 20px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #F8FAFC,
+                    #F4F6F9
+                );
+
+            border: 1px solid #E2E8F0;
+
+        }
+
+
+        .marquee-wrapper::before,
+        .marquee-wrapper::after {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+
+            bottom: 0;
+
+            width: 28px;
+
+            z-index: 5;
+
+            pointer-events: none;
+
+        }
+
+
+        .marquee-wrapper::before {
+
+            left: 0;
+
+            background:
+
+                linear-gradient(
+                    to right,
+                    #F7F9FB,
+                    transparent
+                );
+
+        }
+
+
+        .marquee-wrapper::after {
+
+            right: 0;
+
+            background:
+
+                linear-gradient(
+                    to left,
+                    #F7F9FB,
+                    transparent
+                );
+
+        }
+
+
+        .marquee-track {
+
+            display: flex;
+
+            width: max-content;
+
+            animation:
+                phi-scroll 28s linear infinite;
+
+        }
+
+
+        .marquee-track:hover {
+
+            animation-play-state: paused;
+
+        }
+
+
+        @keyframes phi-scroll {
+
+            from {
+
+                transform: translateX(0);
+
+            }
+
+            to {
+
+                transform: translateX(-50%);
+
+            }
+
+        }
+
+
+        /* =========================================
+           CARTES GUIDES
+        ========================================== */
+
+        .guide-card {
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+
+            text-decoration: none;
+
+        }
+
+
+        .guide-card:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 8px 20px rgba(11, 19, 43, 0.10);
+
+        }
+
+
+        /* =========================================
+           SECTION TITRES
+        ========================================== */
+
+        .section-title {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+        }
+
+
+        .section-title::before,
+        .section-title::after {
+
+            content: "";
+
+            width: 24px;
+
+            height: 1px;
+
+            background:
+
+                linear-gradient(
+                    to right,
+                    transparent,
+                    #D4AF37
+                );
+
+        }
+
+
+        .section-title::after {
+
+            background:
+
+                linear-gradient(
+                    to left,
+                    transparent,
+                    #D4AF37
+                );
+
+        }
+
+
+        /* =========================================
+           TÉMOIGNAGES
+        ========================================== */
+
+        .testimonial {
+
+            transition:
+                transform 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+
+        }
+
+
+        .testimonial:hover {
+
+            transform: translateY(-2px);
+
+            border-color: rgba(212, 175, 55, 0.35);
+
+            box-shadow:
+                0 8px 20px rgba(11, 19, 43, 0.06);
+
+        }
+
+
+        /* =========================================
+           PREUVES
+        ========================================== */
+
+        .proof-card {
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+
+        }
+
+
+        .proof-card:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 10px 25px rgba(11, 19, 43, 0.10);
+
+        }
+
+
+        /*
+           IMPORTANT :
+
+           Les grandes captures utilisent
+           object-contain au lieu de object-cover
+           afin de ne jamais couper les images.
+        */
+
+        .proof-image {
+
+            width: 100%;
+
+            height: auto;
+
+            max-height: 520px;
+
+            object-fit: contain;
+
+            display: block;
+
+            border-radius: 15px;
+
+        }
+
+
+        .small-proof-image {
+
+            width: 100%;
+
+            height: auto;
+
+            max-height: 220px;
+
+            object-fit: contain;
+
+            display: block;
+
+            border-radius: 11px;
+
+        }
+
+
+        /* =========================================
+           WHATSAPP FLOAT
+        ========================================== */
+
+        .whatsapp-floating {
+
+            position: fixed;
+
+            right: 18px;
+
+            bottom: 18px;
+
+            width: 52px;
+
+            height: 52px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #0B132B;
+
+            color: #D4AF37;
+
+            border: 1px solid rgba(212,175,55,0.55);
+
+            box-shadow:
+                0 10px 30px rgba(11,19,43,0.20);
+
+            z-index: 50;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+
+        }
+
+
+        .whatsapp-floating:hover {
+
+            transform: scale(1.08);
+
+            box-shadow:
+
+                0 15px 35px rgba(11,19,43,0.25),
+
+                0 5px 20px rgba(212,175,55,0.15);
+
+        }
+
+
+        .whatsapp-pulse {
+
+            position: absolute;
+
+            inset: -5px;
+
+            border-radius: 50%;
+
+            border: 1px solid rgba(212,175,55,0.35);
+
+            animation: pulse 2.2s infinite;
+
+        }
+
+
+        @keyframes pulse {
+
+            0% {
+
+                transform: scale(0.9);
+
+                opacity: 0.8;
+
+            }
+
+            70% {
+
+                transform: scale(1.2);
+
+                opacity: 0;
+
+            }
+
+            100% {
+
+                opacity: 0;
+
+            }
+
+        }
+
+
+        /* =========================================
+           ACCESSIBILITÉ
+        ========================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+
+                animation-duration: 0.01ms !important;
+
+                animation-iteration-count: 1 !important;
+
+                transition-duration: 0.01ms !important;
+
+            }
+
+        }
+
+
+        /* =========================================
+           PETITS ÉCRANS
+        ========================================== */
+
+        @media (max-width: 360px) {
+
+            .proof-image {
+
+                max-height: 430px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="min-h-screen flex justify-center items-start px-3 py-4 sm:px-4">
+
+
+    <!-- =========================================
+         CONTENEUR PRINCIPAL
+    ========================================== -->
+
+    <main class="phi-container w-full max-w-md mx-auto">
+
+
+        <!-- =========================================
+             LOGO
+        ========================================== -->
+
+        <header class="text-center mb-4">
+
+            <div class="relative inline-block w-full max-w-[290px]">
+
+                <div class="logo-glow"></div>
+
+
+                <!-- CADRE DU LOGO -->
+
+                <div class="logo-card rounded-[28px] px-5 py-4">
+
+                    <div>
+
+                        <img
+                            src="ton-logo.jpg"
+                            alt="PHI Academy"
+                            class="max-h-[82px] w-auto object-contain mx-auto"
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- POSITIONNEMENT -->
+
+            <div class="mt-3">
+
+                <p
+                    class="text-[10px] uppercase tracking-[0.24em] font-bold text-slate-500"
+                >
+                    Trading • Formation • Mentoring
+                </p>
+
+
+                <div class="flex items-center justify-center gap-2 mt-2">
+
+                    <span class="h-px w-8 bg-slate-200"></span>
+
+                    <span class="w-1.5 h-1.5 rounded-full bg-phi-gold"></span>
+
+                    <span class="h-px w-8 bg-slate-200"></span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================================
+             ACTIONS PRINCIPALES
+        ========================================== -->
+
+        <div class="space-y-3">
+
+
+            <!-- =====================================
+                 GUIDES
+            ====================================== -->
+
+            <section>
+
+                <a
+                    href="https://rylhfhli.mychariow.shop"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="phi-button block p-3.5 rounded-[22px] text-white group"
+                >
+
+                    <div class="flex items-center justify-between">
+
+                        <div class="flex items-center gap-3">
+
+                            <div
+                                class="icon-box w-11 h-11 rounded-[15px] flex items-center justify-center text-phi-gold text-base flex-shrink-0"
+                            >
+
+                                <i class="fa-solid fa-book-open"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h2
+                                    class="text-[11px] sm:text-xs font-extrabold tracking-[0.04em] uppercase group-hover:text-phi-gold transition-colors"
+                                >
+                                    Nos Guides
+                                </h2>
+
+                                <p class="text-[10px] text-slate-300 mt-0.5">
+                                    Bibliothèque stratégique pour traders
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="text-phi-gold text-xs ml-2">
+
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
+
+                <!-- GUIDES DÉFILANTS -->
+
+                <div class="marquee-wrapper mt-2.5 py-2 px-1">
+
+                    <div class="marquee-track gap-2">
+
+
+                        <!-- GUIDE 1 -->
+
+                        <a
+                            href="https://rylhfhli.mychariow.shop/prd_nhl8di9w"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="guide-card w-28 flex-shrink-0 bg-white p-1.5 rounded-[15px] border border-slate-200 text-center block cursor-pointer"
+                        >
+
+                            <img
+                                src="guide1.jpg"
+                                alt="22 Patterns"
+                                class="w-full h-12 object-cover rounded-[10px] bg-slate-100 mb-1.5"
+                                onerror="this.style.display='none'"
+                            >
+
+                            <span
+                                class="text-[9px] font-bold text-slate-700 block truncate"
+                            >
+                                22 Patterns
+                            </span>
+
+                        </a>
+
+
+                        <!-- GUIDE 2 -->
+
+                        <a
+                            href="https://rylhfhli.mychariow.shop/prd_7dytyh"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="guide-card w-28 flex-shrink-0 bg-white p-1.5 rounded-[15px] border border-slate-200 text-center block cursor-pointer"
+                        >
+
+                            <img
+                                src="guide2.jpg"
+                                alt="Le Code du Trader"
+                                class="w-full h-12 object-cover rounded-[10px] bg-slate-100 mb-1.5"
+                                onerror="this.style.display='none'"
+                            >
+
+                            <span
+                                class="text-[9px] font-bold text-slate-700 block truncate"
+                            >
+                                Le Code du Trader
+                            </span>
+
+                        </a>
+
+
+                        <!-- GUIDE 3 -->
+
+                        <a
+                            href="https://rylhfhli.mychariow.shop/prd_5sn74art"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="guide-card w-28 flex-shrink-0 bg-white p-1.5 rounded-[15px] border border-slate-200 text-center block cursor-pointer"
+                        >
+
+                            <img
+                                src="guide3.jpg"
+                                alt="Trading Precision"
+                                class="w-full h-12 object-cover rounded-[10px] bg-slate-100 mb-1.5"
+                                onerror="this.style.display='none'"
+                            >
+
+                            <span
+                                class="text-[9px] font-bold text-slate-700 block truncate"
+                            >
+                                Trading Precision
+                            </span>
+
+                        </a>
+
+
+                        <!-- GUIDE 4 -->
+
+                        <a
+                            href="https://rylhfhli.mychariow.shop/prd_6v509q87"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="guide-card w-28 flex-shrink-0 bg-white p-1.5 rounded-[15px] border border-slate-200 text-center block cursor-pointer"
+                        >
+
+                            <img
+                                src="guide4.jpg"
+                                alt="Les Indicateurs"
+                                class="w-full h-12 object-cover rounded-[10px] bg-slate-100 mb-1.5"
+                                onerror="this.style.display='none'"
+                            >
+
+                            <span
+                                class="text-[9px] font-bold text-slate-700 block truncate"
+                            >
+                                Les Indicateurs
+                            </span>
+
+                        </a>
+
+
+                        <!-- GUIDE 5 -->
+
+                        <a
+                            href="https://rylhfhli.mychariow.shop/prd_ne5d75y5"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="guide-card w-28 flex-shrink-0 bg-white p-1.5 rounded-[15px] border border-slate-200 text-center block cursor-pointer"
+                        >
+
+                            <img
+                                src="guide5.jpg"
+                                alt="Les Moyennes Mobiles"
+                                class="w-full h-12 object-cover rounded-[10px] bg-slate-100 mb-1.5"
+                                onerror="this.style.display='none'"
+                            >
+
+                            <span
+                                class="text-[9px] font-bold text-slate-700 block truncate"
+                            >
+                                Moyennes Mobiles
+                            </span>
+
+                        </a>
+
+
+                        <!-- GUIDE 6 -->
+
+                        <a
+                            href="https://rylhfhli.mychariow.shop/prd_hhzxbpd0"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="guide-card w-28 flex-shrink-0 bg-white p-1.5 rounded-[15px] border border-slate-200 text-center block cursor-pointer"
+                        >
+
+                            <img
+                                src="guide6.jpg"
+                                alt="Dictionnaire"
+                                class="w-full h-12 object-cover rounded-[10px] bg-slate-100 mb-1.5"
+                                onerror="this.style.display='none'"
+                            >
+
+                            <span
+                                class="text-[9px] font-bold text-slate-700 block truncate"
+                            >
+                                Dictionnaire
+                            </span>
+
+                        </a>
+
+
+                        <!-- GUIDE 7 -->
+
+                        <a
+                            href="https://rylhfhli.mychariow.shop/prd_u5uxcfu5"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="guide-card w-28 flex-shrink-0 bg-white p-1.5 rounded-[15px] border border-slate-200 text-center block cursor-pointer"
+                        >
+
+                            <img
+                                src="guide7.jpg"
+                                alt="Guide en Anglais"
+                                class="w-full h-12 object-cover rounded-[10px] bg-slate-100 mb-1.5"
+                                onerror="this.style.display='none'"
+                            >
+
+                            <span
+                                class="text-[9px] font-bold text-slate-700 block truncate"
+                            >
+                                Guide en Anglais
+                            </span>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+                 FORMATION
+            ====================================== -->
+
+            <section>
+
+                <a
+                    href="formation.html"
+                    class="phi-button block p-3.5 rounded-[22px] text-white group"
+                >
+
+                    <div class="flex items-center justify-between">
+
+                        <div class="flex items-center gap-3">
+
+                            <div
+                                class="icon-box w-11 h-11 rounded-[15px] flex items-center justify-center text-phi-gold text-base flex-shrink-0"
+                            >
+
+                                <i class="fa-solid fa-graduation-cap"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h2
+                                    class="text-[11px] sm:text-xs font-extrabold tracking-[0.04em] uppercase group-hover:text-phi-gold transition-colors"
+                                >
+                                    Formation & Mentoring
+                                </h2>
+
+                                <p class="text-[10px] text-slate-300 mt-0.5">
+                                    Apprendre • pratiquer • progresser
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <i
+                            class="fa-solid fa-chevron-right text-xs text-phi-gold"
+                        ></i>
+
+                    </div>
+
+                </a>
+
+            </section>
+
+
+            <!-- =====================================
+                 CONFIGURATION COMPTE
+            ====================================== -->
+
+            <section>
+
+                <a
+                    href="https://wa.me/22603031400?text=Bonjour%20Phi%20Academy,%20je%20souhaite%20une%20aide%20pour%20la%20cr%C3%A9ation%20et%20configuration%20de%20mon%20compte%20de%20trading%20(5000%20FCFA)."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="phi-button block p-3.5 rounded-[22px] text-white group"
+                >
+
+                    <div class="flex items-center justify-between">
+
+                        <div class="flex items-center gap-3 min-w-0">
+
+                            <div
+                                class="icon-box w-11 h-11 rounded-[15px] flex items-center justify-center text-phi-gold text-base flex-shrink-0"
+                            >
+
+                                <i class="fa-solid fa-sliders"></i>
+
+                            </div>
+
+
+                            <div class="min-w-0">
+
+                                <div class="flex items-center gap-2 flex-wrap">
+
+                                    <h2
+                                        class="text-[11px] sm:text-xs font-extrabold tracking-[0.02em] uppercase group-hover:text-phi-gold transition-colors"
+                                    >
+                                        Configuration Compte
+                                    </h2>
+
+
+                                    <span
+                                        class="gold-badge text-[9px] font-extrabold px-2 py-1 rounded-full whitespace-nowrap"
+                                    >
+                                        5 000 FCFA
+                                    </span>
+
+                                </div>
+
+
+                                <p class="text-[10px] text-slate-300 mt-0.5">
+                                    Création & paramétrage accompagné
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <i
+                            class="fa-brands fa-whatsapp text-lg text-phi-gold ml-2"
+                        ></i>
+
+                    </div>
+
+                </a>
+
+            </section>
+
+
+            <!-- =====================================
+                 CONTACT
+            ====================================== -->
+
+            <section>
+
+                <a
+                    href="https://wa.me/22656918108?text=Bonjour%20Phi%20Academy,%20je%20vous%20contacte%20depuis%20votre%20page."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="phi-button block p-3.5 rounded-[22px] text-white group"
+                >
+
+                    <div class="flex items-center justify-between">
+
+                        <div class="flex items-center gap-3">
+
+                            <div
+                                class="icon-box w-11 h-11 rounded-[15px] flex items-center justify-center text-phi-gold text-base flex-shrink-0"
+                            >
+
+                                <i class="fa-solid fa-headset"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h2
+                                    class="text-[11px] sm:text-xs font-extrabold tracking-[0.04em] uppercase group-hover:text-phi-gold transition-colors"
+                                >
+                                    Nous Contacter
+                                </h2>
+
+                                <p
+                                    class="text-[10px] text-phi-gold mt-0.5 font-semibold"
+                                >
+                                    +226 56 91 81 08
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <span
+                            class="gold-badge text-[9px] font-extrabold px-2.5 py-1.5 rounded-full"
+                        >
+                            WhatsApp
+                        </span>
+
+                    </div>
+
+                </a>
+
+            </section>
+
+        </div>
+
+
+        <!-- =========================================
+             AVIS & TÉMOIGNAGES
+        ========================================== -->
+
+        <div class="pt-3 space-y-3">
+
+
+            <div class="text-center space-y-1">
+
+                <h3
+                    class="text-xs font-bold uppercase tracking-widest text-phi-navy"
+                >
+                    Avis & Témoignages (5)
+                </h3>
+
+
+                <div
+                    class="h-0.5 w-10 bg-phi-gold mx-auto rounded-full"
+                ></div>
+
+            </div>
+
+
+            <!-- =====================================
+                 SECTION 5 AVIS TEXTE
+            ====================================== -->
+
+            <div
+                class="bg-slate-50 border border-slate-200 p-3 rounded-3xl space-y-2"
+            >
+
+
+                <!-- AVIS 1 -->
+
+                <div
+                    class="p-3 rounded-2xl bg-white border border-slate-200 text-left space-y-1 shadow-sm"
+                >
+
+                    <div class="flex justify-between items-center">
+
+                        <span
+                            class="text-xs font-bold text-phi-navy"
+                        >
+                            Ibrahim K.
+                        </span>
+
+
+                        <div
+                            class="text-phi-gold text-[9px] space-x-0.5"
+                        >
+
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+
+                        </div>
+
+                    </div>
+
+
+                    <p
+                        class="text-[11px] text-slate-600 leading-relaxed italic"
+                    >
+                        "Ce que j'adore chez vous, ce sont vos formations. Et surtout que vos formations sont individuelles ! Elles permettent de poser autant de questions que nous voulons."
+                    </p>
+
+                </div>
+
+
+                <!-- AVIS 2 -->
+
+                <div
+                    class="p-3 rounded-2xl bg-white border border-slate-200 text-left space-y-1 shadow-sm"
+                >
+
+                    <div class="flex justify-between items-center">
+
+                        <span
+                            class="text-xs font-bold text-phi-navy"
+                        >
+                            Moussa T.
+                        </span>
+
+
+                        <div
+                            class="text-phi-gold text-[9px] space-x-0.5"
+                        >
+
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+
+                        </div>
+
+                    </div>
+
+
+                    <p
+                        class="text-[11px] text-slate-600 leading-relaxed italic"
+                    >
+                        "Vos guides de trading sont vraiment très complets et m'aident énormément au quotidien pour mes analyses."
+                    </p>
+
+                </div>
+
+
+                <!-- AVIS 3 -->
+
+                <div
+                    class="p-3 rounded-2xl bg-white border border-slate-200 text-left space-y-1 shadow-sm"
+                >
+
+                    <div class="flex justify-between items-center">
+
+                        <span
+                            class="text-xs font-bold text-phi-navy"
+                        >
+                            Sékou O.
+                        </span>
+
+
+                        <div
+                            class="text-phi-gold text-[9px] space-x-0.5"
+                        >
+
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+
+                        </div>
+
+                    </div>
+
+
+                    <p
+                        class="text-[11px] text-slate-600 leading-relaxed italic"
+                    >
+                        "J'ai trouvé superbe la configuration des comptes ! Surtout que vous passez par un appel vidéo WhatsApp et l'on partage nos écrans, ça facilite vraiment tout et ça permet aussi d'apprendre directement comment gérer ses comptes."
+                    </p>
+
+                </div>
+
+
+                <!-- AVIS 4 -->
+
+                <div
+                    class="p-3 rounded-2xl bg-white border border-slate-200 text-left space-y-1 shadow-sm"
+                >
+
+                    <div class="flex justify-between items-center">
+
+                        <span
+                            class="text-xs font-bold text-phi-navy"
+                        >
+                            Aïcha B.
+                        </span>
+
+
+                        <div
+                            class="text-phi-gold text-[9px] space-x-0.5"
+                        >
+
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+
+                        </div>
+
+                    </div>
+
+
+                    <p
+                        class="text-[11px] text-slate-600 leading-relaxed italic"
+                    >
+                        "Un suivi d'une grande rareté, réponses rapides sur WhatsApp et accompagnement au top !"
+                    </p>
+
+                </div>
+
+
+                <!-- AVIS 5 -->
+
+                <div
+                    class="p-3 rounded-2xl bg-rose-50 border border-rose-200 text-left space-y-1 shadow-sm"
+                >
+
+                    <div class="flex justify-between items-center">
+
+                        <span
+                            class="text-xs font-bold text-rose-800"
+                        >
+                            Client Anonyme
+                        </span>
+
+
+                        <div
+                            class="text-rose-400 text-[9px] space-x-0.5"
+                        >
+
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+
+                        </div>
+
+                    </div>
+
+
+                    <p
+                        class="text-[11px] text-rose-700 font-semibold"
+                    >
+                        "C'est de l'arnaque"
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 PREUVES / CAPTURES
+            ========================================== -->
+
+            <section class="mt-6">
+
+
+                <!-- TITRE -->
+
+                <div class="text-center mb-3">
+
+                    <div class="section-title">
+
+                        <h3
+                            class="text-[10px] font-extrabold uppercase tracking-[0.18em] text-phi-navy"
+                        >
+                            Preuves & Résultats
+                        </h3>
+
+                    </div>
+
+
+                    <p
+                        class="text-[9px] text-slate-400 mt-1"
+                    >
+                        Découvrez les retours et échanges de nos clients
+                    </p>
+
+                </div>
+
+
+                <!-- =====================================
+                     DEUX GRANDES CAPTURES
+                     CÔTE À CÔTE
+                ====================================== -->
+
+                <div class="grid grid-cols-2 gap-2.5">
+
+
+                    <!-- TÉMOIGNAGE 01 -->
+
+                    <div
+                        class="proof-card bg-white border border-slate-200 rounded-[20px] p-1.5 overflow-hidden"
+                    >
+
+                        <div
+                            class="w-full rounded-[15px] bg-slate-50 overflow-hidden flex items-center justify-center"
+                        >
+
+                            <img
+                                src="temoignage1.jpg"
+                                alt="Témoignage client 1"
+                                class="proof-image"
+                            >
+
+                        </div>
+
+
+                        <div class="text-center py-1.5">
+
+                            <span
+                                class="text-[8px] font-bold uppercase tracking-wide text-slate-500"
+                            >
+                                Témoignage 01
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TÉMOIGNAGE 02 -->
+
+                    <div
+                        class="proof-card bg-white border border-slate-200 rounded-[20px] p-1.5 overflow-hidden"
+                    >
+
+                        <div
+                            class="w-full rounded-[15px] bg-slate-50 overflow-hidden flex items-center justify-center"
+                        >
+
+                            <img
+                                src="temoignage2.jpg"
+                                alt="Témoignage client 2"
+                                class="proof-image"
+                            >
+
+                        </div>
+
+
+                        <div class="text-center py-1.5">
+
+                            <span
+                                class="text-[8px] font-bold uppercase tracking-wide text-slate-500"
+                            >
+                                Témoignage 02
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =====================================
+                     GALERIE DÉFILANTE
+                ====================================== -->
+
+                <div class="marquee-wrapper mt-2.5 py-2 px-1">
+
+                    <div class="marquee-track gap-2">
+
+
+                        <!-- TÉMOIGNAGE 03 -->
+
+                        <div
+                            class="w-28 flex-shrink-0 bg-white p-1 rounded-[15px] border border-slate-200"
+                        >
+
+                            <img
+                                src="temoignage3.jpg"
+                                alt="Témoignage 3"
+                                class="small-proof-image bg-slate-100"
+                            >
+
+                        </div>
+
+
+                        <!-- TÉMOIGNAGE 04 -->
+
+                        <div
+                            class="w-28 flex-shrink-0 bg-white p-1 rounded-[15px] border border-slate-200"
+                        >
+
+                            <img
+                                src="temoignage4.jpg"
+                                alt="Témoignage 4"
+                                class="small-proof-image bg-slate-100"
+                            >
+
+                        </div>
+
+
+                        <!-- TÉMOIGNAGE 05 -->
+
+                        <div
+                            class="w-28 flex-shrink-0 bg-white p-1 rounded-[15px] border border-slate-200"
+                        >
+
+                            <img
+                                src="temoignage5.jpg"
+                                alt="Témoignage 5"
+                                class="small-proof-image bg-slate-100"
+                            >
+
+                        </div>
+
+
+                        <!-- TÉMOIGNAGE 06 -->
+
+                        <div
+                            class="w-28 flex-shrink-0 bg-white p-1 rounded-[15px] border border-slate-200"
+                        >
+
+                            <img
+                                src="temoignage6.jpg"
+                                alt="Témoignage 6"
+                                class="small-proof-image bg-slate-100"
+                            >
+
+                        </div>
+
+
+                        <!-- DUPLICATION -->
+
+                        <div
+                            class="w-28 flex-shrink-0 bg-white p-1 rounded-[15px] border border-slate-200"
+                        >
+
+                            <img
+                                src="temoignage3.jpg"
+                                alt="Témoignage 3"
+                                class="small-proof-image bg-slate-100"
+                            >
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================================
+                 PETIT RAPPEL CTA
+            ========================================== -->
+
+            <section class="mt-6">
+
+                <div
+                    class="relative overflow-hidden rounded-[24px] bg-phi-navy p-4 text-center border border-phi-gold/20"
+                >
+
+
+                    <div
+                        class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-phi-gold/10 blur-2xl"
+                    ></div>
+
+
+                    <div
+                        class="absolute -bottom-12 -left-12 w-32 h-32 rounded-full bg-white/5 blur-2xl"
+                    ></div>
+
+
+                    <div class="relative">
+
+
+                        <div
+                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 border border-white/10 mb-2"
+                        >
+
+                            <span
+                                class="w-1.5 h-1.5 rounded-full bg-phi-gold"
+                            ></span>
+
+
+                            <span
+                                class="text-[8px] font-bold uppercase tracking-wider text-slate-200"
+                            >
+                                PHI Academy
+                            </span>
+
+                        </div>
+
+
+                        <h3
+                            class="text-sm font-extrabold text-white"
+                        >
+                            Prêt à passer au niveau supérieur ?
+                        </h3>
+
+
+                        <p
+                            class="text-[9px] text-slate-300 mt-1 leading-relaxed"
+                        >
+                            Formation, guides ou accompagnement personnalisé.
+                        </p>
+
+
+                        <a
+                            href="https://wa.me/22656918108?text=Bonjour%20Phi%20Academy,%20je%20souhaite%20avoir%20plus%20d'informations."
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="inline-flex items-center justify-center gap-2 mt-3 px-4 py-2.5 rounded-full bg-phi-gold text-phi-navy text-[9px] font-extrabold hover:scale-105 transition-transform"
+                        >
+
+                            <i class="fa-brands fa-whatsapp"></i>
+
+                            PARLER À PHI ACADEMY
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================================
+                 FOOTER
+            ========================================== -->
+
+            <footer
+                class="text-center py-6 mt-4 border-t border-slate-200"
+            >
+
+                <p
+                    class="text-[9px] font-bold text-slate-700"
+                >
+                    © PHI ACADEMY — Tous droits réservés.
+                </p>
+
+
+                <p
+                    class="text-[8px] text-slate-400 mt-1.5"
+                >
+                    Le trading comporte des risques financiers importants.
+                </p>
+
+
+                <div
+                    class="flex justify-center items-center gap-2 mt-2"
+                >
+
+                    <span class="w-5 h-px bg-slate-200"></span>
+
+
+                    <span
+                        class="text-[7px] uppercase tracking-[0.2em] text-slate-400"
+                    >
+                        PHI
+                    </span>
+
+
+                    <span class="w-5 h-px bg-slate-200"></span>
+
+                </div>
+
+            </footer>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================================
+         BOUTON WHATSAPP FLOTTANT
+    ========================================== -->
+
+    <a
+        href="https://wa.me/22656918108?text=Bonjour%20Phi%20Academy,%20je%20viens%20de%20votre%20site."
+        target="_blank"
+        rel="noopener noreferrer"
+        class="whatsapp-floating"
+        aria-label="Contacter PHI Academy sur WhatsApp"
+    >
+
+        <span class="whatsapp-pulse"></span>
+
+        <i class="fa-brands fa-whatsapp text-xl relative"></i>
+
+    </a>
+
+
+</body>
+
+</html>
