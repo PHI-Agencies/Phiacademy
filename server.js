@@ -1,3 +1,4 @@
+```js
 const express = require("express");
 const path = require("path");
 const crypto = require("crypto");
@@ -26,7 +27,8 @@ const PAYDUNYA_TOKEN = process.env.TOKEN;
 
 const CALLBACK_URL = process.env.CALLBACK_URL;
 const RETURN_URL = process.env.RETURN_URL;
-const CANCEL_URL = process.env.CANCEL_URL || CALLBACK_URL;
+const CANCEL_URL =
+  process.env.CANCEL_URL || RETURN_URL || CALLBACK_URL;
 
 const ADMIN_EMAIL = String(process.env.ADMIN_EMAIL || "")
   .trim()
@@ -67,7 +69,9 @@ let db;
 
 async function connectDB() {
   if (!MONGO_URI) {
-    throw new Error("MONGO_URI est manquant dans le fichier .env");
+    throw new Error(
+      "MONGO_URI est manquant dans le fichier .env"
+    );
   }
 
   mongoClient = new MongoClient(MONGO_URI);
@@ -113,10 +117,19 @@ async function createIndexes() {
     { unique: true }
   );
 
-  await users.createIndex({
-    sessionTokenHash: 1,
-    sparse: true
-  });
+  /*
+   * IMPORTANT :
+   * "sparse" est une option d'index MongoDB.
+   * Elle doit être placée dans le deuxième argument
+   * de createIndex(), et non dans la clé de l'index.
+   */
+  await users.createIndex(
+    { sessionTokenHash: 1 },
+    {
+      unique: true,
+      sparse: true
+    }
+  );
 
   await payments.createIndex(
     { paydunyaToken: 1 },
@@ -146,10 +159,16 @@ async function createIndexes() {
     { unique: true }
   );
 
-  await admins.createIndex({
-    sessionTokenHash: 1,
-    sparse: true
-  });
+  /*
+   * Même correction pour les sessions administrateur.
+   */
+  await admins.createIndex(
+    { sessionTokenHash: 1 },
+    {
+      unique: true,
+      sparse: true
+    }
+  );
 
   await transactions.createIndex({
     userId: 1,
@@ -219,7 +238,9 @@ function hashSessionToken(token) {
 
 function hashPassword(password) {
   return new Promise((resolve, reject) => {
-    const salt = crypto.randomBytes(16).toString("hex");
+    const salt = crypto
+      .randomBytes(16)
+      .toString("hex");
 
     crypto.scrypt(
       password,
@@ -239,10 +260,14 @@ function hashPassword(password) {
   });
 }
 
-function verifyPassword(password, storedHash) {
+function verifyPassword(
+  password,
+  storedHash
+) {
   return new Promise((resolve, reject) => {
     try {
-      const [salt, key] = String(storedHash).split(":");
+      const [salt, key] =
+        String(storedHash).split(":");
 
       if (!salt || !key) {
         resolve(false);
@@ -259,9 +284,16 @@ function verifyPassword(password, storedHash) {
             return;
           }
 
-          const storedKey = Buffer.from(key, "hex");
+          const storedKey =
+            Buffer.from(
+              key,
+              "hex"
+            );
 
-          if (storedKey.length !== derivedKey.length) {
+          if (
+            storedKey.length !==
+            derivedKey.length
+          ) {
             resolve(false);
             return;
           }
@@ -284,31 +316,60 @@ function verifyPassword(password, storedHash) {
    SESSION MEMBRE
 ========================================================= */
 
-function setSessionCookie(res, token) {
-  res.cookie("phi_session", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 1000 * 60 * 60 * 24 * 30
-  });
+function setSessionCookie(
+  res,
+  token
+) {
+  res.cookie(
+    "phi_session",
+    token,
+    {
+      httpOnly: true,
+      secure:
+        process.env.NODE_ENV ===
+        "production",
+      sameSite: "lax",
+      maxAge:
+        1000 *
+        60 *
+        60 *
+        24 *
+        30
+    }
+  );
 }
 
 function clearSessionCookie(res) {
-  res.clearCookie("phi_session");
+  res.clearCookie(
+    "phi_session",
+    {
+      httpOnly: true,
+      secure:
+        process.env.NODE_ENV ===
+        "production",
+      sameSite: "lax"
+    }
+  );
 }
 
 async function getAuthenticatedUser(req) {
-  const token = req.cookies?.phi_session;
+  const token =
+    req.cookies?.phi_session;
 
   if (!token) {
     return null;
   }
 
-  const sessionHash = hashSessionToken(token);
+  const sessionHash =
+    hashSessionToken(token);
 
-  const user = await db.collection("users").findOne({
-    sessionTokenHash: sessionHash
-  });
+  const user =
+    await db
+      .collection("users")
+      .findOne({
+        sessionTokenHash:
+          sessionHash
+      });
 
   return user || null;
 }
@@ -317,32 +378,62 @@ async function getAuthenticatedUser(req) {
    SESSION ADMINISTRATEUR
 ========================================================= */
 
-function setAdminSessionCookie(res, token) {
-  res.cookie("phi_admin_session", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 1000 * 60 * 60 * 8
-  });
+function setAdminSessionCookie(
+  res,
+  token
+) {
+  res.cookie(
+    "phi_admin_session",
+    token,
+    {
+      httpOnly: true,
+      secure:
+        process.env.NODE_ENV ===
+        "production",
+      sameSite: "lax",
+      maxAge:
+        1000 *
+        60 *
+        60 *
+        8
+    }
+  );
 }
 
 function clearAdminSessionCookie(res) {
-  res.clearCookie("phi_admin_session");
+  res.clearCookie(
+    "phi_admin_session",
+    {
+      httpOnly: true,
+      secure:
+        process.env.NODE_ENV ===
+        "production",
+      sameSite: "lax"
+    }
+  );
 }
 
 async function getAuthenticatedAdmin(req) {
-  const token = req.cookies?.phi_admin_session;
+  const token =
+    req.cookies?.phi_admin_session;
 
   if (!token) {
     return null;
   }
 
-  const sessionHash = hashSessionToken(token);
+  const sessionHash =
+    hashSessionToken(token);
 
-  const admin = await db.collection("admins").findOne({
-    sessionTokenHash: sessionHash,
-    active: true
-  });
+  const admin =
+    await db
+      .collection("admins")
+      .findOne({
+        sessionTokenHash:
+          sessionHash,
+
+        active:
+          true
+      });
 
   return admin || null;
 }
@@ -352,7 +443,10 @@ async function getAuthenticatedAdmin(req) {
 ========================================================= */
 
 async function ensureAdmin() {
-  if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+  if (
+    !ADMIN_EMAIL ||
+    !ADMIN_PASSWORD
+  ) {
     console.warn(
       "ADMIN_EMAIL ou ADMIN_PASSWORD absent. Aucun administrateur n'a été créé automatiquement."
     );
@@ -360,34 +454,52 @@ async function ensureAdmin() {
     return;
   }
 
-  if (ADMIN_PASSWORD.length < 12) {
+  if (
+    ADMIN_PASSWORD.length < 12
+  ) {
     throw new Error(
       "ADMIN_PASSWORD doit contenir au moins 12 caractères."
     );
   }
 
-  const admins = db.collection("admins");
+  const admins =
+    db.collection("admins");
 
-  const existingAdmin = await admins.findOne({
-    email: ADMIN_EMAIL
-  });
+  const existingAdmin =
+    await admins.findOne({
+      email:
+        ADMIN_EMAIL
+    });
 
   if (existingAdmin) {
     return;
   }
 
-  const passwordHash = await hashPassword(
-    ADMIN_PASSWORD
-  );
+  const passwordHash =
+    await hashPassword(
+      ADMIN_PASSWORD
+    );
 
   await admins.insertOne({
-    email: ADMIN_EMAIL,
+    email:
+      ADMIN_EMAIL,
+
     passwordHash,
-    role: "admin",
-    active: true,
-    sessionTokenHash: null,
-    createdAt: new Date(),
-    updatedAt: new Date()
+
+    role:
+      "admin",
+
+    active:
+      true,
+
+    sessionTokenHash:
+      null,
+
+    createdAt:
+      new Date(),
+
+    updatedAt:
+      new Date()
   });
 
   console.log(
@@ -399,14 +511,22 @@ async function ensureAdmin() {
    MIDDLEWARE AUTH MEMBRE
 ========================================================= */
 
-async function requireAuth(req, res, next) {
+async function requireAuth(
+  req,
+  res,
+  next
+) {
   try {
-    const user = await getAuthenticatedUser(req);
+    const user =
+      await getAuthenticatedUser(
+        req
+      );
 
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: "Connexion requise."
+        message:
+          "Connexion requise."
       });
     }
 
@@ -421,23 +541,35 @@ async function requireAuth(req, res, next) {
 
     return res.status(500).json({
       success: false,
-      message: "Erreur serveur."
+      message:
+        "Erreur serveur."
     });
   }
 }
 
-async function requireActiveUser(req, res, next) {
+async function requireActiveUser(
+  req,
+  res,
+  next
+) {
   try {
-    const user = await getAuthenticatedUser(req);
+    const user =
+      await getAuthenticatedUser(
+        req
+      );
 
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: "Connexion requise."
+        message:
+          "Connexion requise."
       });
     }
 
-    if (user.status !== "active") {
+    if (
+      user.status !==
+      "active"
+    ) {
       return res.status(403).json({
         success: false,
         message:
@@ -456,7 +588,8 @@ async function requireActiveUser(req, res, next) {
 
     return res.status(500).json({
       success: false,
-      message: "Erreur serveur."
+      message:
+        "Erreur serveur."
     });
   }
 }
@@ -465,14 +598,22 @@ async function requireActiveUser(req, res, next) {
    MIDDLEWARE ADMIN
 ========================================================= */
 
-async function requireAdmin(req, res, next) {
+async function requireAdmin(
+  req,
+  res,
+  next
+) {
   try {
-    const admin = await getAuthenticatedAdmin(req);
+    const admin =
+      await getAuthenticatedAdmin(
+        req
+      );
 
     if (!admin) {
       return res.status(401).json({
         success: false,
-        message: "Accès administrateur requis."
+        message:
+          "Accès administrateur requis."
       });
     }
 
@@ -498,7 +639,8 @@ async function requireAdmin(req, res, next) {
 
     return res.status(500).json({
       success: false,
-      message: "Erreur serveur."
+      message:
+        "Erreur serveur."
     });
   }
 }
@@ -508,15 +650,20 @@ async function requireAdmin(req, res, next) {
 ========================================================= */
 
 function parsePayDunyaData(body) {
-  let data = body?.data;
+  let data =
+    body?.data;
 
   if (!data) {
     return null;
   }
 
-  if (typeof data === "string") {
+  if (
+    typeof data ===
+    "string"
+  ) {
     try {
-      data = JSON.parse(data);
+      data =
+        JSON.parse(data);
     } catch {
       return null;
     }
@@ -528,24 +675,36 @@ function parsePayDunyaData(body) {
 function createPayDunyaHash() {
   return crypto
     .createHash("sha512")
-    .update(PAYDUNYA_MASTER_KEY || "")
+    .update(
+      PAYDUNYA_MASTER_KEY || ""
+    )
     .digest("hex");
 }
 
-function verifyPayDunyaHash(receivedHash) {
-  if (!receivedHash || !PAYDUNYA_MASTER_KEY) {
+function verifyPayDunyaHash(
+  receivedHash
+) {
+  if (
+    !receivedHash ||
+    !PAYDUNYA_MASTER_KEY
+  ) {
     return false;
   }
 
-  const expectedHash = createPayDunyaHash();
+  const expectedHash =
+    createPayDunyaHash();
 
-  const receivedBuffer = Buffer.from(
-    String(receivedHash).toLowerCase()
-  );
+  const receivedBuffer =
+    Buffer.from(
+      String(
+        receivedHash
+      ).toLowerCase()
+    );
 
-  const expectedBuffer = Buffer.from(
-    expectedHash.toLowerCase()
-  );
+  const expectedBuffer =
+    Buffer.from(
+      expectedHash.toLowerCase()
+    );
 
   if (
     receivedBuffer.length !==
@@ -569,114 +728,183 @@ async function processReferralCommission(
   payment,
   user
 ) {
-  if (!payment || !user) {
+  if (
+    !payment ||
+    !user
+  ) {
     return false;
   }
 
   if (!user.referredBy) {
-    await db.collection("payments").updateOne(
-      {
-        _id: payment._id,
-        commissionStatus: {
-          $ne: "paid"
+    await db
+      .collection("payments")
+      .updateOne(
+        {
+          _id:
+            payment._id,
+
+          commissionStatus: {
+            $ne:
+              "paid"
+          }
+        },
+        {
+          $set: {
+            commissionStatus:
+              "not_applicable",
+
+            updatedAt:
+              new Date()
+          }
+        },
+        {
+          session
         }
-      },
-      {
-        $set: {
-          commissionStatus: "not_applicable",
-          updatedAt: new Date()
-        }
-      },
-      { session }
-    );
+      );
 
     return false;
   }
 
   const transactionExists =
-    await db.collection("transactions").findOne(
-      {
-        type: "referral_commission",
-        paymentId: payment._id
-      },
-      { session }
-    );
+    await db
+      .collection("transactions")
+      .findOne(
+        {
+          type:
+            "referral_commission",
+
+          paymentId:
+            payment._id
+        },
+        {
+          session
+        }
+      );
 
   if (transactionExists) {
     return false;
   }
 
   const referrer =
-    await db.collection("users").findOne(
-      {
-        _id: user.referredBy
-      },
-      { session }
-    );
+    await db
+      .collection("users")
+      .findOne(
+        {
+          _id:
+            user.referredBy
+        },
+        {
+          session
+        }
+      );
 
   if (!referrer) {
-    await db.collection("payments").updateOne(
-      {
-        _id: payment._id
-      },
-      {
-        $set: {
-          commissionStatus: "failed",
-          commissionError:
-            "Parrain introuvable.",
-          updatedAt: new Date()
+    await db
+      .collection("payments")
+      .updateOne(
+        {
+          _id:
+            payment._id
+        },
+        {
+          $set: {
+            commissionStatus:
+              "failed",
+
+            commissionError:
+              "Parrain introuvable.",
+
+            updatedAt:
+              new Date()
+          }
+        },
+        {
+          session
         }
-      },
-      { session }
-    );
+      );
 
     return false;
   }
 
-  await db.collection("users").updateOne(
-    {
-      _id: referrer._id
-    },
-    {
-      $inc: {
-        balance: REFERRAL_COMMISSION
+  await db
+    .collection("users")
+    .updateOne(
+      {
+        _id:
+          referrer._id
       },
-      $set: {
-        updatedAt: new Date()
+      {
+        $inc: {
+          balance:
+            REFERRAL_COMMISSION
+        },
+
+        $set: {
+          updatedAt:
+            new Date()
+        }
+      },
+      {
+        session
       }
-    },
-    { session }
-  );
+    );
 
-  await db.collection("transactions").insertOne(
-    {
-      userId: referrer._id,
-      type: "referral_commission",
-      amount: REFERRAL_COMMISSION,
-      paymentId: payment._id,
-      referredUserId: user._id,
-      description:
-        "Commission de parrainage",
-      createdAt: new Date()
-    },
-    { session }
-  );
+  await db
+    .collection("transactions")
+    .insertOne(
+      {
+        userId:
+          referrer._id,
 
-  await db.collection("payments").updateOne(
-    {
-      _id: payment._id
-    },
-    {
-      $set: {
-        commissionStatus: "paid",
-        commissionAmount:
+        type:
+          "referral_commission",
+
+        amount:
           REFERRAL_COMMISSION,
-        commissionPaidAt: new Date(),
-        updatedAt: new Date()
+
+        paymentId:
+          payment._id,
+
+        referredUserId:
+          user._id,
+
+        description:
+          "Commission de parrainage",
+
+        createdAt:
+          new Date()
+      },
+      {
+        session
       }
-    },
-    { session }
-  );
+    );
+
+  await db
+    .collection("payments")
+    .updateOne(
+      {
+        _id:
+          payment._id
+      },
+      {
+        $set: {
+          commissionStatus:
+            "paid",
+
+          commissionAmount:
+            REFERRAL_COMMISSION,
+
+          commissionPaidAt:
+            new Date(),
+
+          updatedAt:
+            new Date()
+        }
+      },
+      {
+        session
+      }
+    );
 
   return true;
 }
@@ -685,58 +913,78 @@ async function processReferralCommission(
    FINALISATION PAIEMENT
 ========================================================= */
 
-async function completePaymentByToken(token) {
+async function completePaymentByToken(
+  token
+) {
   if (!token) {
-    throw new Error("TOKEN_PAYDUNYA_MANQUANT");
+    throw new Error(
+      "TOKEN_PAYDUNYA_MANQUANT"
+    );
   }
 
-  const session = mongoClient.startSession();
+  const session =
+    mongoClient.startSession();
 
   try {
-    let result = null;
+    let result =
+      null;
 
     await session.withTransaction(
       async () => {
         const payments =
-          db.collection("payments");
+          db.collection(
+            "payments"
+          );
 
         const users =
-          db.collection("users");
+          db.collection(
+            "users"
+          );
 
         const payment =
           await payments.findOne(
             {
-              paydunyaToken: token
+              paydunyaToken:
+                token
             },
-            { session }
+            {
+              session
+            }
           );
 
         if (!payment) {
           throw new Error(
-            "PAIEMENT_LOCAL_INTRouvable"
+            "PAIEMENT_LOCAL_INTROUVABLE"
           );
         }
 
         const user =
           await users.findOne(
             {
-              _id: payment.userId
+              _id:
+                payment.userId
             },
-            { session }
+            {
+              session
+            }
           );
 
         if (!user) {
           throw new Error(
-            "UTILISATEUR_INTRouvable"
+            "UTILISATEUR_INTROUVABLE"
           );
         }
 
         if (
-          payment.status === "completed"
+          payment.status ===
+          "completed"
         ) {
           result = {
-            alreadyCompleted: true,
-            userId: user._id
+            alreadyCompleted:
+              true,
+
+            userId:
+              user._id
           };
 
           return;
@@ -744,32 +992,51 @@ async function completePaymentByToken(token) {
 
         await payments.updateOne(
           {
-            _id: payment._id,
+            _id:
+              payment._id,
+
             status: {
-              $ne: "completed"
+              $ne:
+                "completed"
             }
           },
           {
             $set: {
-              status: "completed",
-              completedAt: new Date(),
-              updatedAt: new Date()
+              status:
+                "completed",
+
+              completedAt:
+                new Date(),
+
+              paydunyaStatus:
+                "completed",
+
+              updatedAt:
+                new Date()
             }
           },
-          { session }
+          {
+            session
+          }
         );
 
         await users.updateOne(
           {
-            _id: user._id
+            _id:
+              user._id
           },
           {
             $set: {
-              status: "active",
-              updatedAt: new Date()
+              status:
+                "active",
+
+              updatedAt:
+                new Date()
             }
           },
-          { session }
+          {
+            session
+          }
         );
 
         await processReferralCommission(
@@ -779,8 +1046,11 @@ async function completePaymentByToken(token) {
         );
 
         result = {
-          alreadyCompleted: false,
-          userId: user._id
+          alreadyCompleted:
+            false,
+
+          userId:
+            user._id
         };
       }
     );
@@ -795,13 +1065,18 @@ async function completePaymentByToken(token) {
    API HEALTH
 ========================================================= */
 
-app.get("/api/health", (req, res) => {
-  res.json({
-    success: true,
-    message:
-      "Serveur PHI Academy opérationnel."
-  });
-});
+app.get(
+  "/api/health",
+  (req, res) => {
+    res.json({
+      success:
+        true,
+
+      message:
+        "Serveur PHI Academy opérationnel."
+    });
+  }
+);
 
 /* =========================================================
    INSCRIPTION
@@ -821,16 +1096,24 @@ app.post(
       } = req.body;
 
       const cleanFirstName =
-        String(firstName || "").trim();
+        String(
+          firstName || ""
+        ).trim();
 
       const cleanLastName =
-        String(lastName || "").trim();
+        String(
+          lastName || ""
+        ).trim();
 
       const cleanPhone =
-        normalizePhone(phone);
+        normalizePhone(
+          phone
+        );
 
       const cleanEmail =
-        normalizeEmail(email);
+        normalizeEmail(
+          email
+        );
 
       const cleanReferralCode =
         normalizeReferralCode(
@@ -846,67 +1129,91 @@ app.post(
         !cleanReferralCode
       ) {
         return res.status(400).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Tous les champs sont obligatoires."
         });
       }
 
-      if (String(password).length < 8) {
+      if (
+        String(password).length <
+        8
+      ) {
         return res.status(400).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Le mot de passe doit contenir au moins 8 caractères."
         });
       }
 
       const referrer =
-        await db.collection("users").findOne({
-          referralCode:
-            cleanReferralCode
-        });
+        await db
+          .collection("users")
+          .findOne({
+            referralCode:
+              cleanReferralCode
+          });
 
       if (!referrer) {
         return res.status(400).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Code parrain invalide."
         });
       }
 
       if (
-        referrer.email === cleanEmail ||
-        referrer.phone === cleanPhone
+        referrer.email ===
+          cleanEmail ||
+        referrer.phone ===
+          cleanPhone
       ) {
         return res.status(400).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Vous ne pouvez pas utiliser votre propre code."
         });
       }
 
       const existingUser =
-        await db.collection("users").findOne({
-          $or: [
-            {
-              email: cleanEmail
-            },
-            {
-              phone: cleanPhone
-            }
-          ]
-        });
+        await db
+          .collection("users")
+          .findOne({
+            $or: [
+              {
+                email:
+                  cleanEmail
+              },
+
+              {
+                phone:
+                  cleanPhone
+              }
+            ]
+          });
 
       if (existingUser) {
         return res.status(409).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Un compte existe déjà avec cet email ou ce numéro."
         });
       }
 
       const passwordHash =
-        await hashPassword(password);
+        await hashPassword(
+          password
+        );
 
       let newReferralCode;
 
@@ -915,23 +1222,28 @@ app.post(
           generateReferralCode();
 
         const exists =
-          await db.collection("users").findOne({
-            referralCode:
-              newReferralCode
-          });
+          await db
+            .collection("users")
+            .findOne({
+              referralCode:
+                newReferralCode
+            });
 
         if (!exists) {
           break;
         }
       }
 
-      const now = new Date();
+      const now =
+        new Date();
 
       const sessionToken =
         generateSessionToken();
 
       const sessionHash =
-        hashSessionToken(sessionToken);
+        hashSessionToken(
+          sessionToken
+        );
 
       const newUser = {
         firstName:
@@ -974,9 +1286,11 @@ app.post(
       };
 
       const result =
-        await db.collection("users").insertOne(
-          newUser
-        );
+        await db
+          .collection("users")
+          .insertOne(
+            newUser
+          );
 
       setSessionCookie(
         res,
@@ -984,9 +1298,12 @@ app.post(
       );
 
       return res.status(201).json({
-        success: true,
+        success:
+          true,
+
         message:
           "Compte créé. Vous pouvez maintenant effectuer le paiement.",
+
         userId:
           result.insertedId.toString()
       });
@@ -996,8 +1313,23 @@ app.post(
         error
       );
 
+      if (
+        error?.code ===
+        11000
+      ) {
+        return res.status(409).json({
+          success:
+            false,
+
+          message:
+            "Un compte existe déjà avec ces informations."
+        });
+      }
+
       return res.status(500).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Erreur lors de l'inscription."
       });
@@ -1014,11 +1346,17 @@ app.post(
   requireAuth,
   async (req, res) => {
     try {
-      const user = req.user;
+      const user =
+        req.user;
 
-      if (user.status === "active") {
+      if (
+        user.status ===
+        "active"
+      ) {
         return res.status(400).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Ce compte est déjà actif."
         });
@@ -1036,38 +1374,49 @@ app.post(
         );
 
         return res.status(500).json({
-          success: false,
+          success:
+            false,
+
           message:
             "La configuration du paiement est incomplète."
         });
       }
 
       const existingPayment =
-        await db.collection("payments").findOne(
-          {
-            userId:
-              user._id,
+        await db
+          .collection("payments")
+          .findOne(
+            {
+              userId:
+                user._id,
 
-            status:
-              "pending",
+              status:
+                "pending",
 
-            paymentUrl: {
-              $exists: true,
-              $ne: null
+              paymentUrl: {
+                $exists:
+                  true,
+
+                $ne:
+                  null
+              }
+            },
+            {
+              sort: {
+                createdAt:
+                  -1
+              }
             }
-          },
-          {
-            sort: {
-              createdAt: -1
-            }
-          }
-        );
+          );
 
       if (existingPayment) {
         return res.json({
-          success: true,
+          success:
+            true,
+
           paymentUrl:
             existingPayment.paymentUrl,
+
           paymentId:
             existingPayment._id.toString()
         });
@@ -1109,9 +1458,11 @@ app.post(
       };
 
       const paymentResult =
-        await db.collection("payments").insertOne(
-          payment
-        );
+        await db
+          .collection("payments")
+          .insertOne(
+            payment
+          );
 
       const paymentData = {
         invoice: {
@@ -1186,8 +1537,9 @@ app.post(
         response.data;
 
       if (
-        result.response_code !==
-        "00"
+        String(
+          result.response_code
+        ) !== "00"
       ) {
         await db
           .collection("payments")
@@ -1212,7 +1564,9 @@ app.post(
           );
 
         return res.status(400).json({
-          success: false,
+          success:
+            false,
+
           message:
             result.response_text ||
             "Impossible de créer le paiement."
@@ -1227,6 +1581,40 @@ app.post(
         result.invoice_token ||
         null;
 
+      if (
+        !paymentUrl ||
+        !paydunyaToken
+      ) {
+        await db
+          .collection("payments")
+          .updateOne(
+            {
+              _id:
+                paymentResult.insertedId
+            },
+            {
+              $set: {
+                status:
+                  "failed",
+
+                errorMessage:
+                  "Réponse PayDunya incomplète.",
+
+                updatedAt:
+                  new Date()
+              }
+            }
+          );
+
+        return res.status(502).json({
+          success:
+            false,
+
+          message:
+            "Réponse de paiement PayDunya incomplète."
+        });
+      }
+
       await db
         .collection("payments")
         .updateOne(
@@ -1238,6 +1626,7 @@ app.post(
             $set: {
               paydunyaToken,
               paymentUrl,
+
               updatedAt:
                 new Date()
             }
@@ -1245,8 +1634,11 @@ app.post(
         );
 
       return res.json({
-        success: true,
+        success:
+          true,
+
         paymentUrl,
+
         paymentId:
           paymentResult.insertedId.toString()
       });
@@ -1258,7 +1650,9 @@ app.post(
       );
 
       return res.status(500).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Erreur lors de la création du paiement."
       });
@@ -1275,7 +1669,9 @@ app.post(
   async (req, res) => {
     try {
       const data =
-        parsePayDunyaData(req.body);
+        parsePayDunyaData(
+          req.body
+        );
 
       if (!data) {
         console.error(
@@ -1283,7 +1679,9 @@ app.post(
         );
 
         return res.status(400).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Données PayDunya invalides."
         });
@@ -1302,7 +1700,9 @@ app.post(
         );
 
         return res.status(401).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Signature PayDunya invalide."
         });
@@ -1323,15 +1723,19 @@ app.post(
 
       if (!token) {
         return res.status(400).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Token PayDunya manquant."
         });
       }
 
       if (
-        status === "completed" ||
-        status === "success"
+        status ===
+          "completed" ||
+        status ===
+          "success"
       ) {
         try {
           await completePaymentByToken(
@@ -1348,7 +1752,9 @@ app.post(
           );
 
           return res.status(500).json({
-            success: false,
+            success:
+              false,
+
             message:
               "Impossible de finaliser le paiement."
           });
@@ -1377,7 +1783,8 @@ app.post(
       }
 
       return res.status(200).json({
-        success: true
+        success:
+          true
       });
     } catch (error) {
       console.error(
@@ -1386,7 +1793,9 @@ app.post(
       );
 
       return res.status(500).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Erreur serveur."
       });
@@ -1413,10 +1822,12 @@ app.get(
       }
 
       const payment =
-        await db.collection("payments").findOne({
-          paydunyaToken:
-            token
-        });
+        await db
+          .collection("payments")
+          .findOne({
+            paydunyaToken:
+              token
+          });
 
       if (!payment) {
         return res.redirect(
@@ -1463,28 +1874,36 @@ app.post(
       } = req.body;
 
       const cleanEmail =
-        normalizeEmail(email);
+        normalizeEmail(
+          email
+        );
 
       if (
         !cleanEmail ||
         !password
       ) {
         return res.status(400).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Email et mot de passe requis."
         });
       }
 
       const user =
-        await db.collection("users").findOne({
-          email:
-            cleanEmail
-        });
+        await db
+          .collection("users")
+          .findOne({
+            email:
+              cleanEmail
+          });
 
       if (!user) {
         return res.status(401).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Email ou mot de passe incorrect."
         });
@@ -1498,7 +1917,9 @@ app.post(
 
       if (!validPassword) {
         return res.status(401).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Email ou mot de passe incorrect."
         });
@@ -1536,7 +1957,8 @@ app.post(
       );
 
       return res.json({
-        success: true,
+        success:
+          true,
 
         user: {
           id:
@@ -1558,14 +1980,16 @@ app.post(
             user.status,
 
           balance:
-            user.balance || 0,
+            user.balance ||
+            0,
 
           referralCode:
             user.referralCode
         },
 
         redirect:
-          user.status === "active"
+          user.status ===
+          "active"
             ? "/cursus"
             : "/"
       });
@@ -1576,7 +2000,9 @@ app.post(
       );
 
       return res.status(500).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Erreur serveur."
       });
@@ -1596,7 +2022,8 @@ app.get(
       req.user;
 
     return res.json({
-      success: true,
+      success:
+        true,
 
       user: {
         id:
@@ -1618,10 +2045,12 @@ app.get(
           user.status,
 
         balance:
-          user.balance || 0,
+          user.balance ||
+          0,
 
         pendingWithdrawal:
-          user.pendingWithdrawal || 0,
+          user.pendingWithdrawal ||
+          0,
 
         referralCode:
           user.referralCode
@@ -1656,10 +2085,14 @@ app.post(
         }
       );
 
-    clearSessionCookie(res);
+    clearSessionCookie(
+      res
+    );
 
     return res.json({
-      success: true,
+      success:
+        true,
+
       message:
         "Déconnexion réussie."
     });
@@ -1680,31 +2113,39 @@ app.post(
       } = req.body;
 
       const cleanEmail =
-        normalizeEmail(email);
+        normalizeEmail(
+          email
+        );
 
       if (
         !cleanEmail ||
         !password
       ) {
         return res.status(400).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Email et mot de passe requis."
         });
       }
 
       const admin =
-        await db.collection("admins").findOne({
-          email:
-            cleanEmail,
+        await db
+          .collection("admins")
+          .findOne({
+            email:
+              cleanEmail,
 
-          active:
-            true
-        });
+            active:
+              true
+          });
 
       if (!admin) {
         return res.status(401).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Identifiants administrateur incorrects."
         });
@@ -1718,7 +2159,9 @@ app.post(
 
       if (!validPassword) {
         return res.status(401).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Identifiants administrateur incorrects."
         });
@@ -1759,7 +2202,8 @@ app.post(
       );
 
       return res.json({
-        success: true,
+        success:
+          true,
 
         admin: {
           id:
@@ -1779,7 +2223,9 @@ app.post(
       );
 
       return res.status(500).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Erreur serveur."
       });
@@ -1796,7 +2242,8 @@ app.get(
   requireAdmin,
   async (req, res) => {
     return res.json({
-      success: true,
+      success:
+        true,
 
       admin: {
         id:
@@ -1843,7 +2290,9 @@ app.post(
     );
 
     return res.json({
-      success: true,
+      success:
+        true,
+
       message:
         "Déconnexion administrateur réussie."
     });
@@ -1859,8 +2308,11 @@ app.get(
   requireActiveUser,
   async (req, res) => {
     return res.json({
-      success: true,
-      access: true
+      success:
+        true,
+
+      access:
+        true
     });
   }
 );
@@ -1952,16 +2404,19 @@ app.get(
           .toArray();
 
       return res.json({
-        success: true,
+        success:
+          true,
 
         referralCode:
           user.referralCode,
 
         balance:
-          user.balance || 0,
+          user.balance ||
+          0,
 
         pendingWithdrawal:
-          user.pendingWithdrawal || 0,
+          user.pendingWithdrawal ||
+          0,
 
         referrals,
 
@@ -1978,7 +2433,9 @@ app.get(
       );
 
       return res.status(500).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Erreur serveur."
       });
@@ -1999,24 +2456,34 @@ app.post(
 
     try {
       const amount =
-        Number(req.body.amount);
+        Number(
+          req.body.amount
+        );
 
       if (
-        !Number.isFinite(amount) ||
+        !Number.isFinite(
+          amount
+        ) ||
         amount <= 0
       ) {
         return res.status(400).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Montant de retrait invalide."
         });
       }
 
       if (
-        !Number.isInteger(amount)
+        !Number.isInteger(
+          amount
+        )
       ) {
         return res.status(400).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Le montant doit être un nombre entier."
         });
@@ -2027,10 +2494,14 @@ app.post(
       await session.withTransaction(
         async () => {
           const users =
-            db.collection("users");
+            db.collection(
+              "users"
+            );
 
           const withdrawals =
-            db.collection("withdrawals");
+            db.collection(
+              "withdrawals"
+            );
 
           const updateResult =
             await users.updateOne(
@@ -2048,6 +2519,7 @@ app.post(
                             0
                           ]
                         },
+
                         {
                           $ifNull: [
                             "$pendingWithdrawal",
@@ -2126,7 +2598,8 @@ app.post(
       );
 
       return res.status(201).json({
-        success: true,
+        success:
+          true,
 
         message:
           "Demande de retrait enregistrée.",
@@ -2139,7 +2612,9 @@ app.post(
         "SOLDE_INSUFFISANT"
       ) {
         return res.status(400).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Solde disponible insuffisant."
         });
@@ -2151,7 +2626,9 @@ app.post(
       );
 
       return res.status(500).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Impossible d'enregistrer le retrait."
       });
@@ -2172,7 +2649,9 @@ app.get(
     try {
       const withdrawals =
         await db
-          .collection("withdrawals")
+          .collection(
+            "withdrawals"
+          )
           .find({
             userId:
               req.user._id
@@ -2185,7 +2664,9 @@ app.get(
 
       const payments =
         await db
-          .collection("payments")
+          .collection(
+            "payments"
+          )
           .find({
             userId:
               req.user._id
@@ -2198,7 +2679,9 @@ app.get(
 
       const transactions =
         await db
-          .collection("transactions")
+          .collection(
+            "transactions"
+          )
           .find({
             userId:
               req.user._id
@@ -2210,13 +2693,16 @@ app.get(
           .toArray();
 
       return res.json({
-        success: true,
+        success:
+          true,
 
         balance:
-          req.user.balance || 0,
+          req.user.balance ||
+          0,
 
         pendingWithdrawal:
-          req.user.pendingWithdrawal || 0,
+          req.user.pendingWithdrawal ||
+          0,
 
         payments,
 
@@ -2231,7 +2717,9 @@ app.get(
       );
 
       return res.status(500).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Erreur serveur."
       });
@@ -2249,13 +2737,19 @@ app.get(
   async (req, res) => {
     try {
       const users =
-        db.collection("users");
+        db.collection(
+          "users"
+        );
 
       const payments =
-        db.collection("payments");
+        db.collection(
+          "payments"
+        );
 
       const withdrawals =
-        db.collection("withdrawals");
+        db.collection(
+          "withdrawals"
+        );
 
       const [
         totalMembers,
@@ -2266,83 +2760,84 @@ app.get(
         pendingWithdrawals,
         revenueResult,
         commissionResult
-      ] = await Promise.all([
-        users.countDocuments(),
+      ] =
+        await Promise.all([
+          users.countDocuments(),
 
-        users.countDocuments({
-          status:
-            "active"
-        }),
+          users.countDocuments({
+            status:
+              "active"
+          }),
 
-        users.countDocuments({
-          status:
-            "pending"
-        }),
+          users.countDocuments({
+            status:
+              "pending"
+          }),
 
-        payments.countDocuments({
-          status:
-            "completed"
-        }),
+          payments.countDocuments({
+            status:
+              "completed"
+          }),
 
-        payments.countDocuments({
-          status:
-            "pending"
-        }),
+          payments.countDocuments({
+            status:
+              "pending"
+          }),
 
-        withdrawals.countDocuments({
-          status:
-            "pending"
-        }),
+          withdrawals.countDocuments({
+            status:
+              "pending"
+          }),
 
-        payments
-          .aggregate([
-            {
-              $match: {
-                status:
-                  "completed"
-              }
-            },
+          payments
+            .aggregate([
+              {
+                $match: {
+                  status:
+                    "completed"
+                }
+              },
 
-            {
-              $group: {
-                _id:
-                  null,
+              {
+                $group: {
+                  _id:
+                    null,
 
-                total: {
-                  $sum:
-                    "$amount"
+                  total: {
+                    $sum:
+                      "$amount"
+                  }
                 }
               }
-            }
-          ])
-          .toArray(),
+            ])
+            .toArray(),
 
-        payments
-          .aggregate([
-            {
-              $match: {
-                status:
-                  "completed",
+          payments
+            .aggregate([
+              {
+                $match: {
+                  status:
+                    "completed",
 
-                commissionStatus:
-                  "paid"
-              }
-            },
+                  commissionStatus:
+                    "paid"
+                }
+              },
 
-            {
-              $group: {
-                _id:
-                  null,
+              {
+                $group: {
+                  _id:
+                    null,
 
-                total: {
-                  $sum:
-                    "$commissionAmount"
+                  total: {
+                    $sum:
+                      "$commissionAmount"
+                  }
                 }
               }
-            }
-          ])
-          .toArray()
-      ]);
+            ])
+            .toArray()
+        ]);
 
       const pendingWithdrawalResult =
         await withdrawals
@@ -2369,7 +2864,8 @@ app.get(
           .toArray();
 
       return res.json({
-        success: true,
+        success:
+          true,
 
         stats: {
           totalMembers,
@@ -2385,15 +2881,18 @@ app.get(
           pendingWithdrawals,
 
           revenue:
-            revenueResult[0]?.total ||
+            revenueResult[0]
+              ?.total ||
             0,
 
           commissions:
-            commissionResult[0]?.total ||
+            commissionResult[0]
+              ?.total ||
             0,
 
           pendingWithdrawalAmount:
-            pendingWithdrawalResult[0]?.total ||
+            pendingWithdrawalResult[0]
+              ?.total ||
             0
         }
       });
@@ -2404,7 +2903,9 @@ app.get(
       );
 
       return res.status(500).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Impossible de charger le dashboard."
       });
@@ -2423,7 +2924,8 @@ app.get(
     try {
       const search =
         String(
-          req.query.search || ""
+          req.query.search ||
+            ""
         ).trim();
 
       const query = {};
@@ -2488,7 +2990,9 @@ app.get(
           .toArray();
 
       return res.json({
-        success: true,
+        success:
+          true,
+
         members
       });
     } catch (error) {
@@ -2498,7 +3002,9 @@ app.get(
       );
 
       return res.status(500).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Impossible de charger les membres."
       });
@@ -2517,7 +3023,9 @@ app.get(
     try {
       const payments =
         await db
-          .collection("payments")
+          .collection(
+            "payments"
+          )
           .aggregate([
             {
               $sort: {
@@ -2605,7 +3113,9 @@ app.get(
           .toArray();
 
       return res.json({
-        success: true,
+        success:
+          true,
+
         payments
       });
     } catch (error) {
@@ -2615,7 +3125,9 @@ app.get(
       );
 
       return res.status(500).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Impossible de charger les paiements."
       });
@@ -2634,7 +3146,9 @@ app.get(
     try {
       const withdrawals =
         await db
-          .collection("withdrawals")
+          .collection(
+            "withdrawals"
+          )
           .aggregate([
             {
               $sort: {
@@ -2710,7 +3224,9 @@ app.get(
           .toArray();
 
       return res.json({
-        success: true,
+        success:
+          true,
+
         withdrawals
       });
     } catch (error) {
@@ -2720,7 +3236,9 @@ app.get(
       );
 
       return res.status(500).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Impossible de charger les retraits."
       });
@@ -2741,7 +3259,8 @@ app.patch(
 
     const action =
       String(
-        req.body.action || ""
+        req.body.action ||
+          ""
       )
         .trim()
         .toLowerCase();
@@ -2752,7 +3271,9 @@ app.patch(
       )
     ) {
       return res.status(400).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Identifiant de retrait invalide."
       });
@@ -2763,7 +3284,9 @@ app.patch(
       action !== "rejected"
     ) {
       return res.status(400).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Action de retrait invalide."
       });
@@ -2808,7 +3331,7 @@ app.patch(
 
           if (!withdrawal) {
             throw new Error(
-              "RETRAIT_INTRouvable"
+              "RETRAIT_INTROUVABLE"
             );
           }
 
@@ -2834,12 +3357,13 @@ app.patch(
 
           if (!user) {
             throw new Error(
-              "UTILISATEUR_INTRouvable"
+              "UTILISATEUR_INTROUVABLE"
             );
           }
 
           if (
-            action === "paid"
+            action ===
+            "paid"
           ) {
             const updateResult =
               await users.updateOne(
@@ -3019,20 +3543,24 @@ app.patch(
       );
 
       return res.json({
-        success: true,
+        success:
+          true,
 
         message:
-          action === "paid"
+          action ===
+          "paid"
             ? "Retrait marqué comme payé."
             : "Retrait rejeté."
       });
     } catch (error) {
       if (
         error.message ===
-        "RETRAIT_INTRouvable"
+        "RETRAIT_INTROUVABLE"
       ) {
         return res.status(404).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Retrait introuvable."
         });
@@ -3043,7 +3571,9 @@ app.patch(
         "RETRAIT_DEJA_TRAITE"
       ) {
         return res.status(409).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Ce retrait a déjà été traité."
         });
@@ -3051,10 +3581,12 @@ app.patch(
 
       if (
         error.message ===
-        "UTILISATEUR_INTRouvable"
+        "UTILISATEUR_INTROUVABLE"
       ) {
         return res.status(404).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Utilisateur introuvable."
         });
@@ -3065,7 +3597,9 @@ app.patch(
         "SOLDE_INSUFFISANT"
       ) {
         return res.status(400).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Le solde disponible est insuffisant pour traiter ce retrait."
         });
@@ -3077,7 +3611,9 @@ app.patch(
       );
 
       return res.status(500).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Impossible de traiter le retrait."
       });
@@ -3098,7 +3634,9 @@ app.get(
     try {
       const modules =
         await db
-          .collection("cursus_modules")
+          .collection(
+            "cursus_modules"
+          )
           .find({})
           .sort({
             order:
@@ -3107,7 +3645,9 @@ app.get(
           .toArray();
 
       return res.json({
-        success: true,
+        success:
+          true,
+
         modules
       });
     } catch (error) {
@@ -3117,7 +3657,9 @@ app.get(
       );
 
       return res.status(500).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Impossible de charger le cursus."
       });
@@ -3137,7 +3679,9 @@ app.post(
       } = req.body;
 
       const cleanTitle =
-        String(title || "").trim();
+        String(
+          title || ""
+        ).trim();
 
       const cleanDescription =
         String(
@@ -3149,7 +3693,9 @@ app.post(
 
       if (!cleanTitle) {
         return res.status(400).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Le titre du module est obligatoire."
         });
@@ -3157,7 +3703,9 @@ app.post(
 
       const result =
         await db
-          .collection("cursus_modules")
+          .collection(
+            "cursus_modules"
+          )
           .insertOne({
             title:
               cleanTitle,
@@ -3183,7 +3731,9 @@ app.post(
           });
 
       return res.status(201).json({
-        success: true,
+        success:
+          true,
+
         moduleId:
           result.insertedId.toString()
       });
@@ -3194,7 +3744,9 @@ app.post(
       );
 
       return res.status(500).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Impossible de créer le module."
       });
@@ -3216,7 +3768,9 @@ app.patch(
         )
       ) {
         return res.status(400).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Identifiant de module invalide."
         });
@@ -3259,7 +3813,9 @@ app.patch(
           )
         ) {
           return res.status(400).json({
-            success: false,
+            success:
+              false,
+
             message:
               "Ordre invalide."
           });
@@ -3274,7 +3830,9 @@ app.patch(
 
       const result =
         await db
-          .collection("cursus_modules")
+          .collection(
+            "cursus_modules"
+          )
           .updateOne(
             {
               _id:
@@ -3293,14 +3851,18 @@ app.patch(
         1
       ) {
         return res.status(404).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Module introuvable."
         });
       }
 
       return res.json({
-        success: true,
+        success:
+          true,
+
         message:
           "Module mis à jour."
       });
@@ -3311,7 +3873,9 @@ app.patch(
       );
 
       return res.status(500).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Impossible de modifier le module."
       });
@@ -3333,7 +3897,9 @@ app.delete(
         )
       ) {
         return res.status(400).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Identifiant de module invalide."
         });
@@ -3341,7 +3907,9 @@ app.delete(
 
       const result =
         await db
-          .collection("cursus_modules")
+          .collection(
+            "cursus_modules"
+          )
           .deleteOne({
             _id:
               new ObjectId(
@@ -3354,14 +3922,18 @@ app.delete(
         1
       ) {
         return res.status(404).json({
-          success: false,
+          success:
+            false,
+
           message:
             "Module introuvable."
         });
       }
 
       return res.json({
-        success: true,
+        success:
+          true,
+
         message:
           "Module supprimé."
       });
@@ -3372,7 +3944,9 @@ app.delete(
       );
 
       return res.status(500).json({
-        success: false,
+        success:
+          false,
+
         message:
           "Impossible de supprimer le module."
       });
@@ -3388,7 +3962,9 @@ app.use(
   "/api",
   (req, res) => {
     res.status(404).json({
-      success: false,
+      success:
+        false,
+
       message:
         "Route API introuvable."
     });
@@ -3399,32 +3975,58 @@ app.use(
    ROUTES FRONTEND
 ========================================================= */
 
-app.get("/{*splat}", (req, res, next) => {
-  if (req.path.startsWith("/api")) {
-    return next();
-  }
+app.get(
+  "/{*splat}",
+  (req, res, next) => {
+    if (
+      req.path.startsWith(
+        "/api"
+      )
+    ) {
+      return next();
+    }
 
-  const indexPath = path.join(__dirname, "dist", "index.html");
-  res.sendFile(indexPath);
-});
+    const indexPath =
+      path.join(
+        __dirname,
+        "dist",
+        "index.html"
+      );
+
+    res.sendFile(
+      indexPath
+    );
+  }
+);
 
 /* =========================================================
    ERREUR GLOBALE
 ========================================================= */
 
 app.use(
-  (error, req, res, next) => {
+  (
+    error,
+    req,
+    res,
+    next
+  ) => {
     console.error(
       "Erreur globale :",
       error
     );
 
-    if (res.headersSent) {
-      return next(error);
+    if (
+      res.headersSent
+    ) {
+      return next(
+        error
+      );
     }
 
     return res.status(500).json({
-      success: false,
+      success:
+        false,
+
       message:
         "Erreur interne du serveur."
     });
@@ -3484,3 +4086,4 @@ async function startServer() {
 }
 
 startServer();
+```
