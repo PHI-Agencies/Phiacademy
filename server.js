@@ -1,3 +1,4 @@
+js
 const express = require("express");
 const path = require("path");
 const crypto = require("crypto");
@@ -232,7 +233,7 @@ function hashSessionToken(token) {
 }
 
 /* =========================================================
-   MOT DE PASSE (VERSION CORRIGÉE)
+   MOT DE PASSE
 ========================================================= */
 
 function hashPassword(password) {
@@ -259,46 +260,58 @@ function hashPassword(password) {
   });
 }
 
-function verifyPassword(password, storedHash) {
-  return new Promise((resolve) => {
+function verifyPassword(
+  password,
+  storedHash
+) {
+  return new Promise((resolve, reject) => {
     try {
-      if (!storedHash || typeof storedHash !== "string") {
-        resolve(false);
-        return;
-      }
-
-      // 1. Découpage pour séparer le SEL et la CLÉ enregistrés
-      const [salt, key] = storedHash.split(":");
+      const [salt, key] =
+        String(storedHash).split(":");
 
       if (!salt || !key) {
         resolve(false);
         return;
       }
 
-      // 2. On hache le mot de passe entré avec le MÊME sel
-      crypto.scrypt(password, salt, 64, (error, derivedKey) => {
-        if (error) {
-          resolve(false);
-          return;
+      crypto.scrypt(
+        password,
+        salt,
+        64,
+        (error, derivedKey) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+
+          const storedKey =
+            Buffer.from(
+              key,
+              "hex"
+            );
+
+          if (
+            storedKey.length !==
+            derivedKey.length
+          ) {
+            resolve(false);
+            return;
+          }
+
+          resolve(
+            crypto.timingSafeEqual(
+              storedKey,
+              derivedKey
+            )
+          );
         }
-
-        // 3. Conversion propre de la clé BDD en Buffer d'octets
-        const keyBuffer = Buffer.from(key, "hex");
-
-        // 4. Vérification de sécurité sur la taille
-        if (keyBuffer.length !== derivedKey.length) {
-          resolve(false);
-          return;
-        }
-
-        // 5. Comparaison binaire sécurisée
-        resolve(crypto.timingSafeEqual(keyBuffer, derivedKey));
-      });
-    } catch (err) {
+      );
+    } catch {
       resolve(false);
     }
   });
 }
+
 /* =========================================================
    SESSION MEMBRE
 ========================================================= */
@@ -4073,4 +4086,3 @@ async function startServer() {
 }
 
 startServer();
-
