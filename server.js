@@ -259,54 +259,42 @@ function hashPassword(password) {
   });
 }
 
-function verifyPassword(
-  password,
-  storedHash
-) {
-  return new Promise((resolve, reject) => {
+function verifyPassword(password, storedHash) {
+  return new Promise((resolve) => {
     try {
       if (!storedHash || typeof storedHash !== "string") {
         resolve(false);
         return;
       }
 
-      const [salt, key] = String(storedHash).split(":");
+      // 1. Découpage pour séparer le SEL et la CLÉ enregistrés
+      const [salt, key] = storedHash.split(":");
 
       if (!salt || !key) {
         resolve(false);
         return;
       }
 
-      // On dérive le mot de passe soumis par le client en utilisant le MÊME sel
-      crypto.scrypt(
-        password,
-        salt,
-        64,
-        (error, derivedKey) => {
-          if (error) {
-            reject(error);
-            return;
-          }
-
-          // Convertit la clé hexadécimale stockée en base de données en Buffer
-          const storedKeyBuffer = Buffer.from(key, "hex");
-
-          // Vérification de sécurité de la longueur des tampons (Buffers)
-          if (storedKeyBuffer.length !== derivedKey.length) {
-            resolve(false);
-            return;
-          }
-
-          // Comparaison sécurisée contre les attaques temporelles (timing attacks)
-          resolve(
-            crypto.timingSafeEqual(
-              storedKeyBuffer,
-              derivedKey
-            )
-          );
+      // 2. On hache le mot de passe entré avec le MÊME sel
+      crypto.scrypt(password, salt, 64, (error, derivedKey) => {
+        if (error) {
+          resolve(false);
+          return;
         }
-      );
-    } catch {
+
+        // 3. Conversion propre de la clé BDD en Buffer d'octets
+        const keyBuffer = Buffer.from(key, "hex");
+
+        // 4. Vérification de sécurité sur la taille
+        if (keyBuffer.length !== derivedKey.length) {
+          resolve(false);
+          return;
+        }
+
+        // 5. Comparaison binaire sécurisée
+        resolve(crypto.timingSafeEqual(keyBuffer, derivedKey));
+      });
+    } catch (err) {
       resolve(false);
     }
   });
