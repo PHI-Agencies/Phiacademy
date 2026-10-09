@@ -232,59 +232,80 @@ function hashSessionToken(token) {
 }
 
 /* =========================================================
-   MOT DE PASSE (CORRIGÉ)
+   MOT DE PASSE
 ========================================================= */
 
 function hashPassword(password) {
   return new Promise((resolve, reject) => {
-    // Génère un sel unique de 16 octets
-    const salt = crypto.randomBytes(16).toString("hex");
+    const salt = crypto
+      .randomBytes(16)
+      .toString("hex");
 
-    crypto.scrypt(password, salt, 64, (error, derivedKey) => {
-      if (error) {
-        reject(error);
-        return;
+    crypto.scrypt(
+      password,
+      salt,
+      64,
+      (error, derivedKey) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+
+        resolve(
+          `${salt}:${derivedKey.toString("hex")}`
+        );
       }
-
-      // Stocke au format "sel:hash_hexadécimal"
-      resolve(`${salt}:${derivedKey.toString("hex")}`);
-    });
+    );
   });
 }
 
-function verifyPassword(password, storedHash) {
+function verifyPassword(
+  password,
+  storedHash
+) {
   return new Promise((resolve, reject) => {
     try {
-      if (!storedHash || typeof storedHash !== "string") {
-        resolve(false);
-        return;
-      }
-
-      const [salt, key] = storedHash.split(":");
+      const [salt, key] =
+        String(storedHash).split(":");
 
       if (!salt || !key) {
         resolve(false);
         return;
       }
 
-      // On dérive le mot de passe entré par l'utilisateur avec le MÊME sel
-      crypto.scrypt(password, salt, 64, (error, derivedKey) => {
-        if (error) {
-          reject(error);
-          return;
+      crypto.scrypt(
+        password,
+        salt,
+        64,
+        (error, derivedKey) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+
+          const storedKey =
+            Buffer.from(
+              key,
+              "hex"
+            );
+
+          if (
+            storedKey.length !==
+            derivedKey.length
+          ) {
+            resolve(false);
+            return;
+          }
+
+          resolve(
+            crypto.timingSafeEqual(
+              storedKey,
+              derivedKey
+            )
+          );
         }
-
-        const keyBuffer = Buffer.from(key, "hex");
-
-        // Comparaison sécurisée contre les attaques par analyse temporelle (timing attacks)
-        if (keyBuffer.length !== derivedKey.length) {
-          resolve(false);
-          return;
-        }
-
-        resolve(crypto.timingSafeEqual(keyBuffer, derivedKey));
-      });
-    } catch (err) {
+      );
+    } catch {
       resolve(false);
     }
   });
