@@ -232,7 +232,7 @@ function hashSessionToken(token) {
 }
 
 /* =========================================================
-   MOT DE PASSE
+   MOT DE PASSE (VERSION CORRIGÉE)
 ========================================================= */
 
 function hashPassword(password) {
@@ -265,14 +265,19 @@ function verifyPassword(
 ) {
   return new Promise((resolve, reject) => {
     try {
-      const [salt, key] =
-        String(storedHash).split(":");
+      if (!storedHash || typeof storedHash !== "string") {
+        resolve(false);
+        return;
+      }
+
+      const [salt, key] = String(storedHash).split(":");
 
       if (!salt || !key) {
         resolve(false);
         return;
       }
 
+      // On dérive le mot de passe soumis par le client en utilisant le MÊME sel
       crypto.scrypt(
         password,
         salt,
@@ -283,23 +288,19 @@ function verifyPassword(
             return;
           }
 
-          const storedKey =
-            Buffer.from(
-              key,
-              "hex"
-            );
+          // Convertit la clé hexadécimale stockée en base de données en Buffer
+          const storedKeyBuffer = Buffer.from(key, "hex");
 
-          if (
-            storedKey.length !==
-            derivedKey.length
-          ) {
+          // Vérification de sécurité de la longueur des tampons (Buffers)
+          if (storedKeyBuffer.length !== derivedKey.length) {
             resolve(false);
             return;
           }
 
+          // Comparaison sécurisée contre les attaques temporelles (timing attacks)
           resolve(
             crypto.timingSafeEqual(
-              storedKey,
+              storedKeyBuffer,
               derivedKey
             )
           );
@@ -310,7 +311,6 @@ function verifyPassword(
     }
   });
 }
-
 /* =========================================================
    SESSION MEMBRE
 ========================================================= */
