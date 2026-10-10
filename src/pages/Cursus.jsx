@@ -33,7 +33,7 @@ function Cursus() {
         "Comment fonctionne un marché ?",
         "Les différents marchés",
       ],
-      resources: [ { url: "https://youtu.be/iWqYXlVwAR8?si=srV3l_fU7A62YMEw" },  ],,
+      resources: [ { url: "https://youtu.be/iWqYXlVwAR8?si=srV3l_fU7A62YMEw" },  ],
     },
     {
       number: "02",
