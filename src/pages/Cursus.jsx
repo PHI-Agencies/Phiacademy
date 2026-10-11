@@ -33,7 +33,7 @@ function Cursus() {
         "Comment fonctionne un marché ?",
         "Les différents marchés",
       ],
-      resources: [ { url: "https://youtu.be/iWqYXlVwAR8?si=srV3l_fU7A62YMEw" },  ],
+      resources: [ { url: "https://youtu.be/iWqYXlVwAR8?si=srV3l_fU7A62YMEw" }, ],
     },
     {
       number: "02",
@@ -45,7 +45,7 @@ function Cursus() {
         "Supports et résistances",
         "Les unités de temps",
       ],
-      resources: [],
+      resources: [{ url: "https://youtu.be/IoLaFOfkOEo?si=bB0MJfqnUs5rjJhK" }, ],
     },
     {
       number: "03",
@@ -57,7 +57,7 @@ function Cursus() {
         "Liquidité et zones d'intérêt",
         "Order Blocks et déséquilibres",
       ],
-      resources: [],
+      resources: [{ url: "https://youtu.be/chrIBc2W9Sc?si=AJMGvsKcga5EaHyA" },],
     },
     {
       number: "04",
@@ -69,7 +69,7 @@ function Cursus() {
         "Zones de réaction",
         "Configurations de prix",
       ],
-      resources: [],
+      resources: [{ url: "https://youtu.be/Lfz9DVjpYxw?si=XoRCFsLDNFoYCO4U" },],
     },
     {
       number: "05",
@@ -81,7 +81,7 @@ function Cursus() {
         "Stop Loss",
         "Ratio risque / rendement",
       ],
-      resources: [],
+      resources: [{ url: "https://youtu.be/BF7DFCoJOOU?si=xp3gYXRy-PZ-BtaO" },],
     },
     {
       number: "06",
