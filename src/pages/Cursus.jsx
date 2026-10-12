@@ -33,7 +33,11 @@ function Cursus() {
         "Comment fonctionne un marché ?",
         "Les différents marchés",
       ],
-      resources: [ { url: "https://youtu.be/iWqYXlVwAR8?si=srV3l_fU7A62YMEw" }, ],
+      resources: [
+        { url: "https://youtu.be/iWqYXlVwAR8?si=srV3l_fU7A62YMEw" }, // Pour "Qu'est-ce que le trading ?"
+        { url: "https://youtu.be/IoLaFOfkOEo?si=bB0MJfqnUs5rjJhK" }, // Pour "Comment fonctionne un marché ?"
+        { url: "https://youtu.be/chrIBc2W9Sc?si=AJMGvsKcga5EaHyA" }, // Pour "Les différents marchés"
+      ],
     },
     {
       number: "02",
@@ -45,7 +49,11 @@ function Cursus() {
         "Supports et résistances",
         "Les unités de temps",
       ],
-      resources: [{ url: "https://youtu.be/IoLaFOfkOEo?si=bB0MJfqnUs5rjJhK" }, ],
+      resources: [
+        { url: "https://youtu.be/Lfz9DVjpYxw?si=XoRCFsLDNFoYCO4U" }, // Pour "Les chandeliers japonais"
+        { url: "https://youtu.be/BF7DFCoJOOU?si=xp3gYXRy-PZ-BtaO" }, // Pour "Supports et résistances"
+        { url: "https://youtu.be/wfEFT-VHmmE?si=krWw6e3rZ50H6oJJ" }, // Pour "Les unités de temps"
+      ]
     },
     {
       number: "03",
@@ -57,7 +65,11 @@ function Cursus() {
         "Liquidité et zones d'intérêt",
         "Order Blocks et déséquilibres",
       ],
-      resources: [{ url: "https://youtu.be/chrIBc2W9Sc?si=AJMGvsKcga5EaHyA" },],
+      resources: [
+        { url: "https://youtu.be/g0LpGYJzsxo?si=i3G3l9ylbpOmP8rR" }, // Pour "Structure du marché"
+        { url: "https://youtu.be/NBhrad-MM-U?si=IMuIU_5fp8sPG5Dk" }, // Pour "Liquidité et zones d'intérêt"
+        { url: "https://youtu.be/vNK17ziTvYg?si=S4pyKidZpZkrJEhi" }, // Pour "Order Blocks et déséquilibres"
+      ],
     },
     {
       number: "04",
@@ -67,9 +79,13 @@ function Cursus() {
       lessons: [
         "Structure du marché",
         "Zones de réaction",
-        "Configurations de prix",
+        "Confirmations importantes",
       ],
-      resources: [{ url: "https://youtu.be/Lfz9DVjpYxw?si=XoRCFsLDNFoYCO4U" },],
+      resources: [
+        { url: "https://youtu.be/29Q58Gpf3Hs?si=OCEx_dP0VH-L9oZL" }, // Pour "Structure du marché"
+        { url: "https://youtu.be/jPo7VRTd9zg?si=OLwPo8RrF1SMbPVb" }, // Pour "Zones de réaction"
+        { url: "https://youtu.be/82chDLfWHWM?si=Z-ortngcG7wYyH9p" }, // Pour "Configurations de prix"
+      ],
     },
     {
       number: "05",
@@ -81,7 +97,11 @@ function Cursus() {
         "Stop Loss",
         "Ratio risque / rendement",
       ],
-      resources: [{ url: "https://youtu.be/BF7DFCoJOOU?si=xp3gYXRy-PZ-BtaO" },],
+      resources: [
+        { url: "https://youtu.be/4tkqx2LKd7g?si=yjzLBtsia_pzdbYQ" }, // Pour "Risque par position"
+        { url: "https://youtu.be/VWXqhaVez08?si=E792auhHqmYq_-Kj" }, // Pour "Stop Loss"
+        { url: "https://youtu.be/yTcPWkjt1-8?si=HjBkN1CtJVBeQvr2" }, // Pour "Ratio risque / rendement"
+      ],
     },
     {
       number: "06",
@@ -93,7 +113,11 @@ function Cursus() {
         "La discipline",
         "Construire une routine",
       ],
-      resources: [],
+      resources: [
+        { url: "https://youtu.be/iWqYXlVwAR8?si=srV3l_fU7A62YMEw" },
+        { url: "https://youtu.be/IoLaFOfkOEo?si=bB0MJfqnUs5rjJhK" },
+        { url: "https://youtu.be/chrIBc2W9Sc?si=AJMGvsKcga5EaHyA" },
+      ],
     },
   ];
 
