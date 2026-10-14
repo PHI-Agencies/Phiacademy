@@ -199,7 +199,7 @@ function Cursus() {
     return (
       <div className="cursus-loading">
         <div className="loading-logo">
-          <img src="/images/logo/phi-logo.png" alt="PHI Academy" />
+          <img src="https://res.cloudinary.com/dzy6t8hky/image/upload/v1791970857/temoignage6_dyreit.jpg" alt="PHI Academy" />
         </div>
 
         <div className="loading-spinner" />
