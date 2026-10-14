@@ -73,15 +73,19 @@ function Home() {
           MOBILE APP HEADER
       ========================= */}
 
-      <header className="mobile-header">
-        <div className="brand-area">
-          <div className="mobile-logo" style={{ background: "#ffffff", padding: "3px" }}>
-            <img
-              src="https://res.cloudinary.com/dzy6t8hky/image/upload/v1791970857/temoignage6_dyreit.jpg"
-              alt="PHI Academy"
-              style={{ width: "100%", height: "100%", objectFit: "contain" }}
-            />
-          </div>
+      <div className="mobile-logo">
+  <img
+    src="https://res.cloudinary.com/dzy6t8hky/image/upload/v1791970857/temoignage6_dyreit.jpg"
+    alt="PHI Academy"
+    style={{
+      width: "250%",
+      height: "250%",
+      objectFit: "cover",
+      objectPosition: "center 22%", // Ajuste le cadrage vertical pour cibler uniquement le symbole du haut
+      transform: "scale(1.2)"
+    }}
+  />
+</div>
 
           <div className="brand-name">
             <strong>PHI</strong>
