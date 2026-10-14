@@ -28,7 +28,7 @@ function Services() {
       level: "Débutant → Intermédiaire",
       description:
         "Le guide principal pour construire des bases solides et progresser dans votre compréhension du trading.",
-      image: "images/books/trading-precision.jpg",
+      image: "./images/books/trading-precision.jpg",
       link: "https://rylhfhli.mychariow.shop/prd_5sn74art",
       featured: true,
     },
@@ -38,7 +38,7 @@ function Services() {
       level: "Intermédiaire → Avancé",
       description:
         "Un guide destiné aux traders qui souhaitent approfondir leur méthode et leur compréhension des marchés.",
-      image: "images/books/code-du-trader.jpg",
+      image: "./images/books/code-du-trader.jpg",
       link: "https://rylhfhli.mychariow.shop/prd_7dytyh",
       featured: true,
     },
@@ -48,7 +48,7 @@ function Services() {
       level: "Patterns",
       description:
         "Une ressource consacrée aux principales configurations graphiques à connaître.",
-      image: "images/books/22-patterns.jpg",
+      image: "./images/books/22-patterns.jpg",
       link: "https://rylhfhli.mychariow.shop/prd_nhl8di9w",
     },
     {
@@ -57,7 +57,7 @@ function Services() {
       level: "Référence",
       description:
         "Retrouvez les principaux termes et notions utilisés dans l'univers du trading.",
-      image: "images/books/dictionnaire-trading.jpg",
+      image: "./images/books/dictionnaire-trading.jpg",
       link: "https://rylhfhli.mychariow.shop/prd_hhzxbpd0",
     },
     {
@@ -66,7 +66,7 @@ function Services() {
       level: "Analyse technique",
       description:
         "Une ressource dédiée à la compréhension et à l'utilisation des moyennes mobiles.",
-      image: "images/books/moyennes-mobiles.jpg",
+      image: "./images/books/moyennes-mobiles.jpg",
       link: "https://rylhfhli.mychariow.shop/prd_ne5d75y5",
     },
     {
@@ -75,7 +75,7 @@ function Services() {
       level: "Analyse technique",
       description:
         "Explorez les principaux indicateurs techniques et leur utilisation dans l'analyse des marchés.",
-      image: "images/books/grand-livre-indicateurs.jpg",
+      image: "./images/books/grand-livre-indicateurs.jpg",
       link: "https://rylhfhli.mychariow.shop/prd_6v509q87",
     },
     {
@@ -84,7 +84,7 @@ function Services() {
       level: "English Guide",
       description:
         "A trading resource designed for English-speaking readers who want to learn and develop their market knowledge.",
-      image: "images/books/simple-trading-book.jpg",
+      image: "./images/books/simple-trading-book.jpg",
       link: "https://rylhfhli.mychariow.shop/prd_u5uxcfu5",
     },
   ];
