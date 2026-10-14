@@ -69,23 +69,18 @@ function Home() {
     <div className="phi-app">
       <Navbar />
 
-      {/* =========================
+       {/* =========================
           MOBILE APP HEADER
       ========================= */}
 
-      <div className="mobile-logo">
-  <img
-    src="https://res.cloudinary.com/dzy6t8hky/image/upload/v1791970857/temoignage6_dyreit.jpg"
-    alt="PHI Academy"
-    style={{
-      width: "250%",
-      height: "250%",
-      objectFit: "cover",
-      objectPosition: "center 22%", // Ajuste le cadrage vertical pour cibler uniquement le symbole du haut
-      transform: "scale(1.2)"
-    }}
-  />
-</div>
+      <header className="mobile-header">
+        <div className="brand-area">
+          <div className="mobile-logo">
+            <img
+              src="https://res.cloudinary.com/dzy6t8hky/image/upload/v1791974143/Gemini_Generated_Image_ig831yig831yig83_so0wli.jpg"
+              alt="PHI Academy"
+            />
+          </div>
 
           <div className="brand-name">
             <strong>PHI</strong>
