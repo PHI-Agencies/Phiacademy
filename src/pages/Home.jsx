@@ -77,7 +77,7 @@ function Home() {
         <div className="brand-area">
           <div className="mobile-logo">
             <img
-              src="/images/logo/phi-logo.png"
+              src="https://res.cloudinary.com/dzy6t8hky/image/upload/v1791970857/temoignage6_dyreit.jpg"
               alt="PHI Academy"
             />
           </div>
