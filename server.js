@@ -1336,6 +1336,7 @@ app.post(
   }
 );
 
+
 /* =========================================================
    CRÉATION PAIEMENT PAYDUNYA
 ========================================================= */
@@ -1344,23 +1345,20 @@ app.post(
   "/api/payment/create",
   requireAuth,
   async (req, res) => {
+    let paymentId = null;
+
     try {
-      const user =
-        req.user;
+      const user = req.user;
 
-      if (
-        user.status ===
-        "active"
-      ) {
+      // 1. Vérifier que le compte n'est pas déjà actif
+      if (user.status === "active") {
         return res.status(400).json({
-          success:
-            false,
-
-          message:
-            "Ce compte est déjà actif."
+          success: false,
+          message: "Ce compte est déjà actif."
         });
       }
 
+      // 2. Vérifier la configuration PayDunya
       if (
         !PAYDUNYA_MASTER_KEY ||
         !PAYDUNYA_PRIVATE_KEY ||
@@ -1369,295 +1367,258 @@ app.post(
         !RETURN_URL
       ) {
         console.error(
-          "Configuration PayDunya incomplète."
+          "[PAYDUNYA] Configuration incomplète."
         );
 
         return res.status(500).json({
-          success:
-            false,
-
+          success: false,
           message:
             "La configuration du paiement est incomplète."
         });
       }
 
-      const existingPayment =
-        await db
-          .collection("payments")
-          .findOne(
-            {
-              userId:
-                user._id,
-
-              status:
-                "pending",
-
-              paymentUrl: {
-                $exists:
-                  true,
-
-                $ne:
-                  null
-              }
-            },
-            {
-              sort: {
-                createdAt:
-                  -1
-              }
+      // 3. Réutiliser une facture en attente si elle existe
+      const existingPayment = await db
+        .collection("payments")
+        .findOne(
+          {
+            userId: user._id,
+            status: "pending",
+            paymentUrl: {
+              $exists: true,
+              $ne: null
             }
-          );
+          },
+          {
+            sort: {
+              createdAt: -1
+            }
+          }
+        );
 
       if (existingPayment) {
         return res.json({
-          success:
-            true,
-
-          paymentUrl:
-            existingPayment.paymentUrl,
-
-          paymentId:
-            existingPayment._id.toString()
+          success: true,
+          paymentUrl: existingPayment.paymentUrl,
+          paymentId: existingPayment._id.toString()
         });
       }
 
+      // 4. Créer l'enregistrement du paiement dans MongoDB
       const payment = {
-        userId:
-          user._id,
-
-        amount:
-          MEMBERSHIP_PRICE,
-
-        currency:
-          "XOF",
-
-        status:
-          "pending",
-
-        paydunyaToken:
-          null,
-
-        paymentUrl:
-          null,
-
-        commissionStatus:
-          "pending",
-
-        commissionAmount:
-          REFERRAL_COMMISSION,
-
-        createdAt:
-          new Date(),
-
-        completedAt:
-          null,
-
-        updatedAt:
-          new Date()
+        userId: user._id,
+        amount: MEMBERSHIP_PRICE,
+        currency: "XOF",
+        status: "pending",
+        paydunyaToken: null,
+        paymentUrl: null,
+        commissionStatus: "pending",
+        commissionAmount: REFERRAL_COMMISSION,
+        createdAt: new Date(),
+        completedAt: null,
+        updatedAt: new Date()
       };
 
-      const paymentResult =
-        await db
-          .collection("payments")
-          .insertOne(
-            payment
-          );
+      const paymentResult = await db
+        .collection("payments")
+        .insertOne(payment);
+
+      paymentId = paymentResult.insertedId;
+
+      // 5. Préparer les données au format PayDunya
+      const customerName = [
+        user.firstName,
+        user.lastName
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .trim() || user.name || "Client PHI Academy";
 
       const paymentData = {
         invoice: {
-          total_amount:
-            MEMBERSHIP_PRICE,
-
-          currency:
-            "XOF",
-
-          description:
-            "Abonnement PHI Academy"
+          total_amount: MEMBERSHIP_PRICE,
+          currency: "XOF",
+          description: "Abonnement PHI Academy",
+          customer: {
+            name: customerName,
+            email: user.email,
+            phone: user.phone || ""
+          }
         },
 
         store: {
-          name:
-            "PHI Academy"
+          name: "PHI Academy"
         },
 
         actions: {
-          return_url:
-            RETURN_URL,
-
-          cancel_url:
-            CANCEL_URL,
-
-          callback_url:
-            CALLBACK_URL
+          return_url: RETURN_URL,
+          cancel_url: CANCEL_URL || RETURN_URL,
+          callback_url: CALLBACK_URL
         },
 
-        customer: {
-          name:
-            `${user.firstName} ${user.lastName}`,
-
-          phone_number:
-            user.phone,
-
-          email:
-            user.email
-        },
-
-        metadata: {
-          userId:
-            user._id.toString(),
-
-          paymentId:
-            paymentResult.insertedId.toString()
+        custom_data: {
+          userId: user._id.toString(),
+          paymentId: paymentId.toString()
         }
       };
 
-      const response =
-        await axios.post(
-          PAYDUNYA_CHECKOUT_URL,
-          paymentData,
-          {
-            headers: {
-              "Content-Type":
-                "application/json",
-
-              "PAYDUNYA-MASTER-KEY":
-                PAYDUNYA_MASTER_KEY,
-
-              "PAYDUNYA-PRIVATE-KEY":
-                PAYDUNYA_PRIVATE_KEY,
-
-              "PAYDUNYA-TOKEN":
-                PAYDUNYA_TOKEN
-            }
-          }
-        );
-
-      const result =
-        response.data;
-
-      if (
-        String(
-          result.response_code
-        ) !== "00"
-      ) {
-        await db
-          .collection("payments")
-          .updateOne(
-            {
-              _id:
-                paymentResult.insertedId
-            },
-            {
-              $set: {
-                status:
-                  "failed",
-
-                errorMessage:
-                  result.response_text ||
-                  null,
-
-                updatedAt:
-                  new Date()
-              }
-            }
-          );
-
-        return res.status(400).json({
-          success:
-            false,
-
-          message:
-            result.response_text ||
-            "Impossible de créer le paiement."
-        });
-      }
-
-      const paymentUrl =
-        result.response_text;
-
-      const paydunyaToken =
-        result.token ||
-        result.invoice_token ||
-        null;
-
-      if (
-        !paymentUrl ||
-        !paydunyaToken
-      ) {
-        await db
-          .collection("payments")
-          .updateOne(
-            {
-              _id:
-                paymentResult.insertedId
-            },
-            {
-              $set: {
-                status:
-                  "failed",
-
-                errorMessage:
-                  "Réponse PayDunya incomplète.",
-
-                updatedAt:
-                  new Date()
-              }
-            }
-          );
-
-        return res.status(502).json({
-          success:
-            false,
-
-          message:
-            "Réponse de paiement PayDunya incomplète."
-        });
-      }
-
-      await db
-        .collection("payments")
-        .updateOne(
-          {
-            _id:
-              paymentResult.insertedId
-          },
-          {
-            $set: {
-              paydunyaToken,
-              paymentUrl,
-
-              updatedAt:
-                new Date()
-            }
-          }
-        );
-
-      return res.json({
-        success:
-          true,
-
-        paymentUrl,
-
-        paymentId:
-          paymentResult.insertedId.toString()
-      });
-    } catch (error) {
-      console.error(
-        "Erreur création paiement :",
-        error.response?.data ||
-          error
+      console.log(
+        "[PAYDUNYA] Création d'une facture pour :",
+        user.email
       );
 
-      return res.status(500).json({
-        success:
-          false,
+      // 6. Envoyer la demande à PayDunya
+      const response = await axios.post(
+        PAYDUNYA_CHECKOUT_URL,
+        paymentData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "PAYDUNYA-MASTER-KEY": PAYDUNYA_MASTER_KEY,
+            "PAYDUNYA-PRIVATE-KEY": PAYDUNYA_PRIVATE_KEY,
+            "PAYDUNYA-TOKEN": PAYDUNYA_TOKEN
+          },
+          timeout: 20000
+        }
+      );
 
+      const result = response.data || {};
+
+      console.log(
+        "[PAYDUNYA] Code de réponse :",
+        result.response_code
+      );
+
+      // 7. Vérifier la réponse de PayDunya
+      if (String(result.response_code) !== "00") {
+        await db.collection("payments").updateOne(
+          { _id: paymentId },
+          {
+            $set: {
+              status: "failed",
+              errorMessage:
+                result.response_text ||
+                "PayDunya a refusé la création de la facture.",
+              updatedAt: new Date()
+            }
+          }
+        );
+
+        console.error(
+          "[PAYDUNYA] Création refusée :",
+          result.response_text
+        );
+
+        return res.status(502).json({
+          success: false,
+          message:
+            "Impossible de créer le paiement. Veuillez réessayer."
+        });
+      }
+
+      const paymentUrl = result.response_text;
+      const paydunyaToken =
+        result.token || result.invoice_token || null;
+
+      // 8. Vérifier que les informations reçues sont utilisables
+      let validPaymentUrl = false;
+
+      try {
+        const parsedUrl = new URL(paymentUrl);
+        validPaymentUrl = parsedUrl.protocol === "https:";
+      } catch {
+        validPaymentUrl = false;
+      }
+
+      if (!validPaymentUrl || !paydunyaToken) {
+        await db.collection("payments").updateOne(
+          { _id: paymentId },
+          {
+            $set: {
+              status: "failed",
+              errorMessage:
+                "Réponse PayDunya incomplète ou URL invalide.",
+              updatedAt: new Date()
+            }
+          }
+        );
+
+        console.error(
+          "[PAYDUNYA] Réponse incomplète :",
+          {
+            paymentUrlPresent: Boolean(paymentUrl),
+            tokenPresent: Boolean(paydunyaToken)
+          }
+        );
+
+        return res.status(502).json({
+          success: false,
+          message:
+            "La réponse du service de paiement est incomplète. Veuillez réessayer."
+        });
+      }
+
+      // 9. Enregistrer le lien et le token PayDunya
+      await db.collection("payments").updateOne(
+        { _id: paymentId },
+        {
+          $set: {
+            paydunyaToken,
+            paymentUrl,
+            updatedAt: new Date()
+          }
+        }
+      );
+
+      console.log(
+        "[PAYDUNYA] Facture créée avec succès. ID :",
+        paymentId.toString()
+      );
+
+      // 10. Renvoyer le lien de paiement au frontend
+      return res.json({
+        success: true,
+        paymentUrl,
+        paymentId: paymentId.toString()
+      });
+
+    } catch (error) {
+      console.error(
+        "[PAYDUNYA] Erreur lors de la création :",
+        error.response?.data || error.message || error
+      );
+
+      // Marquer l'enregistrement comme échoué si possible
+      if (paymentId && db) {
+        try {
+          await db.collection("payments").updateOne(
+            { _id: paymentId, status: "pending" },
+            {
+              $set: {
+                status: "failed",
+                errorMessage:
+                  "Erreur technique lors de la création du paiement.",
+                updatedAt: new Date()
+              }
+            }
+          );
+        } catch (dbError) {
+          console.error(
+            "[PAYDUNYA] Impossible de mettre à jour le paiement :",
+            dbError.message
+          );
+        }
+      }
+
+      return res.status(500).json({
+        success: false,
         message:
-          "Erreur lors de la création du paiement."
+          "Une erreur est survenue lors de la création du paiement. Veuillez réessayer."
       });
     }
   }
 );
+
 
 /* =========================================================
    CALLBACK / IPN PAYDUNYA
