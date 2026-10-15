@@ -1408,19 +1408,18 @@ app.post(
       }
 
       // Créer le paiement dans MongoDB
-      const payment = {
-        userId: user._id,
-        amount: MEMBERSHIP_PRICE,
-        currency: "XOF",
-        status: "pending",
-        paydunyaToken: null,
-        paymentUrl: null,
-        commissionStatus: "pending",
-        commissionAmount: REFERRAL_COMMISSION,
-        createdAt: new Date(),
-        completedAt: null,
-        updatedAt: new Date()
-      };
+const payment = {
+  userId: user._id,
+  amount: MEMBERSHIP_PRICE,
+  currency: "XOF",
+  status: "pending",
+  paymentUrl: null,
+  commissionStatus: "pending",
+  commissionAmount: REFERRAL_COMMISSION,
+  createdAt: new Date(),
+  completedAt: null,
+  updatedAt: new Date()
+};
 
       const inserted = await db
         .collection("payments")
