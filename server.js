@@ -35,8 +35,8 @@ const ADMIN_EMAIL = String(process.env.ADMIN_EMAIL || "")
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
 
-const MEMBERSHIP_PRICE = 10000;
-const REFERRAL_COMMISSION = 3000;
+const MEMBERSHIP_PRICE = 500;
+const REFERRAL_COMMISSION = 100;
 
 /* =========================================================
    EXPRESS
@@ -1630,60 +1630,46 @@ app.post(
 
 
 /* =========================================================
-   CALLBACK / IPN PAYDUNYA
+   CALLBACK / IPN PAYDUNYA — MODE RÉEL
+   Confirmation du paiement et commission de parrainage
 ========================================================= */
 
 app.post(
   "/api/payment/callback",
   async (req, res) => {
     try {
-      const data =
-        parsePayDunyaData(
-          req.body
-        );
+      // 1. Récupérer les données envoyées par PayDunya
+      const data = parsePayDunyaData(req.body);
 
-      if (!data) {
+      if (!data || typeof data !== "object") {
         console.error(
-          "Callback PayDunya invalide : data absente."
+          "[PAYDUNYA IPN] Données absentes ou invalides."
         );
 
         return res.status(400).json({
-          success:
-            false,
-
-          message:
-            "Données PayDunya invalides."
+          success: false,
+          message: "Données PayDunya invalides."
         });
       }
 
-      const receivedHash =
-        data.hash;
-
-      if (
-        !verifyPayDunyaHash(
-          receivedHash
-        )
-      ) {
+      // 2. Vérifier l'authenticité de la notification
+      if (!verifyPayDunyaHash(data.hash)) {
         console.error(
-          "Hash PayDunya invalide."
+          "[PAYDUNYA IPN] Hash invalide."
         );
 
         return res.status(401).json({
-          success:
-            false,
-
-          message:
-            "Signature PayDunya invalide."
+          success: false,
+          message: "Signature PayDunya invalide."
         });
       }
 
-      const status =
-        String(
-          data.status || ""
-        ).toLowerCase();
+      // 3. Lire le statut, le token et les informations de facture
+      const status = String(
+        data.status || ""
+      ).trim().toLowerCase();
 
-      const invoice =
-        data.invoice || {};
+      const invoice = data.invoice || {};
 
       const token =
         invoice.token ||
@@ -1691,82 +1677,159 @@ app.post(
         data.invoice_token;
 
       if (!token) {
-        return res.status(400).json({
-          success:
-            false,
+        console.error(
+          "[PAYDUNYA IPN] Token de facture manquant."
+        );
 
-          message:
-            "Token PayDunya manquant."
+        return res.status(400).json({
+          success: false,
+          message: "Token PayDunya manquant."
         });
       }
 
-      if (
-        status ===
-          "completed" ||
-        status ===
-          "success"
-      ) {
-        try {
-          await completePaymentByToken(
-            token
-          );
+      console.log(
+        "[PAYDUNYA IPN] Notification reçue :",
+        {
+          status,
+          token
+        }
+      );
 
-          console.log(
-            `Paiement PayDunya confirmé : ${token}`
-          );
-        } catch (error) {
+      // 4. Retrouver le paiement correspondant dans MongoDB
+      const payment = await db
+        .collection("payments")
+        .findOne({
+          paydunyaToken: token
+        });
+
+      if (!payment) {
+        console.error(
+          "[PAYDUNYA IPN] Paiement local introuvable :",
+          token
+        );
+
+        return res.status(404).json({
+          success: false,
+          message: "Paiement correspondant introuvable."
+        });
+      }
+
+      // 5. Ne traiter que les paiements confirmés
+      if (status === "completed") {
+        // Vérifier le montant transmis par PayDunya
+        const receivedAmount = Number(
+          invoice.total_amount
+        );
+
+        const expectedAmount = Number(
+          payment.amount
+        );
+
+        if (
+          !Number.isFinite(receivedAmount) ||
+          receivedAmount !== expectedAmount ||
+          expectedAmount !== MEMBERSHIP_PRICE
+        ) {
           console.error(
-            "Erreur finalisation paiement :",
-            error
+            "[PAYDUNYA IPN] Montant incorrect :",
+            {
+              token,
+              receivedAmount,
+              expectedAmount,
+              configuredPrice: MEMBERSHIP_PRICE
+            }
           );
 
-          return res.status(500).json({
-            success:
-              false,
-
-            message:
-              "Impossible de finaliser le paiement."
+          return res.status(400).json({
+            success: false,
+            message: "Montant du paiement invalide."
           });
         }
-      } else {
+
+        // Si le paiement est déjà finalisé, ne pas recréditer
+        if (payment.status === "completed") {
+          return res.status(200).json({
+            success: true,
+            message: "Paiement déjà traité."
+          });
+        }
+
+        // La fonction existante active le compte et traite
+        // la commission dans une transaction MongoDB.
+        // Elle évite également un double versement.
+        await completePaymentByToken(token);
+
+        console.log(
+          "[PAYDUNYA IPN] Paiement confirmé et traité :",
+          token
+        );
+
+        return res.status(200).json({
+          success: true,
+          message: "Paiement confirmé."
+        });
+      }
+
+      // 6. Enregistrer les autres statuts sans activer le compte
+      const allowedNonFinalStatuses = [
+        "pending",
+        "cancelled",
+        "failed"
+      ];
+
+      if (allowedNonFinalStatuses.includes(status)) {
         await db
           .collection("payments")
           .updateOne(
             {
-              paydunyaToken:
-                token,
-
-              status:
-                "pending"
+              _id: payment._id,
+              status: "pending"
             },
             {
               $set: {
-                paydunyaStatus:
-                  status,
-
-                updatedAt:
-                  new Date()
+                paydunyaStatus: status,
+                updatedAt: new Date()
               }
             }
           );
+
+        console.log(
+          "[PAYDUNYA IPN] Paiement non confirmé :",
+          {
+            token,
+            status
+          }
+        );
+
+        // Réponse positive pour accuser réception de l'IPN.
+        return res.status(200).json({
+          success: true,
+          message: "Notification reçue."
+        });
       }
 
-      return res.status(200).json({
-        success:
-          true
+      // 7. Ne pas traiter un statut inconnu comme un paiement réussi
+      console.warn(
+        "[PAYDUNYA IPN] Statut inconnu :",
+        status
+      );
+
+      return res.status(400).json({
+        success: false,
+        message: "Statut de paiement inconnu."
       });
+
     } catch (error) {
       console.error(
-        "Erreur callback PayDunya :",
-        error
+        "[PAYDUNYA IPN] Erreur de traitement :",
+        error.response?.data ||
+          error.message ||
+          error
       );
 
       return res.status(500).json({
-        success:
-          false,
-
-        message:
-          "Erreur serveur."
+        success: false,
+        message: "Erreur serveur lors du traitement du paiement."
       });
     }
   }
