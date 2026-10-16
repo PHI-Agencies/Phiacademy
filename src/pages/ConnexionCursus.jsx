@@ -44,16 +44,6 @@ function ConnexionCursus() {
     });
   };
 
-  const parsedPhone = parsePhoneNumberFromString(
-  registerData.phone
-);
-
-if (!parsedPhone || !parsedPhone.isValid()) {
-  setMessage(
-    "Veuillez sélectionner un pays et saisir un numéro de téléphone international valide."
-  );
-  return;
-}
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -111,6 +101,17 @@ if (!parsedPhone || !parsedPhone.isValid()) {
       setLoading(false);
       return;
     }
+
+    const parsedPhone = parsePhoneNumberFromString(registerData.phone);
+
+  if (!parsedPhone || !parsedPhone.isValid()) {
+    setMessage(
+      "Veuillez sélectionner un pays et saisir un numéro de téléphone international valide."
+    );
+    setLoading(false);
+    return;
+  }
+
 
     try {
       const response = await fetch("/api/auth/register", {
