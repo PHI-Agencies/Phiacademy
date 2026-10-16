@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 function ConnexionCursus() {
   const navigate = useNavigate();
@@ -40,6 +43,17 @@ function ConnexionCursus() {
       [event.target.name]: event.target.value,
     });
   };
+
+  const parsedPhone = parsePhoneNumberFromString(
+  registerData.phone
+);
+
+if (!parsedPhone || !parsedPhone.isValid()) {
+  setMessage(
+    "Veuillez sélectionner un pays et saisir un numéro de téléphone international valide."
+  );
+  return;
+}
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -526,21 +540,54 @@ function ConnexionCursus() {
               </div>
 
               <div className="connexion-field">
-                <label htmlFor="phone">
-                  Téléphone
-                </label>
+  <label htmlFor="phone">
+    Téléphone
+  </label>
 
-                <input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  autoComplete="tel"
-                  value={registerData.phone}
-                  onChange={handleRegisterChange}
-                  placeholder="Votre numéro"
-                  required
-                />
-              </div>
+  <PhoneInput
+    country=""
+    enableSearch
+    disableSearchIcon={false}
+    countryCodeEditable={false}
+    value={registerData.phone}
+    onChange={(value) => {
+      setRegisterData((previous) => ({
+        ...previous,
+        phone: value ? `+${value}` : "",
+      }));
+    }}
+    inputProps={{
+      id: "phone",
+      name: "phone",
+      required: true,
+      autoComplete: "tel",
+    }}
+    placeholder="XXXXXXXXX"
+    searchPlaceholder="Rechercher un pays..."
+    preferredCountries={[]}
+    containerStyle={{
+      width: "100%",
+    }}
+    inputStyle={{
+      width: "100%",
+      height: "48px",
+      borderRadius: "12px",
+      border: "1px solid #dfe3ea",
+      fontSize: "14px",
+      color: "#0b132b",
+      background: "#fff",
+    }}
+    buttonStyle={{
+      border: "1px solid #dfe3ea",
+      borderRadius: "12px 0 0 12px",
+      background: "#fff",
+    }}
+    dropdownStyle={{
+      color: "#0b132b",
+      borderRadius: "12px",
+    }}
+  />
+</div>
 
               <div className="connexion-field">
                 <label htmlFor="register-email">
