@@ -198,8 +198,8 @@ function Cursus() {
   if (loading) {
     return (
       <div className="cursus-loading">
-        <div className="loading-logo">
-          <img src="https://res.cloudinary.com/dzy6t8hky/image/upload/v1791974143/Gemini_Generated_Image_ig831yig831yig83_so0wli.jpg" alt="PHI Academy" />
+        <div className="loading-wordmark">
+          PHI <span>ACADEMY</span>
         </div>
 
         <div className="loading-spinner" />
@@ -237,6 +237,17 @@ function Cursus() {
             display: block;
           }
 
+          .loading-wordmark {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #0A2A66;
+          }
+
+          .loading-wordmark span {
+            color: #FF7A1A;
+          }
+
           .loading-spinner {
             width: 26px;
             height: 26px;
@@ -271,13 +282,9 @@ function Cursus() {
       <header className="cursus-header">
         <div className="header-inner">
           <Link to="/" className="brand">
-            <span className="brand-logo">
-              <img src="/images/logo/phi-logo.png" alt="PHI Academy" />
-            </span>
-
             <span className="brand-text">
               <strong>PHI</strong>
-              <span>Academy</span>
+              <span>ACADEMY</span>
             </span>
           </Link>
 
