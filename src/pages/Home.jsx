@@ -75,16 +75,8 @@ function Home() {
 
       <header className="mobile-header">
         <div className="brand-area">
-          <div className="mobile-logo">
-            <img
-              src="https://res.cloudinary.com/dzy6t8hky/image/upload/v1791974143/Gemini_Generated_Image_ig831yig831yig83_so0wli.jpg"
-              alt="PHI Academy"
-            />
-          </div>
-
-          <div className="brand-name">
-            <strong>PHI</strong>
-            <span>ACADEMY</span>
+          <div className="brand-wordmark">
+            PHI <span>ACADEMY</span>
           </div>
         </div>
 
@@ -583,6 +575,19 @@ function Home() {
           font-weight: 800;
 
           letter-spacing: 0.18em;
+        }
+
+        .brand-wordmark {
+          color: var(--blue-800);
+
+          font-size: 20px;
+          font-weight: 800;
+
+          letter-spacing: -0.5px;
+        }
+
+        .brand-wordmark span {
+          color: var(--orange);
         }
 
         .header-actions {
