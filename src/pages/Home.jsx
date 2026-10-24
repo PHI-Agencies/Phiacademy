@@ -430,14 +430,36 @@ function Home() {
 
       <style>{`
 
+        /* =========================
+           PALETTE : BLEU • BLANC • ORANGE
+        ========================= */
+
+        .phi-app {
+          --blue-900: #061A4A;
+          --blue-800: #0A2A6B;
+          --blue-700: #103A8C;
+          --blue-100: #E6EEFC;
+          --blue-50:  #F1F5FD;
+
+          --orange: #FF7A1A;
+          --orange-text: #D9590A;
+          --orange-soft: #FFF0E3;
+
+          --ink: #0A1B44;
+          --muted: #5F6E8A;
+          --muted-2: #8794AD;
+          --line: #DFE6F2;
+          --bg: #F4F7FC;
+        }
+
         * {
           box-sizing: border-box;
         }
 
         body {
           margin: 0;
-          background: #f7f8fa;
-          color: #0b132b;
+          background: #F4F7FC;
+          color: #0A1B44;
 
           font-family:
             Inter,
@@ -459,7 +481,7 @@ function Home() {
 
         .phi-app {
           min-height: 100vh;
-          background: #f7f8fa;
+          background: var(--bg);
         }
 
         .app-main {
@@ -488,10 +510,10 @@ function Home() {
           padding: 0 16px;
 
           background:
-            rgba(255,255,255,0.93);
+            rgba(255,255,255,0.94);
 
           border-bottom:
-            1px solid #e8ebf0;
+            1px solid var(--line);
 
           backdrop-filter: blur(18px);
 
@@ -506,10 +528,6 @@ function Home() {
           gap: 9px;
         }
 
-        /* =========================
-           VRAI LOGO
-        ========================= */
-
         .mobile-logo {
           width: 39px;
           height: 39px;
@@ -520,15 +538,17 @@ function Home() {
 
           overflow: hidden;
 
-          background: #0b132b;
+          background: var(--blue-800);
 
           display: flex;
           align-items: center;
           justify-content: center;
 
+          border: 2px solid var(--orange);
+
           box-shadow:
             0 5px 15px
-            rgba(11,19,43,0.16);
+            rgba(10,42,107,0.2);
         }
 
         .mobile-logo img {
@@ -547,9 +567,9 @@ function Home() {
         }
 
         .brand-name strong {
-          color: #0b132b;
+          color: var(--blue-800);
 
-          font-size: 13px;
+          font-size: 14px;
 
           letter-spacing: 0.08em;
         }
@@ -557,9 +577,9 @@ function Home() {
         .brand-name span {
           margin-top: 3px;
 
-          color: #8b929e;
+          color: var(--orange-text);
 
-          font-size: 7px;
+          font-size: 8px;
           font-weight: 800;
 
           letter-spacing: 0.18em;
@@ -571,21 +591,28 @@ function Home() {
         }
 
         .header-icon {
-          width: 38px;
-          height: 38px;
+          width: 40px;
+          height: 40px;
 
           border: 0;
           border-radius: 12px;
 
-          background: #f3f4f6;
+          background: var(--blue-50);
 
-          color: #0b132b;
+          color: var(--blue-800);
 
           display: flex;
           align-items: center;
           justify-content: center;
 
           cursor: pointer;
+
+          transition: background 160ms ease, color 160ms ease;
+        }
+
+        .header-icon:hover {
+          background: var(--orange-soft);
+          color: var(--orange-text);
         }
 
         /* =========================
@@ -602,22 +629,27 @@ function Home() {
         }
 
         .search-box {
-          height: 44px;
+          height: 46px;
 
-          padding: 0 13px;
+          padding: 0 14px;
 
           border:
-            1px solid #e1e5eb;
+            1px solid var(--line);
 
           border-radius: 13px;
 
-          background: #f7f8fa;
+          background: var(--blue-50);
 
-          color: #8a919d;
+          color: var(--muted-2);
 
           display: flex;
           align-items: center;
           gap: 9px;
+        }
+
+        .search-box:focus-within {
+          border-color: var(--orange);
+          background: #fff;
         }
 
         .search-box input {
@@ -628,9 +660,9 @@ function Home() {
 
           background: transparent;
 
-          color: #0b132b;
+          color: var(--ink);
 
-          font-size: 12px;
+          font-size: 13px;
         }
 
         /* =========================
@@ -641,50 +673,56 @@ function Home() {
           padding:
             17px
             2px
-            21px;
+            22px;
         }
 
         .welcome-label {
-          display: block;
+          display: inline-block;
 
-          margin-bottom: 8px;
+          margin-bottom: 10px;
 
-          color: #b18a1c;
+          padding: 5px 10px;
 
-          font-size: 8px;
+          border-radius: 999px;
+
+          background: var(--orange-soft);
+
+          color: var(--orange-text);
+
+          font-size: 9px;
           font-weight: 900;
 
-          letter-spacing: 0.18em;
+          letter-spacing: 0.16em;
         }
 
         .welcome h1 {
           margin: 0;
 
-          color: #0b132b;
+          color: var(--blue-800);
 
-          font-size: 29px;
-          line-height: 1.08;
+          font-size: 31px;
+          line-height: 1.1;
 
           letter-spacing: -0.045em;
 
-          font-weight: 400;
+          font-weight: 500;
         }
 
         .welcome h1 span {
-          color: #b18a1c;
-          font-weight: 750;
+          color: var(--orange);
+          font-weight: 800;
         }
 
         .welcome p {
-          max-width: 350px;
+          max-width: 360px;
 
           margin:
-            11px 0 0;
+            12px 0 0;
 
-          color: #737c8c;
+          color: var(--muted);
 
-          font-size: 11px;
-          line-height: 1.55;
+          font-size: 13px;
+          line-height: 1.6;
         }
 
         /* =========================
@@ -694,24 +732,30 @@ function Home() {
         .learning-card {
           position: relative;
 
-          min-height: 230px;
+          min-height: 245px;
 
           overflow: hidden;
 
-          padding: 21px;
+          padding: 22px;
 
           border-radius: 24px;
 
           background:
+            radial-gradient(
+              circle at 100% 0%,
+              rgba(255,122,26,0.28),
+              transparent 55%
+            ),
             linear-gradient(
               135deg,
-              #0b132b 0%,
-              #111d3b 100%
+              var(--blue-900) 0%,
+              var(--blue-800) 55%,
+              var(--blue-700) 100%
             );
 
           box-shadow:
             0 18px 45px
-            rgba(11,19,43,0.15);
+            rgba(10,42,107,0.28);
 
           display: flex;
           justify-content: space-between;
@@ -722,21 +766,21 @@ function Home() {
           position: relative;
           z-index: 2;
 
-          width: 61%;
+          width: 62%;
         }
 
         .learning-icon {
-          width: 40px;
-          height: 40px;
+          width: 42px;
+          height: 42px;
 
-          margin-bottom: 17px;
+          margin-bottom: 16px;
 
           border-radius: 12px;
 
           background:
-            rgba(212,175,55,0.13);
+            rgba(255,122,26,0.18);
 
-          color: #d4af37;
+          color: var(--orange);
 
           display: flex;
           align-items: center;
@@ -748,9 +792,9 @@ function Home() {
 
           margin-bottom: 7px;
 
-          color: #d4af37;
+          color: #FFB680;
 
-          font-size: 7px;
+          font-size: 9px;
           font-weight: 900;
 
           letter-spacing: 0.16em;
@@ -761,7 +805,7 @@ function Home() {
 
           color: #fff;
 
-          font-size: 19px;
+          font-size: 21px;
           line-height: 1.15;
 
           letter-spacing: -0.03em;
@@ -769,33 +813,44 @@ function Home() {
 
         .learning-content p {
           margin:
-            9px 0 16px;
+            9px 0 17px;
 
-          color: #aab2c1;
+          color: #C3D0EC;
 
-          font-size: 9px;
-          line-height: 1.5;
+          font-size: 11px;
+          line-height: 1.55;
         }
 
         .primary-button {
-          min-height: 38px;
+          min-height: 42px;
 
-          padding: 0 12px;
+          padding: 0 15px;
 
           border: 0;
-          border-radius: 10px;
+          border-radius: 11px;
 
-          background: #d4af37;
-          color: #0b132b;
+          background: var(--orange);
+          color: #fff;
 
           display: inline-flex;
           align-items: center;
-          gap: 7px;
+          gap: 8px;
 
-          font-size: 9px;
+          font-size: 11px;
           font-weight: 800;
 
           cursor: pointer;
+
+          box-shadow:
+            0 10px 22px
+            rgba(255,122,26,0.4);
+
+          transition: transform 160ms ease, background 160ms ease;
+        }
+
+        .primary-button:hover {
+          background: #E86405;
+          transform: translateY(-1px);
         }
 
         /* =========================
@@ -820,12 +875,12 @@ function Home() {
 
           background-image:
             linear-gradient(
-              rgba(255,255,255,0.035) 1px,
+              rgba(255,255,255,0.06) 1px,
               transparent 1px
             ),
             linear-gradient(
               90deg,
-              rgba(255,255,255,0.035) 1px,
+              rgba(255,255,255,0.06) 1px,
               transparent 1px
             );
 
@@ -851,28 +906,30 @@ function Home() {
         }
 
         .chart-axis {
-          stroke: rgba(255,255,255,0.08);
+          stroke: rgba(255,255,255,0.14);
           stroke-width: 1;
         }
 
         .chart-line {
           fill: none;
 
-          stroke: #d4af37;
+          stroke: var(--orange);
 
-          stroke-width: 2.4;
+          stroke-width: 2.6;
 
           stroke-linecap: round;
           stroke-linejoin: round;
         }
 
         .chart-point {
-          fill: #d4af37;
+          fill: #fff;
+          stroke: var(--orange);
+          stroke-width: 2;
 
           filter:
             drop-shadow(
-              0 0 7px
-              rgba(212,175,55,0.8)
+              0 0 8px
+              rgba(255,122,26,0.9)
             );
         }
 
@@ -883,20 +940,20 @@ function Home() {
           top: 19px;
 
           padding:
-            5px 7px;
+            5px 8px;
 
           border:
             1px solid
-            rgba(212,175,55,0.2);
+            rgba(255,255,255,0.25);
 
           border-radius: 6px;
 
           background:
-            rgba(212,175,55,0.08);
+            rgba(255,255,255,0.1);
 
-          color: #d4af37;
+          color: #fff;
 
-          font-size: 6px;
+          font-size: 8px;
           font-weight: 900;
 
           letter-spacing: 0.12em;
@@ -907,11 +964,11 @@ function Home() {
         ========================= */
 
         .section {
-          margin-top: 32px;
+          margin-top: 34px;
         }
 
         .section-header {
-          margin-bottom: 13px;
+          margin-bottom: 14px;
 
           display: flex;
           align-items: flex-end;
@@ -924,9 +981,9 @@ function Home() {
 
           margin-bottom: 4px;
 
-          color: #a18a45;
+          color: var(--orange-text);
 
-          font-size: 7px;
+          font-size: 9px;
           font-weight: 900;
 
           letter-spacing: 0.17em;
@@ -935,25 +992,28 @@ function Home() {
         .section-header h2 {
           margin: 0;
 
-          color: #0b132b;
+          color: var(--blue-800);
 
-          font-size: 19px;
+          font-size: 21px;
 
           letter-spacing: -0.035em;
         }
 
         .section-link {
           border: 0;
-          background: transparent;
+          background: var(--orange-soft);
 
-          color: #a27d16;
+          padding: 7px 10px;
+          border-radius: 999px;
+
+          color: var(--orange-text);
 
           display: flex;
           align-items: center;
           gap: 2px;
 
-          font-size: 9px;
-          font-weight: 750;
+          font-size: 11px;
+          font-weight: 800;
 
           cursor: pointer;
         }
@@ -964,18 +1024,21 @@ function Home() {
 
         .module-list {
           display: grid;
-          gap: 8px;
+          gap: 9px;
         }
 
         .module {
           width: 100%;
 
-          min-height: 87px;
+          min-height: 92px;
 
-          padding: 12px;
+          padding: 13px;
 
           border:
-            1px solid #e5e8ed;
+            1px solid var(--line);
+
+          border-left:
+            4px solid var(--blue-700);
 
           border-radius: 17px;
 
@@ -983,7 +1046,7 @@ function Home() {
 
           display: flex;
           align-items: center;
-          gap: 11px;
+          gap: 12px;
 
           text-align: left;
 
@@ -995,44 +1058,47 @@ function Home() {
             border-color 160ms ease;
         }
 
+        .module:nth-child(even) {
+          border-left-color: var(--orange);
+        }
+
         .module:hover {
-          transform: translateY(-1px);
+          transform: translateY(-2px);
 
           border-color:
-            rgba(212,175,55,0.45);
+            var(--orange);
 
           box-shadow:
-            0 9px 25px
-            rgba(11,19,43,0.06);
+            0 10px 26px
+            rgba(10,42,107,0.1);
         }
 
         .module-number {
-          width: 38px;
-          height: 38px;
+          width: 40px;
+          height: 40px;
 
           flex: 0 0 auto;
 
           border-radius: 12px;
 
-          background: #f0f2f6;
+          background: var(--blue-100);
 
-          color: #0b132b;
+          color: var(--blue-800);
 
           display: flex;
           align-items: center;
           justify-content: center;
 
-          font-size: 9px;
+          font-size: 11px;
           font-weight: 900;
         }
 
-        .module:nth-child(2) .module-number,
-        .module:nth-child(4) .module-number {
+        .module:nth-child(even) .module-number {
           background:
-            rgba(212,175,55,0.12);
+            var(--orange-soft);
 
           color:
-            #9b7718;
+            var(--orange-text);
         }
 
         .module-info {
@@ -1043,37 +1109,37 @@ function Home() {
         .module-info h3 {
           margin: 0;
 
-          color: #0b132b;
+          color: var(--ink);
 
-          font-size: 11px;
+          font-size: 13px;
           line-height: 1.3;
 
-          font-weight: 750;
+          font-weight: 800;
         }
 
         .module-info p {
           margin:
             4px 0;
 
-          color: #7d8593;
+          color: var(--muted);
 
-          font-size: 9px;
-          line-height: 1.4;
+          font-size: 11px;
+          line-height: 1.45;
         }
 
         .lesson-count {
           display: block;
 
-          color: #a18a45;
+          color: var(--orange-text);
 
-          font-size: 8px;
-          font-weight: 700;
+          font-size: 10px;
+          font-weight: 800;
         }
 
         .module-arrow {
           flex: 0 0 auto;
 
-          color: #a3aab5;
+          color: var(--muted-2);
         }
 
         /* =========================
@@ -1081,36 +1147,40 @@ function Home() {
         ========================= */
 
         .resource-info-card {
-          margin-top: 32px;
+          margin-top: 34px;
 
-          padding: 17px;
+          padding: 18px;
 
           border:
-            1px solid #e4e7eb;
+            1px solid var(--line);
 
           border-radius: 19px;
 
           background: #fff;
 
           display: flex;
-          gap: 12px;
+          gap: 13px;
         }
 
         .youtube-icon {
-          width: 38px;
-          height: 38px;
+          width: 40px;
+          height: 40px;
 
           flex: 0 0 auto;
 
           border-radius: 11px;
 
-          background: #f1f3f6;
+          background: var(--orange);
 
-          color: #0b132b;
+          color: #fff;
 
           display: flex;
           align-items: center;
           justify-content: center;
+
+          box-shadow:
+            0 8px 18px
+            rgba(255,122,26,0.35);
         }
 
         .resource-info-card span {
@@ -1118,9 +1188,9 @@ function Home() {
 
           margin-bottom: 5px;
 
-          color: #a18a45;
+          color: var(--orange-text);
 
-          font-size: 7px;
+          font-size: 9px;
           font-weight: 900;
 
           letter-spacing: 0.15em;
@@ -1129,9 +1199,9 @@ function Home() {
         .resource-info-card h2 {
           margin: 0;
 
-          color: #0b132b;
+          color: var(--blue-800);
 
-          font-size: 12px;
+          font-size: 14px;
           line-height: 1.35;
         }
 
@@ -1139,10 +1209,10 @@ function Home() {
           margin:
             7px 0 0;
 
-          color: #7c8593;
+          color: var(--muted);
 
-          font-size: 9px;
-          line-height: 1.5;
+          font-size: 11px;
+          line-height: 1.55;
         }
 
         /* =========================
@@ -1152,30 +1222,30 @@ function Home() {
         .space-card {
           margin-top: 12px;
 
-          padding: 18px;
+          padding: 19px;
 
           border:
-            1px solid #e2e6eb;
+            1px solid var(--line);
 
           border-radius: 20px;
 
           background: #fff;
 
           display: flex;
-          gap: 12px;
+          gap: 13px;
         }
 
         .space-icon {
-          width: 40px;
-          height: 40px;
+          width: 42px;
+          height: 42px;
 
           flex: 0 0 auto;
 
           border-radius: 12px;
 
-          background: #0b132b;
+          background: var(--blue-800);
 
-          color: #d4af37;
+          color: var(--orange);
 
           display: flex;
           align-items: center;
@@ -1191,9 +1261,9 @@ function Home() {
 
           margin-bottom: 5px;
 
-          color: #a18a45;
+          color: var(--orange-text);
 
-          font-size: 7px;
+          font-size: 9px;
           font-weight: 900;
 
           letter-spacing: 0.15em;
@@ -1202,47 +1272,70 @@ function Home() {
         .space-content h2 {
           margin: 0;
 
-          color: #0b132b;
+          color: var(--blue-800);
 
-          font-size: 13px;
+          font-size: 15px;
           line-height: 1.35;
         }
 
         .space-content p {
           margin:
-            7px 0 10px;
+            7px 0 12px;
 
-          color: #7c8593;
+          color: var(--muted);
 
-          font-size: 9px;
-          line-height: 1.5;
+          font-size: 11px;
+          line-height: 1.55;
         }
 
         .space-content button {
-          padding: 0;
+          padding: 9px 13px;
 
           border: 0;
-          background: transparent;
+          border-radius: 10px;
 
-          color: #a27d16;
+          background: var(--blue-800);
+
+          color: #fff;
 
           display: inline-flex;
           align-items: center;
-          gap: 6px;
+          gap: 7px;
 
-          font-size: 9px;
+          font-size: 11px;
           font-weight: 800;
 
           cursor: pointer;
+
+          transition: background 160ms ease;
+        }
+
+        .space-content button:hover {
+          background: var(--orange);
         }
 
         .referral {
+          border-color: rgba(255,122,26,0.4);
+
           background:
             linear-gradient(
               135deg,
               #ffffff,
-              #faf9f4
+              var(--orange-soft)
             );
+        }
+
+        .referral .space-icon {
+          background: var(--orange);
+          color: #fff;
+        }
+
+        .referral .space-content button {
+          background: var(--orange);
+        }
+
+        .referral .space-content button:hover {
+          background: #E86405;
         }
 
         .bottom-space {
@@ -1262,7 +1355,7 @@ function Home() {
           bottom: 0;
           left: 0;
 
-          height: 68px;
+          height: 70px;
 
           padding:
             7px
@@ -1271,10 +1364,10 @@ function Home() {
             max(10px, env(safe-area-inset-right));
 
           border-top:
-            1px solid #e4e7ec;
+            1px solid var(--line);
 
           background:
-            rgba(255,255,255,0.95);
+            rgba(255,255,255,0.96);
 
           backdrop-filter:
             blur(18px);
@@ -1294,7 +1387,7 @@ function Home() {
           border: 0;
           background: transparent;
 
-          color: #9aa1ac;
+          color: var(--muted-2);
 
           display: flex;
           flex-direction: column;
@@ -1307,16 +1400,16 @@ function Home() {
         }
 
         .bottom-nav button span {
-          font-size: 7px;
+          font-size: 9px;
           font-weight: 700;
         }
 
         .bottom-nav button.active {
-          color: #0b132b;
+          color: var(--blue-800);
         }
 
         .bottom-nav button.active svg {
-          color: #a98118;
+          color: var(--orange);
         }
 
         .bottom-nav button.active::before {
@@ -1326,12 +1419,12 @@ function Home() {
 
           top: -7px;
 
-          width: 19px;
-          height: 2px;
+          width: 24px;
+          height: 3px;
 
           border-radius: 999px;
 
-          background: #d4af37;
+          background: var(--orange);
         }
 
         /* =========================
@@ -1350,6 +1443,10 @@ function Home() {
             padding-top: 50px;
           }
 
+          .module-list {
+            grid-template-columns: 1fr 1fr;
+          }
+
           .bottom-nav {
             width: 620px;
 
@@ -1362,13 +1459,13 @@ function Home() {
             bottom: 15px;
 
             border:
-              1px solid #e1e4e9;
+              1px solid var(--line);
 
             border-radius: 19px;
 
             box-shadow:
               0 15px 45px
-              rgba(11,19,43,0.1);
+              rgba(10,42,107,0.14);
           }
         }
 
@@ -1384,28 +1481,28 @@ function Home() {
           }
 
           .welcome h1 {
-            font-size: 26px;
+            font-size: 27px;
           }
 
           .learning-card {
-            min-height: 250px;
+            min-height: 265px;
             padding: 18px;
           }
 
           .learning-content {
-            width: 66%;
+            width: 68%;
           }
 
           .learning-visual {
-            width: 48%;
+            width: 46%;
           }
 
           .learning-content h2 {
-            font-size: 17px;
+            font-size: 18px;
           }
 
           .module-info p {
-            font-size: 8px;
+            font-size: 10px;
           }
         }
 
