@@ -28,7 +28,7 @@ const WHATSAPP_ACCOUNT_NUMBER = "22603031400";
 const PACK_LINK = "https://rylhfhli.mychariow.shop/prd_r6etq0c6";
 
 // Dossier (dans /public) où se trouvent temoignage1.jpg ... temoignage6.jpg
-const PROOF_FOLDER = "/images/temoignages/";
+const PROOF_FOLDER = "/utilitaire/";
 const PROOF_IMAGES = [1, 2, 3, 4, 5, 6].map(
   (number) => `${PROOF_FOLDER}temoignage${number}.jpg`
 );
