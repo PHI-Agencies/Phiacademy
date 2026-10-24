@@ -77,6 +77,27 @@ export default function AdminLogin() {
   return (
     <>
       <style>{`
+        /* =========================
+           PALETTE : BLEU • BLANC • ORANGE
+        ========================= */
+
+        .admin-login-page {
+          --blue-900: #061A4A;
+          --blue-800: #0A2A66;
+          --blue-700: #103A8C;
+          --blue-100: #E6EEFC;
+          --blue-50:  #F1F5FD;
+
+          --orange: #FF7A1A;
+          --orange-dark: #E86405;
+          --orange-text: #D9590A;
+          --orange-soft: #FFF0E3;
+
+          --ink: #0A1B44;
+          --muted: #5F6E8A;
+          --line: #DFE6F2;
+        }
+
         * {
           box-sizing: border-box;
           margin: 0;
@@ -85,8 +106,8 @@ export default function AdminLogin() {
 
         body {
           font-family: Inter, Arial, sans-serif;
-          background: #f7f8fa;
-          color: #0b132b;
+          background: #F4F7FC;
+          color: #0A1B44;
         }
 
         button,
@@ -102,11 +123,16 @@ export default function AdminLogin() {
           padding: 24px;
           background:
             radial-gradient(
-              circle at top right,
-              rgba(212, 175, 55, 0.08),
-              transparent 35%
+              600px 320px at 100% 0%,
+              rgba(255, 122, 26, 0.16),
+              transparent 60%
             ),
-            #f7f8fa;
+            radial-gradient(
+              600px 320px at 0% 100%,
+              rgba(16, 58, 140, 0.12),
+              transparent 60%
+            ),
+            #F4F7FC;
         }
 
         .admin-login-wrapper {
@@ -123,18 +149,22 @@ export default function AdminLogin() {
           font-size: 24px;
           font-weight: 800;
           letter-spacing: -0.7px;
-          color: #0b132b;
+          color: var(--blue-800);
         }
 
         .admin-logo span {
-          color: #d4af37;
+          color: var(--orange);
         }
 
         .admin-label {
-          margin-top: 8px;
-          color: #8a909b;
+          display: inline-block;
+          margin-top: 10px;
+          padding: 5px 11px;
+          border-radius: 999px;
+          background: var(--orange-soft);
+          color: var(--orange-text);
           font-size: 11px;
-          font-weight: 700;
+          font-weight: 800;
           letter-spacing: 1.5px;
           text-transform: uppercase;
         }
@@ -143,14 +173,16 @@ export default function AdminLogin() {
           width: 100%;
           padding: 34px;
           background: #ffffff;
-          border: 1px solid #e7e9ee;
+          border: 1px solid var(--line);
+          border-top: 4px solid var(--orange);
           border-radius: 28px;
           box-shadow:
-            0 20px 60px rgba(11, 19, 43, 0.06);
+            0 24px 60px rgba(10, 42, 102, 0.14);
         }
 
         .admin-login-card h1 {
           margin-bottom: 9px;
+          color: var(--blue-800);
           font-size: 27px;
           line-height: 1.15;
           letter-spacing: -1px;
@@ -158,7 +190,7 @@ export default function AdminLogin() {
 
         .admin-login-card > p {
           margin-bottom: 28px;
-          color: #737a87;
+          color: var(--muted);
           font-size: 13px;
           line-height: 1.65;
         }
@@ -176,7 +208,7 @@ export default function AdminLogin() {
         }
 
         .admin-field label {
-          color: #454c59;
+          color: var(--blue-800);
           font-size: 12px;
           font-weight: 800;
         }
@@ -185,53 +217,58 @@ export default function AdminLogin() {
           width: 100%;
           height: 50px;
           padding: 0 15px;
-          border: 1px solid #dfe2e8;
+          border: 1px solid var(--line);
           border-radius: 14px;
           outline: none;
-          background: #ffffff;
-          color: #0b132b;
+          background: var(--blue-50);
+          color: var(--ink);
           font-size: 14px;
           transition:
             border-color 0.2s ease,
-            box-shadow 0.2s ease;
+            box-shadow 0.2s ease,
+            background 0.2s ease;
         }
 
         .admin-field input:focus {
-          border-color: #d4af37;
-          box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+          border-color: var(--orange);
+          background: #ffffff;
+          box-shadow: 0 0 0 4px rgba(255, 122, 26, 0.15);
         }
 
         .admin-field input::placeholder {
-          color: #a3a8b2;
+          color: #9AA7BF;
         }
 
         .admin-error {
           padding: 13px 14px;
-          border: 1px solid #efd4d4;
+          border: 1px solid #F6CFC6;
           border-radius: 14px;
-          background: #fff5f5;
-          color: #9a4545;
+          background: #FFF3F0;
+          color: #A33A2A;
           font-size: 12px;
           line-height: 1.5;
         }
 
         .admin-submit {
           width: 100%;
-          height: 51px;
+          height: 52px;
           margin-top: 3px;
           border: none;
           border-radius: 15px;
-          background: #0b132b;
+          background: var(--orange);
           color: #ffffff;
           font-size: 13px;
           font-weight: 800;
           cursor: pointer;
+          box-shadow: 0 12px 26px rgba(255, 122, 26, 0.38);
           transition:
             transform 0.2s ease,
-            opacity 0.2s ease;
+            opacity 0.2s ease,
+            background 0.2s ease;
         }
 
         .admin-submit:hover:not(:disabled) {
+          background: var(--orange-dark);
           transform: translateY(-1px);
         }
 
@@ -246,7 +283,7 @@ export default function AdminLogin() {
           justify-content: center;
           gap: 7px;
           margin-top: 20px;
-          color: #9298a3;
+          color: var(--muted);
           font-size: 11px;
           line-height: 1.5;
           text-align: center;
@@ -255,7 +292,7 @@ export default function AdminLogin() {
         .admin-footer {
           margin-top: 22px;
           text-align: center;
-          color: #9aa0aa;
+          color: var(--muted);
           font-size: 11px;
         }
 
