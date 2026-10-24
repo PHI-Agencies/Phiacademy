@@ -28,10 +28,14 @@ const WHATSAPP_ACCOUNT_NUMBER = "22603031400";
 const PACK_LINK = "https://rylhfhli.mychariow.shop/prd_r6etq0c6";
 
 // Dossier (dans /public) où se trouvent temoignage1.jpg ... temoignage6.jpg
-const PROOF_FOLDER = "./utilitaire/";
-const PROOF_IMAGES = [1, 2, 3, 4, 5, 6].map(
-  (number) => `${PROOF_FOLDER}temoignage${number}.jpg`
-);
+const PROOF_IMAGES = [
+  "https://res.cloudinary.com/dzy6t8hky/image/upload/v1792870858/temoignage1_l7rbbw.jpg",
+  "https://res.cloudinary.com/dzy6t8hky/image/upload/v1792870859/temoignage2_la9xfq.jpg",
+  "https://res.cloudinary.com/dzy6t8hky/image/upload/v1792870859/temoignage3_bjz5vi.jpg",
+  "https://res.cloudinary.com/dzy6t8hky/image/upload/v1792870859/temoignage4_jqxo83.jpg",
+  "https://res.cloudinary.com/dzy6t8hky/image/upload/v1792870859/temoignage5_i1sfdz.jpg",
+  "https://res.cloudinary.com/dzy6t8hky/image/upload/v1792871724/WhatsApp_Image_2026-10-24_at_19.52.35_orwijn.jpg",
+];
 
 const whatsappLink = (number, message) =>
   `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
