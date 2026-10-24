@@ -210,13 +210,13 @@ function Cursus() {
           .cursus-loading {
             min-height: 100vh;
             min-height: 100dvh;
-            background: #f7f8fa;
+            background: #F4F7FC;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 18px;
-            color: #0b132b;
+            color: #0A2A66;
             font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
           }
 
@@ -225,8 +225,9 @@ function Cursus() {
             height: 58px;
             border-radius: 16px;
             overflow: hidden;
-            background: #0b132b;
-            box-shadow: 0 12px 35px rgba(11, 19, 43, 0.16);
+            background: #0A2A66;
+            border: 2px solid #FF7A1A;
+            box-shadow: 0 12px 35px rgba(10, 42, 102, 0.22);
           }
 
           .loading-logo img {
@@ -237,10 +238,10 @@ function Cursus() {
           }
 
           .loading-spinner {
-            width: 24px;
-            height: 24px;
-            border: 2px solid rgba(11, 19, 43, 0.12);
-            border-top-color: #d4af37;
+            width: 26px;
+            height: 26px;
+            border: 3px solid rgba(10, 42, 102, 0.12);
+            border-top-color: #FF7A1A;
             border-radius: 50%;
             animation: cursusSpin .8s linear infinite;
           }
@@ -248,7 +249,7 @@ function Cursus() {
           .cursus-loading p {
             margin: 0;
             font-size: 13px;
-            color: #6b7280;
+            color: #5F6E8A;
           }
 
           @keyframes cursusSpin {
@@ -596,6 +597,29 @@ function Cursus() {
       </nav>
 
       <style>{`
+        /* =========================
+           PALETTE : BLEU • BLANC • ORANGE
+        ========================= */
+
+        .cursus-page {
+          --blue-900: #061A4A;
+          --blue-800: #0A2A66;
+          --blue-700: #103A8C;
+          --blue-100: #E6EEFC;
+          --blue-50:  #F1F5FD;
+
+          --orange: #FF7A1A;
+          --orange-dark: #E86405;
+          --orange-text: #D9590A;
+          --orange-soft: #FFF0E3;
+
+          --ink: #0A1B44;
+          --muted: #5F6E8A;
+          --muted-2: #8794AD;
+          --line: #DFE6F2;
+          --bg: #F4F7FC;
+        }
+
         * {
           box-sizing: border-box;
         }
@@ -603,8 +627,8 @@ function Cursus() {
         .cursus-page {
           min-height: 100vh;
           min-height: 100dvh;
-          background: #f7f8fa;
-          color: #0b132b;
+          background: var(--bg);
+          color: var(--ink);
           font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
           padding-bottom: 0;
         }
@@ -613,10 +637,10 @@ function Cursus() {
           position: sticky;
           top: 0;
           z-index: 100;
-          background: rgba(255,255,255,0.92);
+          background: rgba(255,255,255,0.94);
           backdrop-filter: blur(18px);
           -webkit-backdrop-filter: blur(18px);
-          border-bottom: 1px solid rgba(11,19,43,0.07);
+          border-bottom: 1px solid var(--line);
         }
 
         .header-inner {
@@ -634,7 +658,7 @@ function Cursus() {
           align-items: center;
           gap: 10px;
           text-decoration: none;
-          color: #0b132b;
+          color: var(--blue-800);
         }
 
         .brand-logo {
@@ -642,7 +666,8 @@ function Cursus() {
           height: 38px;
           border-radius: 12px;
           overflow: hidden;
-          background: #0b132b;
+          background: var(--blue-800);
+          border: 2px solid var(--orange);
           flex: 0 0 auto;
         }
 
@@ -663,12 +688,13 @@ function Cursus() {
         .brand-text strong {
           font-size: 17px;
           font-weight: 800;
+          color: var(--blue-800);
         }
 
         .brand-text span {
           font-size: 15px;
-          font-weight: 500;
-          color: #7a808c;
+          font-weight: 600;
+          color: var(--orange-text);
         }
 
         .desktop-nav {
@@ -680,7 +706,7 @@ function Cursus() {
         .desktop-nav a {
           position: relative;
           padding: 9px 13px;
-          color: #69707d;
+          color: var(--muted);
           font-size: 13px;
           font-weight: 600;
           text-decoration: none;
@@ -689,12 +715,13 @@ function Cursus() {
         }
 
         .desktop-nav a:hover {
-          color: #0b132b;
-          background: #f2f3f5;
+          color: var(--blue-800);
+          background: var(--blue-50);
         }
 
         .desktop-nav a.active {
-          color: #0b132b;
+          color: var(--blue-800);
+          font-weight: 800;
         }
 
         .desktop-nav a.active::after {
@@ -703,9 +730,9 @@ function Cursus() {
           left: 13px;
           right: 13px;
           bottom: 3px;
-          height: 2px;
+          height: 3px;
           border-radius: 999px;
-          background: #d4af37;
+          background: var(--orange);
         }
 
         .desktop-account {
@@ -721,17 +748,17 @@ function Cursus() {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          color: #4d5563;
+          color: var(--blue-800);
           font-size: 12px;
-          font-weight: 600;
+          font-weight: 700;
         }
 
         .active-dot {
           width: 7px;
           height: 7px;
           border-radius: 50%;
-          background: #31a46c;
-          box-shadow: 0 0 0 4px rgba(49,164,108,0.1);
+          background: #1FAE63;
+          box-shadow: 0 0 0 4px rgba(31,174,99,0.14);
         }
 
         .mobile-menu-button {
@@ -740,8 +767,8 @@ function Cursus() {
           height: 42px;
           border: 0;
           border-radius: 12px;
-          background: #f1f2f4;
-          color: #0b132b;
+          background: var(--blue-50);
+          color: var(--blue-800);
           align-items: center;
           justify-content: center;
           cursor: pointer;
@@ -751,9 +778,13 @@ function Cursus() {
           display: none;
         }
 
+        /* ===== INTRO ===== */
+
         .cursus-intro {
-          background: #fff;
-          border-bottom: 1px solid rgba(11,19,43,0.06);
+          background:
+            radial-gradient(700px 300px at 100% 0%, rgba(255,122,26,0.12), transparent 60%),
+            #fff;
+          border-bottom: 1px solid var(--line);
         }
 
         .intro-inner {
@@ -767,16 +798,16 @@ function Cursus() {
           display: inline-flex;
           align-items: center;
           gap: 7px;
-          color: #777e89;
+          color: var(--muted);
           text-decoration: none;
-          font-size: 12px;
-          font-weight: 600;
+          font-size: 13px;
+          font-weight: 700;
           margin-bottom: 36px;
           transition: color .2s ease;
         }
 
         .back-link:hover {
-          color: #0b132b;
+          color: var(--orange-text);
         }
 
         .intro-copy {
@@ -787,29 +818,33 @@ function Cursus() {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          color: #a17e16;
+          padding: 7px 12px;
+          border-radius: 999px;
+          background: var(--orange-soft);
+          color: var(--orange-text);
           font-size: 11px;
           font-weight: 800;
           letter-spacing: .13em;
-          margin-bottom: 15px;
+          margin-bottom: 16px;
         }
 
         .intro-copy h1 {
           margin: 0;
+          color: var(--blue-800);
           font-size: clamp(38px, 6vw, 70px);
-          line-height: .99;
+          line-height: 1;
           letter-spacing: -.055em;
           font-weight: 800;
         }
 
         .intro-copy h1 span {
-          color: #d4af37;
+          color: var(--orange);
         }
 
         .intro-copy p {
           max-width: 610px;
           margin: 24px 0 0;
-          color: #68707d;
+          color: var(--muted);
           font-size: 15px;
           line-height: 1.7;
         }
@@ -821,14 +856,16 @@ function Cursus() {
           display: inline-flex;
           align-items: center;
           gap: 7px;
-          padding: 9px 12px;
+          padding: 9px 13px;
           border-radius: 999px;
-          background: #f2f8f5;
-          color: #267a53;
-          font-size: 11px;
+          background: #EAF8F0;
+          color: #167A48;
+          font-size: 12px;
           font-weight: 700;
-          border: 1px solid rgba(38,122,83,0.09);
+          border: 1px solid rgba(22,122,72,0.15);
         }
+
+        /* ===== CARTE VISUELLE ===== */
 
         .market-visual-section {
           width: min(1180px, calc(100% - 32px));
@@ -843,10 +880,10 @@ function Cursus() {
           border-radius: 28px;
           padding: 26px;
           background:
-            radial-gradient(circle at 85% 15%, rgba(212,175,55,.13), transparent 27%),
-            linear-gradient(135deg, #0b132b, #111c39);
+            radial-gradient(circle at 85% 15%, rgba(255,122,26,.28), transparent 32%),
+            linear-gradient(135deg, var(--blue-900), var(--blue-800) 60%, var(--blue-700));
           color: white;
-          box-shadow: 0 24px 60px rgba(11,19,43,.13);
+          box-shadow: 0 24px 60px rgba(10,42,102,.25);
         }
 
         .market-top {
@@ -859,15 +896,15 @@ function Cursus() {
 
         .market-label {
           display: block;
-          color: rgba(255,255,255,.45);
-          font-size: 9px;
+          color: #FFB680;
+          font-size: 10px;
           letter-spacing: .16em;
           font-weight: 800;
           margin-bottom: 5px;
         }
 
         .market-top strong {
-          font-size: 17px;
+          font-size: 18px;
           letter-spacing: -.02em;
         }
 
@@ -875,8 +912,8 @@ function Cursus() {
           display: flex;
           align-items: center;
           gap: 7px;
-          color: rgba(255,255,255,.65);
-          font-size: 10px;
+          color: rgba(255,255,255,.8);
+          font-size: 11px;
           font-weight: 600;
         }
 
@@ -884,8 +921,8 @@ function Cursus() {
           width: 6px;
           height: 6px;
           border-radius: 50%;
-          background: #4fc38a;
-          box-shadow: 0 0 0 4px rgba(79,195,138,.1);
+          background: #4fe09a;
+          box-shadow: 0 0 0 4px rgba(79,224,154,.15);
         }
 
         .chart-area {
@@ -895,17 +932,17 @@ function Cursus() {
           bottom: 28px;
           height: 175px;
           overflow: hidden;
-          border-top: 1px solid rgba(255,255,255,.07);
-          border-bottom: 1px solid rgba(255,255,255,.07);
+          border-top: 1px solid rgba(255,255,255,.12);
+          border-bottom: 1px solid rgba(255,255,255,.12);
         }
 
         .chart-grid {
           position: absolute;
           inset: 0;
-          opacity: .45;
+          opacity: .6;
           background-image: linear-gradient(
             to right,
-            rgba(255,255,255,.045) 1px,
+            rgba(255,255,255,.07) 1px,
             transparent 1px
           );
           background-size: 12.5% 100%;
@@ -914,7 +951,7 @@ function Cursus() {
         .grid-two {
           background-image: linear-gradient(
             to bottom,
-            rgba(255,255,255,.045) 1px,
+            rgba(255,255,255,.07) 1px,
             transparent 1px
           );
           background-size: 100% 25%;
@@ -929,17 +966,17 @@ function Cursus() {
           inset: 15px 0;
           width: 100%;
           height: calc(100% - 30px);
-          color: #d4af37;
-          filter: drop-shadow(0 4px 10px rgba(212,175,55,.18));
+          color: var(--orange);
+          filter: drop-shadow(0 4px 12px rgba(255,122,26,.45));
         }
 
         .chart-label {
           position: absolute;
           padding: 5px 8px;
           border-radius: 6px;
-          background: rgba(255,255,255,.06);
-          color: rgba(255,255,255,.55);
-          font-size: 8px;
+          background: rgba(255,255,255,.12);
+          color: rgba(255,255,255,.85);
+          font-size: 9px;
           letter-spacing: .08em;
           font-weight: 700;
         }
@@ -959,6 +996,8 @@ function Cursus() {
           top: 17%;
         }
 
+        /* ===== MODULES ===== */
+
         .learning-section {
           width: min(1180px, calc(100% - 32px));
           margin: 0 auto;
@@ -975,8 +1014,8 @@ function Cursus() {
 
         .section-kicker {
           display: block;
-          color: #a17e16;
-          font-size: 10px;
+          color: var(--orange-text);
+          font-size: 11px;
           letter-spacing: .15em;
           font-weight: 800;
           margin-bottom: 10px;
@@ -984,20 +1023,21 @@ function Cursus() {
 
         .section-heading h2 {
           margin: 0;
+          color: var(--blue-800);
           font-size: clamp(30px, 4vw, 48px);
           line-height: 1;
           letter-spacing: -.045em;
         }
 
         .section-heading h2 span {
-          color: #d4af37;
+          color: var(--orange);
         }
 
         .section-heading > p {
           max-width: 390px;
           margin: 0;
-          color: #707783;
-          font-size: 13px;
+          color: var(--muted);
+          font-size: 14px;
           line-height: 1.7;
         }
 
@@ -1011,7 +1051,7 @@ function Cursus() {
         .module-list {
           display: flex;
           flex-direction: column;
-          gap: 7px;
+          gap: 8px;
         }
 
         .module-item {
@@ -1021,10 +1061,10 @@ function Cursus() {
           align-items: center;
           gap: 10px;
           padding: 15px 14px;
-          border: 1px solid rgba(11,19,43,.07);
+          border: 1px solid var(--line);
           border-radius: 15px;
           background: #fff;
-          color: #0b132b;
+          color: var(--ink);
           text-align: left;
           cursor: pointer;
           transition:
@@ -1035,31 +1075,31 @@ function Cursus() {
 
         .module-item:hover {
           transform: translateY(-1px);
-          border-color: rgba(212,175,55,.32);
+          border-color: rgba(255,122,26,.5);
         }
 
         .module-item.active {
-          border-color: rgba(212,175,55,.48);
-          box-shadow: 0 12px 30px rgba(11,19,43,.07);
-          background: #fffdf6;
+          border-color: var(--orange);
+          box-shadow: 0 12px 30px rgba(10,42,102,.12);
+          background: #FFF8F2;
         }
 
         .module-number {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 35px;
-          height: 35px;
+          width: 36px;
+          height: 36px;
           border-radius: 10px;
-          background: #f2f3f5;
-          color: #777e89;
-          font-size: 10px;
+          background: var(--blue-100);
+          color: var(--blue-800);
+          font-size: 11px;
           font-weight: 800;
         }
 
         .module-item.active .module-number {
-          background: #0b132b;
-          color: #d4af37;
+          background: var(--blue-800);
+          color: var(--orange);
         }
 
         .module-main {
@@ -1071,24 +1111,25 @@ function Cursus() {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          font-size: 13px;
-          font-weight: 750;
+          font-size: 14px;
+          font-weight: 800;
+          color: var(--blue-800);
         }
 
         .module-main small {
           display: block;
           margin-top: 4px;
-          color: #9298a2;
-          font-size: 10px;
+          color: var(--muted-2);
+          font-size: 11px;
         }
 
         .module-arrow {
-          color: #a4a9b1;
+          color: var(--muted-2);
           transition: transform .2s ease;
         }
 
         .module-item.active .module-arrow {
-          color: #d4af37;
+          color: var(--orange);
           transform: translateX(2px);
         }
 
@@ -1097,8 +1138,9 @@ function Cursus() {
           padding: 25px;
           border-radius: 22px;
           background: #fff;
-          border: 1px solid rgba(11,19,43,.07);
-          box-shadow: 0 15px 40px rgba(11,19,43,.045);
+          border: 1px solid var(--line);
+          border-top: 4px solid var(--orange);
+          box-shadow: 0 15px 40px rgba(10,42,102,.07);
         }
 
         .detail-header {
@@ -1107,37 +1149,38 @@ function Cursus() {
           justify-content: space-between;
           gap: 20px;
           padding-bottom: 23px;
-          border-bottom: 1px solid #edf0f2;
+          border-bottom: 1px solid var(--line);
         }
 
         .detail-number {
-          color: #a17e16;
-          font-size: 9px;
+          color: var(--orange-text);
+          font-size: 10px;
           font-weight: 800;
           letter-spacing: .13em;
         }
 
         .detail-header h3 {
           margin: 7px 0 8px;
-          font-size: 25px;
+          color: var(--blue-800);
+          font-size: 26px;
           letter-spacing: -.035em;
         }
 
         .detail-header p {
           max-width: 580px;
           margin: 0;
-          color: #777e89;
-          font-size: 12px;
+          color: var(--muted);
+          font-size: 13px;
           line-height: 1.65;
         }
 
         .detail-icon {
-          width: 45px;
-          height: 45px;
+          width: 46px;
+          height: 46px;
           flex: 0 0 auto;
           border-radius: 14px;
-          background: #0b132b;
-          color: #d4af37;
+          background: var(--blue-800);
+          color: var(--orange);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1151,9 +1194,9 @@ function Cursus() {
           display: flex;
           align-items: center;
           gap: 14px;
-          min-height: 68px;
+          min-height: 70px;
           padding: 10px 2px;
-          border-bottom: 1px solid #f0f1f3;
+          border-bottom: 1px solid #EDF1F7;
         }
 
         .lesson-card:last-child {
@@ -1163,8 +1206,8 @@ function Cursus() {
         .lesson-index {
           width: 30px;
           flex: 0 0 auto;
-          color: #a0a5ad;
-          font-size: 9px;
+          color: var(--orange-text);
+          font-size: 11px;
           font-weight: 800;
         }
 
@@ -1175,22 +1218,22 @@ function Cursus() {
 
         .lesson-content strong {
           display: block;
-          color: #202838;
-          font-size: 12px;
+          color: var(--ink);
+          font-size: 13px;
           line-height: 1.4;
         }
 
         .lesson-content span {
           display: block;
           margin-top: 3px;
-          color: #9a9fa8;
-          font-size: 9px;
+          color: var(--muted-2);
+          font-size: 10px;
         }
 
         .lesson-action,
         .lesson-lock {
-          width: 34px;
-          height: 34px;
+          width: 36px;
+          height: 36px;
           flex: 0 0 auto;
           border-radius: 50%;
           display: flex;
@@ -1200,44 +1243,47 @@ function Cursus() {
 
         .lesson-action {
           border: 0;
-          background: #0b132b;
+          background: var(--orange);
           color: #fff;
           cursor: pointer;
+          box-shadow: 0 8px 18px rgba(255,122,26,.35);
           transition: transform .2s ease, background .2s ease;
         }
 
         .lesson-action:hover {
-          transform: scale(1.05);
-          background: #172443;
+          transform: scale(1.08);
+          background: var(--orange-dark);
         }
 
         .lesson-lock {
-          background: #f3f4f5;
-          color: #a4a9b1;
+          background: var(--blue-50);
+          color: var(--muted-2);
         }
 
         .resource-note {
           margin-top: 17px;
-          padding: 12px 13px;
+          padding: 13px 14px;
           display: flex;
           align-items: flex-start;
           gap: 9px;
           border-radius: 11px;
-          background: #f7f8fa;
-          color: #8a9099;
+          background: var(--blue-50);
+          color: var(--muted);
         }
 
         .resource-note svg {
           flex: 0 0 auto;
           margin-top: 1px;
-          color: #a17e16;
+          color: var(--orange-text);
         }
 
         .resource-note p {
           margin: 0;
-          font-size: 9px;
+          font-size: 11px;
           line-height: 1.6;
         }
+
+        /* ===== BAS DE PAGE ===== */
 
         .bottom-information {
           width: min(1180px, calc(100% - 32px));
@@ -1257,28 +1303,29 @@ function Cursus() {
         }
 
         .information-icon {
-          width: 38px;
-          height: 38px;
+          width: 40px;
+          height: 40px;
           flex: 0 0 auto;
           border-radius: 11px;
           display: flex;
           align-items: center;
           justify-content: center;
-          background: #fff;
-          border: 1px solid rgba(11,19,43,.07);
-          color: #a17e16;
+          background: var(--orange-soft);
+          border: 1px solid rgba(255,122,26,.25);
+          color: var(--orange-text);
         }
 
         .information-card strong {
           display: block;
           margin-bottom: 4px;
-          font-size: 12px;
+          color: var(--blue-800);
+          font-size: 14px;
         }
 
         .information-card p {
           margin: 0;
-          color: #858b95;
-          font-size: 11px;
+          color: var(--muted);
+          font-size: 12px;
           line-height: 1.6;
         }
 
@@ -1287,14 +1334,20 @@ function Cursus() {
           align-items: center;
           gap: 6px;
           flex: 0 0 auto;
-          color: #0b132b;
+          padding: 12px 16px;
+          border-radius: 12px;
+          background: var(--orange);
+          color: #fff;
           text-decoration: none;
-          font-size: 11px;
-          font-weight: 750;
+          font-size: 12px;
+          font-weight: 800;
+          box-shadow: 0 10px 22px rgba(255,122,26,.35);
+          transition: background .2s ease, transform .2s ease;
         }
 
         .services-link:hover {
-          color: #a17e16;
+          background: var(--orange-dark);
+          transform: translateY(-1px);
         }
 
         .mobile-bottom-nav {
@@ -1316,7 +1369,7 @@ function Cursus() {
             display: block;
             z-index: 90;
             inset: 72px 0 0;
-            background: rgba(11,19,43,.18);
+            background: rgba(6,26,74,.28);
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
           }
@@ -1324,8 +1377,8 @@ function Cursus() {
           .mobile-menu {
             padding: 12px 16px 20px;
             background: #fff;
-            border-bottom: 1px solid rgba(11,19,43,.08);
-            box-shadow: 0 20px 40px rgba(11,19,43,.12);
+            border-bottom: 1px solid var(--line);
+            box-shadow: 0 20px 40px rgba(10,42,102,.15);
           }
 
           .mobile-menu a {
@@ -1333,16 +1386,16 @@ function Cursus() {
             align-items: center;
             min-height: 50px;
             padding: 0 12px;
-            color: #4f5663;
+            color: var(--muted);
             text-decoration: none;
             border-radius: 12px;
-            font-size: 13px;
-            font-weight: 650;
+            font-size: 14px;
+            font-weight: 700;
           }
 
           .mobile-menu a.selected {
-            color: #0b132b;
-            background: #f7f4e9;
+            color: var(--orange-text);
+            background: var(--orange-soft);
           }
 
           .learning-layout {
@@ -1377,12 +1430,12 @@ function Cursus() {
             grid-template-columns: repeat(4, 1fr);
             gap: 4px;
             padding: 7px;
-            border: 1px solid rgba(11,19,43,.08);
+            border: 1px solid var(--line);
             border-radius: 18px;
-            background: rgba(255,255,255,.94);
+            background: rgba(255,255,255,.96);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
-            box-shadow: 0 14px 35px rgba(11,19,43,.15);
+            box-shadow: 0 14px 35px rgba(10,42,102,.2);
           }
 
           .mobile-bottom-nav a {
@@ -1393,15 +1446,19 @@ function Cursus() {
             justify-content: center;
             gap: 3px;
             border-radius: 12px;
-            color: #858b95;
+            color: var(--muted-2);
             text-decoration: none;
-            font-size: 8px;
+            font-size: 10px;
             font-weight: 700;
           }
 
           .mobile-bottom-nav a.current {
-            color: #0b132b;
-            background: #f6f2e5;
+            color: #fff;
+            background: var(--blue-800);
+          }
+
+          .mobile-bottom-nav a.current svg {
+            color: var(--orange);
           }
         }
 
@@ -1450,18 +1507,18 @@ function Cursus() {
 
           .intro-copy h1 {
             font-size: 40px;
-            line-height: .99;
+            line-height: 1;
           }
 
           .intro-copy p {
             margin-top: 17px;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.65;
           }
 
           .access-badge {
             margin-top: 22px;
-            font-size: 10px;
+            font-size: 11px;
           }
 
           .market-visual-section {
@@ -1475,11 +1532,11 @@ function Cursus() {
           }
 
           .market-top strong {
-            font-size: 14px;
+            font-size: 15px;
           }
 
           .market-status {
-            font-size: 9px;
+            font-size: 10px;
           }
 
           .chart-area {
@@ -1490,7 +1547,7 @@ function Cursus() {
           }
 
           .chart-label {
-            font-size: 7px;
+            font-size: 8px;
             padding: 4px 6px;
           }
 
@@ -1509,7 +1566,7 @@ function Cursus() {
 
           .section-heading > p {
             margin-top: 14px;
-            font-size: 12px;
+            font-size: 13px;
           }
 
           .module-list {
@@ -1528,24 +1585,24 @@ function Cursus() {
           }
 
           .module-item {
-            min-width: 235px;
+            min-width: 245px;
             grid-template-columns: 36px minmax(0,1fr) 18px;
             padding: 12px;
             border-radius: 14px;
           }
 
           .module-number {
-            width: 32px;
-            height: 32px;
+            width: 33px;
+            height: 33px;
             border-radius: 9px;
           }
 
           .module-main strong {
-            font-size: 11px;
+            font-size: 12px;
           }
 
           .module-main small {
-            font-size: 9px;
+            font-size: 10px;
           }
 
           .module-detail {
@@ -1559,36 +1616,36 @@ function Cursus() {
           }
 
           .detail-header h3 {
-            font-size: 21px;
+            font-size: 22px;
           }
 
           .detail-header p {
-            font-size: 11px;
+            font-size: 12px;
           }
 
           .detail-icon {
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             border-radius: 11px;
           }
 
           .lesson-card {
-            min-height: 62px;
+            min-height: 64px;
             gap: 10px;
           }
 
           .lesson-content strong {
-            font-size: 11px;
+            font-size: 12px;
           }
 
           .lesson-content span {
-            font-size: 8px;
+            font-size: 9px;
           }
 
           .lesson-action,
           .lesson-lock {
-            width: 31px;
-            height: 31px;
+            width: 34px;
+            height: 34px;
           }
 
           .resource-note {
@@ -1606,21 +1663,23 @@ function Cursus() {
           }
 
           .information-icon {
-            width: 34px;
-            height: 34px;
+            width: 36px;
+            height: 36px;
             border-radius: 9px;
           }
 
           .information-card strong {
-            font-size: 11px;
+            font-size: 13px;
           }
 
           .information-card p {
-            font-size: 10px;
+            font-size: 11px;
           }
 
           .services-link {
             margin-top: 20px;
+            width: 100%;
+            justify-content: center;
           }
         }
 
@@ -1634,7 +1693,7 @@ function Cursus() {
           }
 
           .module-item {
-            min-width: 220px;
+            min-width: 225px;
           }
         }
 
