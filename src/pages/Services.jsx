@@ -367,6 +367,29 @@ function Services() {
       ================================= */}
 
       <style>{`
+        /* =================================
+           PALETTE : BLEU • BLANC • ORANGE
+        ================================= */
+
+        .services-page {
+          --blue-900: #061A4A;
+          --blue-800: #0A2A66;
+          --blue-700: #103A8C;
+          --blue-100: #E6EEFC;
+          --blue-50:  #F1F5FD;
+
+          --orange: #FF7A1A;
+          --orange-dark: #E86405;
+          --orange-text: #D9590A;
+          --orange-soft: #FFF0E3;
+
+          --ink: #0A1B44;
+          --muted: #5F6E8A;
+          --muted-2: #8794AD;
+          --line: #DFE6F2;
+          --bg: #F4F7FC;
+        }
+
         * {
           box-sizing: border-box;
         }
@@ -374,7 +397,7 @@ function Services() {
         .services-page {
           min-height: 100vh;
           background: #ffffff;
-          color: #0b132b;
+          color: var(--ink);
           font-family:
             Inter,
             -apple-system,
@@ -407,8 +430,11 @@ function Services() {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          color: #a88918;
-          font-size: 10px;
+          padding: 7px 12px;
+          border-radius: 999px;
+          background: var(--orange-soft);
+          color: var(--orange-text);
+          font-size: 11px;
           font-weight: 800;
           letter-spacing: 0.15em;
           margin-bottom: 18px;
@@ -416,20 +442,21 @@ function Services() {
 
         .services-intro h1 {
           margin: 0;
+          color: var(--blue-800);
           font-size: clamp(40px, 5vw, 64px);
           line-height: 1.01;
           letter-spacing: -0.055em;
-          font-weight: 760;
+          font-weight: 800;
         }
 
         .services-intro h1 span {
-          color: #a88918;
+          color: var(--orange);
         }
 
         .services-intro p {
           max-width: 650px;
           margin: 22px 0 0;
-          color: #707784;
+          color: var(--muted);
           font-size: 15px;
           line-height: 1.7;
         }
@@ -446,20 +473,21 @@ function Services() {
         }
 
         .section-header > svg {
-          color: #a88918;
+          color: var(--orange);
         }
 
         .section-label {
           display: block;
           margin-bottom: 5px;
-          color: #8d939e;
-          font-size: 9px;
+          color: var(--orange-text);
+          font-size: 10px;
           font-weight: 800;
           letter-spacing: 0.16em;
         }
 
         .section-header h2 {
           margin: 0;
+          color: var(--blue-800);
           font-size: 26px;
           line-height: 1.1;
           letter-spacing: -0.035em;
@@ -496,7 +524,7 @@ function Services() {
           gap: 18px;
           min-height: 200px;
           padding: 12px;
-          border: 1px solid #e9ebef;
+          border: 1px solid var(--line);
           border-radius: 21px;
           background: #ffffff;
           color: inherit;
@@ -508,10 +536,15 @@ function Services() {
             box-shadow 0.25s ease;
         }
 
+        .book-card-featured {
+          border-color: rgba(255, 122, 26, 0.45);
+          background: linear-gradient(135deg, #ffffff, var(--orange-soft));
+        }
+
         .book-card:hover {
           transform: translateY(-3px);
-          border-color: #d4af37;
-          box-shadow: 0 17px 40px rgba(11, 19, 43, 0.08);
+          border-color: var(--orange);
+          box-shadow: 0 17px 40px rgba(10, 42, 102, 0.14);
         }
 
         .book-image-wrapper {
@@ -520,7 +553,7 @@ function Services() {
           height: 176px;
           overflow: hidden;
           border-radius: 14px;
-          background: #f1f2f4;
+          background: var(--blue-100);
         }
 
         .book-image {
@@ -539,8 +572,8 @@ function Services() {
           width: 29px;
           height: 29px;
           border-radius: 9px;
-          background: rgba(11, 19, 43, 0.92);
-          color: #d4af37;
+          background: var(--orange);
+          color: #ffffff;
         }
 
         .book-content {
@@ -553,8 +586,8 @@ function Services() {
         .book-level {
           display: block;
           margin-bottom: 7px;
-          color: #a88918;
-          font-size: 8px;
+          color: var(--orange-text);
+          font-size: 9px;
           font-weight: 800;
           letter-spacing: 0.12em;
           text-transform: uppercase;
@@ -562,6 +595,7 @@ function Services() {
 
         .book-content h3 {
           margin: 0 0 9px;
+          color: var(--blue-800);
           font-size: 17px;
           line-height: 1.18;
           letter-spacing: -0.025em;
@@ -569,8 +603,8 @@ function Services() {
 
         .book-content p {
           margin: 0;
-          color: #747b87;
-          font-size: 10px;
+          color: var(--muted);
+          font-size: 11px;
           line-height: 1.55;
         }
 
@@ -579,9 +613,13 @@ function Services() {
           align-items: center;
           gap: 5px;
           margin-top: 16px;
-          color: #0b132b;
-          font-size: 10px;
-          font-weight: 750;
+          color: var(--blue-700);
+          font-size: 11px;
+          font-weight: 800;
+        }
+
+        .book-card:hover .book-link {
+          color: var(--orange-text);
         }
 
         .scroll-indicator {
@@ -589,17 +627,17 @@ function Services() {
           align-items: center;
           gap: 7px;
           margin-top: 5px;
-          color: #999fa9;
-          font-size: 9px;
+          color: var(--muted-2);
+          font-size: 10px;
         }
 
         .scroll-line {
           position: relative;
           width: 32px;
-          height: 2px;
+          height: 3px;
           overflow: hidden;
           border-radius: 10px;
-          background: #e8e9eb;
+          background: var(--blue-100);
         }
 
         .scroll-line span {
@@ -609,7 +647,7 @@ function Services() {
           width: 12px;
           height: 100%;
           border-radius: inherit;
-          background: #d4af37;
+          background: var(--orange);
           animation: scrollHint 2s ease-in-out infinite;
         }
 
@@ -631,19 +669,20 @@ function Services() {
           margin-top: 17px;
           padding: 14px 16px;
           border-radius: 14px;
-          background: #f7f7f5;
+          background: var(--blue-50);
+          border-left: 4px solid var(--blue-700);
         }
 
         .books-note svg {
           flex-shrink: 0;
-          color: #a88918;
+          color: var(--blue-700);
           margin-top: 1px;
         }
 
         .books-note p {
           margin: 0;
-          color: #777e89;
-          font-size: 10px;
+          color: var(--muted);
+          font-size: 11px;
           line-height: 1.55;
         }
 
@@ -665,11 +704,12 @@ function Services() {
           display: block;
           width: 100%;
           padding: 24px;
-          border: 1px solid #e9ebef;
+          border: 1px solid var(--line);
+          border-bottom: 4px solid var(--blue-700);
           border-radius: 20px;
           background: #ffffff;
           text-align: left;
-          color: #0b132b;
+          color: var(--ink);
           cursor: pointer;
           transition:
             transform 0.25s ease,
@@ -677,32 +717,42 @@ function Services() {
             box-shadow 0.25s ease;
         }
 
+        .service-card:nth-child(2) {
+          border-bottom-color: var(--orange);
+        }
+
         .service-card:hover {
           transform: translateY(-3px);
-          border-color: #d4af37;
-          box-shadow: 0 15px 38px rgba(11, 19, 43, 0.07);
+          border-color: var(--orange);
+          box-shadow: 0 15px 38px rgba(10, 42, 102, 0.12);
         }
 
         .service-icon {
           display: grid;
           place-items: center;
-          width: 43px;
-          height: 43px;
+          width: 44px;
+          height: 44px;
           margin-bottom: 24px;
           border-radius: 13px;
-          background: #0b132b;
-          color: #d4af37;
+          background: var(--blue-800);
+          color: var(--orange);
+        }
+
+        .service-card:nth-child(2) .service-icon {
+          background: var(--orange);
+          color: #ffffff;
         }
 
         .service-body > span {
-          color: #a88918;
-          font-size: 8px;
+          color: var(--orange-text);
+          font-size: 9px;
           font-weight: 800;
           letter-spacing: 0.14em;
         }
 
         .service-body h3 {
           margin: 7px 0 8px;
+          color: var(--blue-800);
           font-size: 18px;
           line-height: 1.2;
           letter-spacing: -0.025em;
@@ -710,8 +760,8 @@ function Services() {
 
         .service-body p {
           margin: 0;
-          color: #747b87;
-          font-size: 11px;
+          color: var(--muted);
+          font-size: 12px;
           line-height: 1.6;
         }
 
@@ -720,9 +770,13 @@ function Services() {
           align-items: center;
           gap: 5px;
           margin-top: 20px;
-          color: #0b132b;
-          font-size: 10px;
-          font-weight: 750;
+          color: var(--blue-700);
+          font-size: 11px;
+          font-weight: 800;
+        }
+
+        .service-card:hover .service-action {
+          color: var(--orange-text);
         }
 
         /* =================================
@@ -730,13 +784,19 @@ function Services() {
         ================================= */
 
         .contact-section {
+          position: relative;
+          overflow: hidden;
           display: grid;
           grid-template-columns: auto 1fr auto;
           align-items: center;
           gap: 23px;
           padding: 30px;
           border-radius: 23px;
-          background: #f6f6f4;
+          background:
+            radial-gradient(circle at 100% 0%, rgba(255, 122, 26, 0.3), transparent 50%),
+            linear-gradient(135deg, var(--blue-900), var(--blue-800) 60%, var(--blue-700));
+          color: #ffffff;
+          box-shadow: 0 20px 45px rgba(10, 42, 102, 0.25);
         }
 
         .contact-icon {
@@ -745,19 +805,20 @@ function Services() {
           width: 48px;
           height: 48px;
           border-radius: 14px;
-          background: #0b132b;
-          color: #d4af37;
+          background: var(--orange);
+          color: #ffffff;
         }
 
         .contact-content > span {
-          color: #a88918;
-          font-size: 8px;
+          color: #FFB680;
+          font-size: 9px;
           font-weight: 800;
           letter-spacing: 0.15em;
         }
 
         .contact-content h2 {
           margin: 6px 0;
+          color: #ffffff;
           font-size: 24px;
           line-height: 1.1;
           letter-spacing: -0.035em;
@@ -766,8 +827,8 @@ function Services() {
         .contact-content p {
           max-width: 510px;
           margin: 0;
-          color: #747b87;
-          font-size: 11px;
+          color: #C3D0EC;
+          font-size: 12px;
           line-height: 1.55;
         }
 
@@ -775,15 +836,22 @@ function Services() {
           display: flex;
           align-items: center;
           gap: 8px;
-          padding: 13px 17px;
+          padding: 14px 19px;
           border: 0;
           border-radius: 12px;
-          background: #0b132b;
+          background: var(--orange);
           color: #ffffff;
-          font-size: 10px;
-          font-weight: 750;
+          font-size: 12px;
+          font-weight: 800;
           cursor: pointer;
           white-space: nowrap;
+          box-shadow: 0 10px 22px rgba(255, 122, 26, 0.4);
+          transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .contact-button:hover {
+          background: var(--orange-dark);
+          transform: translateY(-1px);
         }
 
         /* =================================
@@ -839,8 +907,8 @@ function Services() {
             justify-content: space-between;
             height: 63px;
             padding: 0 16px;
-            border-bottom: 1px solid #eef0f2;
-            background: rgba(255, 255, 255, 0.94);
+            border-bottom: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(14px);
           }
 
@@ -851,7 +919,7 @@ function Services() {
             padding: 0;
             border: 0;
             background: transparent;
-            color: #0b132b;
+            color: var(--blue-800);
             cursor: pointer;
           }
 
@@ -867,7 +935,7 @@ function Services() {
             display: block;
             width: 5px;
             border-radius: 2px;
-            background: #0b132b;
+            background: var(--blue-800);
           }
 
           .brand-symbol span:nth-child(1) {
@@ -880,14 +948,14 @@ function Services() {
 
           .brand-symbol span:nth-child(3) {
             height: 13px;
-            background: #d4af37;
+            background: var(--orange);
           }
 
           .brand-name {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 850;
             line-height: 0.85;
             letter-spacing: -0.04em;
@@ -895,14 +963,18 @@ function Services() {
 
           .brand-name strong {
             margin-top: 3px;
-            font-size: 6px;
+            color: var(--orange-text);
+            font-size: 7px;
             font-weight: 800;
             letter-spacing: 0.18em;
           }
 
           .header-section-name {
-            color: #898f9b;
-            font-size: 8px;
+            padding: 5px 9px;
+            border-radius: 999px;
+            background: var(--orange-soft);
+            color: var(--orange-text);
+            font-size: 9px;
             font-weight: 800;
             letter-spacing: 0.14em;
           }
@@ -919,7 +991,7 @@ function Services() {
           .intro-label {
             gap: 6px;
             margin-bottom: 13px;
-            font-size: 8px;
+            font-size: 9px;
           }
 
           .services-intro h1 {
@@ -931,7 +1003,7 @@ function Services() {
 
           .services-intro p {
             margin-top: 15px;
-            font-size: 11px;
+            font-size: 13px;
             line-height: 1.65;
           }
 
@@ -940,11 +1012,11 @@ function Services() {
           }
 
           .section-header h2 {
-            font-size: 21px;
+            font-size: 22px;
           }
 
           .section-label {
-            font-size: 7px;
+            font-size: 8px;
           }
 
           .guides-section {
@@ -961,7 +1033,7 @@ function Services() {
           }
 
           .book-card {
-            flex: 0 0 285px;
+            flex: 0 0 290px;
             grid-template-columns: 96px 1fr;
             gap: 13px;
             min-height: 157px;
@@ -990,7 +1062,7 @@ function Services() {
 
           .book-level {
             margin-bottom: 5px;
-            font-size: 6.5px;
+            font-size: 8px;
             letter-spacing: 0.1em;
           }
 
@@ -1001,18 +1073,18 @@ function Services() {
           }
 
           .book-content p {
-            font-size: 9px;
+            font-size: 10px;
             line-height: 1.5;
           }
 
           .book-link {
             margin-top: 11px;
-            font-size: 9px;
+            font-size: 10px;
           }
 
           .scroll-indicator {
             margin-top: 2px;
-            font-size: 8px;
+            font-size: 9px;
           }
 
           .books-note {
@@ -1023,7 +1095,7 @@ function Services() {
           }
 
           .books-note p {
-            font-size: 8.5px;
+            font-size: 10px;
           }
 
           /* SERVICES MOBILE */
@@ -1047,8 +1119,8 @@ function Services() {
           }
 
           .service-icon {
-            width: 39px;
-            height: 39px;
+            width: 40px;
+            height: 40px;
             margin: 0;
             border-radius: 11px;
           }
@@ -1059,22 +1131,22 @@ function Services() {
           }
 
           .service-body > span {
-            font-size: 6.5px;
+            font-size: 8px;
           }
 
           .service-body h3 {
             margin: 4px 0 5px;
-            font-size: 14px;
+            font-size: 15px;
           }
 
           .service-body p {
-            font-size: 9px;
+            font-size: 10px;
             line-height: 1.5;
           }
 
           .service-action {
             margin-top: 8px;
-            font-size: 8px;
+            font-size: 10px;
           }
 
           /* CONTACT MOBILE */
@@ -1087,13 +1159,13 @@ function Services() {
           }
 
           .contact-icon {
-            width: 39px;
-            height: 39px;
+            width: 40px;
+            height: 40px;
             border-radius: 11px;
           }
 
           .contact-content > span {
-            font-size: 7px;
+            font-size: 8px;
           }
 
           .contact-content h2 {
@@ -1103,7 +1175,7 @@ function Services() {
 
           .contact-content p {
             margin-top: 8px;
-            font-size: 9px;
+            font-size: 10px;
             line-height: 1.5;
           }
 
@@ -1111,8 +1183,8 @@ function Services() {
             grid-column: 1 / -1;
             justify-content: center;
             width: 100%;
-            padding: 12px;
-            font-size: 9px;
+            padding: 13px;
+            font-size: 11px;
           }
 
           /* BOTTOM NAV */
@@ -1127,31 +1199,42 @@ function Services() {
             grid-template-columns: repeat(4, 1fr);
             height: 68px;
             padding: 7px 8px max(7px, env(safe-area-inset-bottom));
-            border-top: 1px solid #eceef1;
-            background: rgba(255, 255, 255, 0.96);
+            border-top: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.97);
             backdrop-filter: blur(15px);
           }
 
           .bottom-link {
+            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 4px;
             border-radius: 11px;
-            color: #969ca7;
+            color: var(--muted-2);
             text-decoration: none;
-            font-size: 8px;
-            font-weight: 650;
+            font-size: 9px;
+            font-weight: 700;
             transition: 0.2s ease;
           }
 
           .bottom-link.active {
-            color: #0b132b;
+            color: var(--blue-800);
           }
 
           .bottom-link.active svg {
-            color: #b08e1e;
+            color: var(--orange);
+          }
+
+          .bottom-link.active::before {
+            content: "";
+            position: absolute;
+            top: -7px;
+            width: 24px;
+            height: 3px;
+            border-radius: 999px;
+            background: var(--orange);
           }
 
           .bottom-link svg {
@@ -1196,11 +1279,11 @@ function Services() {
           }
 
           .book-content p {
-            font-size: 8.5px;
+            font-size: 9.5px;
           }
 
           .service-body h3 {
-            font-size: 13px;
+            font-size: 14px;
           }
         }
       `}</style>
