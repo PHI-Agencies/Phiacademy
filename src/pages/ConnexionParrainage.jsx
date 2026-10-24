@@ -62,10 +62,34 @@ function ConnexionParrainage() {
   return (
     <div className="parrainage-login-page">
       <style>{`
+        /* =========================
+           PALETTE : BLEU • BLANC • ORANGE
+        ========================= */
+
+        .parrainage-login-page {
+          --blue-900: #061A4A;
+          --blue-800: #0A2A66;
+          --blue-700: #103A8C;
+          --blue-100: #E6EEFC;
+          --blue-50:  #F1F5FD;
+
+          --orange: #FF7A1A;
+          --orange-dark: #E86405;
+          --orange-text: #D9590A;
+          --orange-soft: #FFF0E3;
+
+          --ink: #0A1B44;
+          --muted: #5F6E8A;
+          --line: #DFE6F2;
+        }
+
         .parrainage-login-page {
           min-height: 100vh;
-          background: #f7f8fa;
-          color: #0b132b;
+          background:
+            radial-gradient(600px 300px at 100% 0%, rgba(255,122,26,.14), transparent 60%),
+            radial-gradient(600px 300px at 0% 100%, rgba(16,58,140,.10), transparent 60%),
+            #F4F7FC;
+          color: var(--ink);
           padding: 24px 16px;
           display: flex;
           justify-content: center;
@@ -84,13 +108,14 @@ function ConnexionParrainage() {
         }
 
         .parrainage-login-logo {
-          width: 58px;
-          height: 58px;
+          width: 62px;
+          height: 62px;
           margin: 0 auto 14px;
-          border-radius: 16px;
+          border-radius: 18px;
           overflow: hidden;
-          background: #0b132b;
-          border: 1px solid rgba(212,175,55,.45);
+          background: var(--blue-800);
+          border: 2px solid var(--orange);
+          box-shadow: 0 12px 28px rgba(10,42,102,.22);
         }
 
         .parrainage-login-logo img {
@@ -102,33 +127,35 @@ function ConnexionParrainage() {
 
         .parrainage-login-top h1 {
           margin: 0;
-          font-size: 25px;
+          color: var(--blue-800);
+          font-size: 26px;
           font-weight: 800;
           letter-spacing: -.5px;
         }
 
         .parrainage-login-top p {
           margin: 8px 0 0;
-          color: #697386;
+          color: var(--muted);
           font-size: 14px;
           line-height: 1.5;
         }
 
         .parrainage-login-card {
           background: #ffffff;
-          border: 1px solid #e8eaf0;
+          border: 1px solid var(--line);
+          border-top: 4px solid var(--orange);
           border-radius: 24px;
-          padding: 20px;
-          box-shadow: 0 16px 45px rgba(11,19,43,.07);
+          padding: 22px;
+          box-shadow: 0 20px 50px rgba(10,42,102,.12);
         }
 
         .parrainage-login-info {
           padding: 14px;
           margin-bottom: 18px;
           border-radius: 13px;
-          background: #faf8ef;
-          border: 1px solid rgba(212,175,55,.25);
-          color: #5d5129;
+          background: var(--blue-50);
+          border-left: 4px solid var(--blue-700);
+          color: var(--blue-800);
           font-size: 13px;
           line-height: 1.5;
         }
@@ -148,52 +175,59 @@ function ConnexionParrainage() {
         .parrainage-login-field label {
           font-size: 13px;
           font-weight: 700;
-          color: #30384d;
+          color: var(--blue-800);
         }
 
         .parrainage-login-field input {
           width: 100%;
-          height: 48px;
+          height: 50px;
           box-sizing: border-box;
           padding: 0 14px;
-          border: 1px solid #dfe3ea;
+          border: 1px solid var(--line);
           border-radius: 12px;
           outline: none;
-          background: #fff;
-          color: #0b132b;
+          background: var(--blue-50);
+          color: var(--ink);
           font-size: 14px;
           transition: .2s ease;
         }
 
+        .parrainage-login-field input::placeholder {
+          color: #9AA7BF;
+        }
+
         .parrainage-login-field input:focus {
-          border-color: #d4af37;
-          box-shadow: 0 0 0 3px rgba(212,175,55,.12);
+          border-color: var(--orange);
+          background: #fff;
+          box-shadow: 0 0 0 4px rgba(255,122,26,.15);
         }
 
         .parrainage-login-message {
           margin-bottom: 15px;
           padding: 12px 14px;
           border-radius: 12px;
-          background: #fff3f3;
-          border: 1px solid #ffd7d7;
-          color: #a32828;
+          background: #FFF3F0;
+          border: 1px solid #F6CFC6;
+          color: #A33A2A;
           font-size: 13px;
           line-height: 1.45;
         }
 
         .parrainage-login-submit {
-          height: 50px;
+          height: 52px;
           border: 0;
           border-radius: 13px;
-          background: #0b132b;
+          background: var(--orange);
           color: #fff;
           font-size: 14px;
           font-weight: 800;
           cursor: pointer;
-          transition: transform .2s ease, opacity .2s ease;
+          box-shadow: 0 12px 26px rgba(255,122,26,.38);
+          transition: transform .2s ease, opacity .2s ease, background .2s ease;
         }
 
         .parrainage-login-submit:hover {
+          background: var(--orange-dark);
           transform: translateY(-1px);
         }
 
@@ -207,27 +241,32 @@ function ConnexionParrainage() {
           margin-top: 18px;
           text-align: center;
           font-size: 13px;
-          color: #697386;
+          color: var(--muted);
           line-height: 1.5;
         }
 
         .parrainage-login-register a {
-          color: #0b132b;
+          color: var(--orange-text);
           font-weight: 800;
           text-decoration: none;
+        }
+
+        .parrainage-login-register a:hover {
+          text-decoration: underline;
         }
 
         .parrainage-login-back {
           display: block;
           margin-top: 18px;
           text-align: center;
-          color: #697386;
+          color: var(--muted);
           text-decoration: none;
           font-size: 13px;
+          font-weight: 600;
         }
 
         .parrainage-login-back:hover {
-          color: #0b132b;
+          color: var(--orange-text);
         }
 
         @media (max-width: 380px) {
@@ -236,7 +275,7 @@ function ConnexionParrainage() {
           }
 
           .parrainage-login-card {
-            padding: 17px;
+            padding: 18px;
             border-radius: 20px;
           }
 
