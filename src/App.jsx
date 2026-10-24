@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import ConnexionCursus from "./pages/ConnexionCursus";
 import ConnexionParrainage from "./pages/ConnexionParrainage";
 import Cursus from "./pages/Cursus";
-import Services from "https://phi-agencies.github.io/Phi-academy/";
+import Services from "./pages/Services";
 import Parrainage from "./pages/Parrainage";
 import AdminLogin from "./pages/AdminLogin";
 
