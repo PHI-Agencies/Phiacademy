@@ -41,14 +41,20 @@ function Navbar() {
   return (
     <>
       <style>{`
+        /* =========================
+           PALETTE : BLEU • BLANC • ORANGE
+        ========================= */
+
         :root {
-          --phi-navy: #0B132B;
-          --phi-navy-soft: #111C38;
-          --phi-gold: #D4AF37;
+          --phi-navy: #061A4A;
+          --phi-navy-soft: #0A2A66;
+          --phi-blue: #103A8C;
+          --phi-orange: #FF7A1A;
+          --phi-orange-dark: #E86405;
           --phi-white: #FFFFFF;
-          --phi-text: #E8ECF5;
-          --phi-muted: #9AA5BC;
-          --phi-border: rgba(255,255,255,0.09);
+          --phi-text: #EAF0FC;
+          --phi-muted: #B4C2E0;
+          --phi-border: rgba(255,255,255,0.12);
         }
 
         /* =========================
@@ -70,8 +76,8 @@ function Navbar() {
           background:
             linear-gradient(
               180deg,
-              rgba(11,19,43,0.94),
-              rgba(11,19,43,0.82)
+              rgba(6,26,74,0.97),
+              rgba(10,42,102,0.94)
             );
 
           border-bottom: 1px solid var(--phi-border);
@@ -94,52 +100,18 @@ function Navbar() {
         }
 
         /* =========================
-           BRAND / LOGO
+           BRAND / LOGO (TEXTE)
         ========================= */
 
         .phi-brand {
           display: inline-flex;
           align-items: center;
-          gap: 11px;
 
           color: var(--phi-white);
           text-decoration: none;
 
           position: relative;
           z-index: 1002;
-        }
-
-        .phi-brand-mark {
-          width: 38px;
-          height: 38px;
-
-          flex-shrink: 0;
-
-          border-radius: 50%;
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          overflow: hidden;
-
-          background: var(--phi-navy);
-
-          border: 1px solid rgba(212,175,55,0.45);
-
-          box-shadow:
-            0 8px 30px rgba(0,0,0,0.18);
-
-          position: relative;
-        }
-
-        .phi-brand-mark img {
-          width: 100%;
-          height: 100%;
-
-          display: block;
-
-          object-fit: cover;
         }
 
         .phi-brand-text {
@@ -149,19 +121,26 @@ function Navbar() {
         }
 
         .phi-brand-name {
-          font-size: 15px;
+          font-size: 20px;
           font-weight: 800;
-          letter-spacing: 0.12em;
+          letter-spacing: -0.5px;
+
+          color: var(--phi-white);
+        }
+
+        .phi-brand-name em {
+          font-style: normal;
+          color: var(--phi-orange);
         }
 
         .phi-brand-subtitle {
-          margin-top: 5px;
+          margin-top: 6px;
 
           font-size: 8px;
-          font-weight: 600;
+          font-weight: 700;
           letter-spacing: 0.22em;
 
-          color: var(--phi-gold);
+          color: #FFB680;
           text-transform: uppercase;
         }
 
@@ -201,19 +180,20 @@ function Navbar() {
         .phi-nav-link:hover {
           color: var(--phi-white);
 
-          background: rgba(255,255,255,0.055);
+          background: rgba(255,255,255,0.09);
 
           transform: translateY(-1px);
         }
 
         .phi-nav-link.active {
           color: var(--phi-white);
+          font-weight: 800;
 
           background:
             linear-gradient(
               135deg,
-              rgba(212,175,55,0.14),
-              rgba(212,175,55,0.045)
+              rgba(255,122,26,0.22),
+              rgba(255,122,26,0.07)
             );
         }
 
@@ -226,14 +206,14 @@ function Navbar() {
           right: 17px;
           bottom: 5px;
 
-          height: 2px;
+          height: 3px;
 
           border-radius: 999px;
 
-          background: var(--phi-gold);
+          background: var(--phi-orange);
 
           box-shadow:
-            0 0 10px rgba(212,175,55,0.55);
+            0 0 10px rgba(255,122,26,0.6);
         }
 
         /* =========================
@@ -246,14 +226,14 @@ function Navbar() {
           justify-content: center;
 
           height: 42px;
-          padding: 0 18px;
+          padding: 0 20px;
 
           margin-left: 10px;
 
           border-radius: 13px;
 
-          color: var(--phi-navy);
-          background: var(--phi-gold);
+          color: var(--phi-white);
+          background: var(--phi-orange);
 
           text-decoration: none;
 
@@ -261,7 +241,7 @@ function Navbar() {
           font-weight: 800;
 
           box-shadow:
-            0 8px 25px rgba(212,175,55,0.16);
+            0 8px 25px rgba(255,122,26,0.35);
 
           transition:
             transform 0.25s ease,
@@ -272,10 +252,10 @@ function Navbar() {
         .phi-nav-action:hover {
           transform: translateY(-2px);
 
-          background: #e0bd42;
+          background: var(--phi-orange-dark);
 
           box-shadow:
-            0 12px 32px rgba(212,175,55,0.24);
+            0 12px 32px rgba(255,122,26,0.45);
         }
 
         /* =========================
@@ -291,7 +271,7 @@ function Navbar() {
           border: 1px solid var(--phi-border);
           border-radius: 13px;
 
-          background: rgba(255,255,255,0.04);
+          background: rgba(255,255,255,0.08);
 
           cursor: pointer;
 
@@ -326,7 +306,8 @@ function Navbar() {
           transition:
             transform 0.28s ease,
             top 0.28s ease,
-            opacity 0.2s ease;
+            opacity 0.2s ease,
+            background 0.2s ease;
         }
 
         .phi-menu-line:nth-child(1) {
@@ -335,6 +316,7 @@ function Navbar() {
 
         .phi-menu-line:nth-child(2) {
           top: 7px;
+          background: var(--phi-orange);
         }
 
         .phi-menu-line:nth-child(3) {
@@ -366,7 +348,7 @@ function Navbar() {
 
           z-index: 999;
 
-          background: rgba(2,7,20,0.58);
+          background: rgba(3,12,38,0.65);
 
           backdrop-filter: blur(5px);
           -webkit-backdrop-filter: blur(5px);
@@ -405,10 +387,14 @@ function Navbar() {
           background:
             radial-gradient(
               circle at 90% 10%,
-              rgba(212,175,55,0.08),
-              transparent 32%
+              rgba(255,122,26,0.22),
+              transparent 36%
             ),
-            var(--phi-navy);
+            linear-gradient(
+              180deg,
+              var(--phi-navy),
+              var(--phi-navy-soft)
+            );
 
           border-left: 1px solid var(--phi-border);
 
@@ -418,7 +404,7 @@ function Navbar() {
             transform 0.38s cubic-bezier(.22,.61,.36,1);
 
           box-shadow:
-            -20px 0 60px rgba(0,0,0,0.3);
+            -20px 0 60px rgba(0,0,0,0.35);
         }
 
         .phi-mobile-panel.open {
@@ -430,14 +416,14 @@ function Navbar() {
         }
 
         .phi-mobile-heading-small {
-          font-size: 10px;
-          font-weight: 700;
+          font-size: 11px;
+          font-weight: 800;
 
           letter-spacing: 0.18em;
 
           text-transform: uppercase;
 
-          color: var(--phi-gold);
+          color: #FFB680;
         }
 
         .phi-mobile-heading-title {
@@ -486,25 +472,27 @@ function Navbar() {
 
         .phi-mobile-link:hover {
           color: var(--phi-white);
+          background: rgba(255,255,255,0.06);
           transform: translateX(3px);
         }
 
         .phi-mobile-link.active {
           color: var(--phi-white);
+          font-weight: 800;
 
           background:
             linear-gradient(
               135deg,
-              rgba(212,175,55,0.14),
-              rgba(212,175,55,0.04)
+              rgba(255,122,26,0.26),
+              rgba(255,122,26,0.08)
             );
 
           border-color:
-            rgba(212,175,55,0.18);
+            rgba(255,122,26,0.4);
         }
 
         .phi-mobile-arrow {
-          color: var(--phi-gold);
+          color: var(--phi-orange);
 
           font-size: 17px;
 
@@ -531,12 +519,13 @@ function Navbar() {
         .phi-mobile-footer-text {
           color: var(--phi-muted);
 
-          font-size: 11px;
+          font-size: 12px;
           line-height: 1.6;
         }
 
         .phi-mobile-footer-highlight {
-          color: var(--phi-gold);
+          color: #FFB680;
+          font-weight: 700;
         }
 
         /* =========================
@@ -562,13 +551,8 @@ function Navbar() {
             height: 68px;
           }
 
-          .phi-brand-mark {
-            width: 35px;
-            height: 35px;
-          }
-
           .phi-brand-name {
-            font-size: 13px;
+            font-size: 18px;
           }
 
           .phi-brand-subtitle {
@@ -604,16 +588,9 @@ function Navbar() {
             className="phi-brand"
             aria-label="PHI Academy - Accueil"
           >
-            <span className="phi-brand-mark">
-              <img
-                src="/images/logo/phi-logo.png"
-                alt="PHI Academy"
-              />
-            </span>
-
             <span className="phi-brand-text">
               <span className="phi-brand-name">
-                PHI ACADEMY
+                PHI <em>ACADEMY</em>
               </span>
 
               <span className="phi-brand-subtitle">
