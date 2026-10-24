@@ -226,6 +226,18 @@ function ConnexionCursus() {
           margin-bottom: 24px;
         }
 
+        .connexion-wordmark {
+          margin: 0 auto 14px;
+          color: var(--blue-800);
+          font-size: 24px;
+          font-weight: 800;
+          letter-spacing: -0.7px;
+        }
+
+        .connexion-wordmark span {
+          color: var(--orange);
+        }
+
         .connexion-logo {
           width: 62px;
           height: 62px;
@@ -460,11 +472,8 @@ function ConnexionCursus() {
       <main className="connexion-container">
 
         <div className="connexion-top">
-          <div className="connexion-logo">
-            <img
-              src="/images/logo/phi-logo.png"
-              alt="PHI Academy"
-            />
+          <div className="connexion-wordmark">
+            PHI <span>ACADEMY</span>
           </div>
 
           <h1>Espace Cursus</h1>
