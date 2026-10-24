@@ -216,8 +216,8 @@ export default function Parrainage() {
 
           body {
             font-family: Inter, Arial, sans-serif;
-            background: #f7f8fa;
-            color: #0b132b;
+            background: #F4F7FC;
+            color: #0A2A66;
           }
 
           .referral-loading {
@@ -226,7 +226,7 @@ export default function Parrainage() {
             align-items: center;
             justify-content: center;
             padding: 30px;
-            background: #f7f8fa;
+            background: #F4F7FC;
           }
 
           .referral-loading-card {
@@ -235,22 +235,25 @@ export default function Parrainage() {
             padding: 30px;
             text-align: center;
             background: white;
-            border: 1px solid #e7e9ee;
+            border: 1px solid #DFE6F2;
+            border-top: 4px solid #FF7A1A;
             border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(10, 42, 102, 0.08);
           }
 
           .referral-loading-logo {
             font-size: 20px;
             font-weight: 800;
             margin-bottom: 14px;
+            color: #0A2A66;
           }
 
           .referral-loading-logo span {
-            color: #d4af37;
+            color: #FF7A1A;
           }
 
           .referral-loading-text {
-            color: #747b87;
+            color: #5F6E8A;
             font-size: 13px;
             line-height: 1.6;
           }
@@ -274,6 +277,29 @@ export default function Parrainage() {
   return (
     <>
       <style>{`
+        /* =========================
+           PALETTE : BLEU • BLANC • ORANGE
+        ========================= */
+
+        .referral-page {
+          --blue-900: #061A4A;
+          --blue-800: #0A2A66;
+          --blue-700: #103A8C;
+          --blue-100: #E6EEFC;
+          --blue-50:  #F1F5FD;
+
+          --orange: #FF7A1A;
+          --orange-dark: #E86405;
+          --orange-text: #D9590A;
+          --orange-soft: #FFF0E3;
+
+          --ink: #0A1B44;
+          --muted: #5F6E8A;
+          --muted-2: #8794AD;
+          --line: #DFE6F2;
+          --bg: #F4F7FC;
+        }
+
         * {
           box-sizing: border-box;
           margin: 0;
@@ -282,8 +308,8 @@ export default function Parrainage() {
 
         body {
           font-family: Inter, Arial, sans-serif;
-          background: #f7f8fa;
-          color: #0b132b;
+          background: #F4F7FC;
+          color: #0A1B44;
         }
 
         a {
@@ -297,7 +323,7 @@ export default function Parrainage() {
 
         .referral-page {
           min-height: 100vh;
-          background: #f7f8fa;
+          background: var(--bg);
         }
 
         /* =========================
@@ -313,7 +339,7 @@ export default function Parrainage() {
           justify-content: space-between;
           padding: 18px 6%;
           background: rgba(255, 255, 255, 0.96);
-          border-bottom: 1px solid rgba(11, 19, 43, 0.06);
+          border-bottom: 1px solid var(--line);
           backdrop-filter: blur(12px);
         }
 
@@ -321,10 +347,11 @@ export default function Parrainage() {
           font-size: 20px;
           font-weight: 800;
           letter-spacing: -0.5px;
+          color: var(--blue-800);
         }
 
         .referral-logo span {
-          color: #d4af37;
+          color: var(--orange);
         }
 
         .referral-nav {
@@ -334,13 +361,31 @@ export default function Parrainage() {
         }
 
         .referral-nav a {
-          color: #666d7c;
+          position: relative;
+          color: var(--muted);
           font-size: 14px;
           font-weight: 600;
+          transition: color .2s ease;
+        }
+
+        .referral-nav a:hover {
+          color: var(--blue-800);
         }
 
         .referral-nav a.active {
-          color: #0b132b;
+          color: var(--blue-800);
+          font-weight: 800;
+        }
+
+        .referral-nav a.active::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: -7px;
+          height: 3px;
+          border-radius: 999px;
+          background: var(--orange);
         }
 
         /* =========================
@@ -355,8 +400,11 @@ export default function Parrainage() {
 
         .referral-label {
           display: inline-block;
-          margin-bottom: 15px;
-          color: #a17e19;
+          margin-bottom: 16px;
+          padding: 7px 12px;
+          border-radius: 999px;
+          background: var(--orange-soft);
+          color: var(--orange-text);
           font-size: 12px;
           font-weight: 800;
           text-transform: uppercase;
@@ -364,6 +412,7 @@ export default function Parrainage() {
         }
 
         .referral-header h1 {
+          color: var(--blue-800);
           font-size: clamp(38px, 6vw, 58px);
           line-height: 1.05;
           letter-spacing: -2.5px;
@@ -372,7 +421,7 @@ export default function Parrainage() {
 
         .referral-header p {
           max-width: 620px;
-          color: #687080;
+          color: var(--muted);
           font-size: 15px;
           line-height: 1.7;
         }
@@ -390,10 +439,10 @@ export default function Parrainage() {
         .referral-error-box {
           padding: 15px 17px;
           border-radius: 16px;
-          background: #fff4f4;
-          border: 1px solid #f0d5d5;
-          color: #9b4444;
-          font-size: 12px;
+          background: #FFF4F2;
+          border: 1px solid #F3CFC8;
+          color: #A33A2A;
+          font-size: 13px;
           line-height: 1.5;
         }
 
@@ -416,9 +465,12 @@ export default function Parrainage() {
           overflow: hidden;
           padding: 35px;
           border-radius: 30px;
-          background: #0b132b;
+          background:
+            radial-gradient(circle at 100% 0%, rgba(255, 122, 26, 0.3), transparent 50%),
+            linear-gradient(135deg, var(--blue-900), var(--blue-800) 60%, var(--blue-700));
           color: white;
           margin-bottom: 20px;
+          box-shadow: 0 22px 50px rgba(10, 42, 102, 0.25);
         }
 
         .balance-card::after {
@@ -429,14 +481,14 @@ export default function Parrainage() {
           right: -90px;
           top: -130px;
           border-radius: 50%;
-          border: 1px solid rgba(212, 175, 55, 0.25);
+          border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .balance-label {
           position: relative;
           z-index: 2;
-          color: #aeb5c4;
-          font-size: 12px;
+          color: #C3D0EC;
+          font-size: 13px;
           font-weight: 700;
           margin-bottom: 10px;
         }
@@ -452,8 +504,8 @@ export default function Parrainage() {
 
         .balance-amount span {
           font-size: 17px;
-          font-weight: 600;
-          color: #d4af37;
+          font-weight: 700;
+          color: #FFB680;
           letter-spacing: 0;
         }
 
@@ -461,12 +513,19 @@ export default function Parrainage() {
           position: relative;
           z-index: 2;
           display: inline-block;
-          padding: 13px 20px;
+          padding: 14px 22px;
           border-radius: 50px;
-          background: #d4af37;
-          color: #0b132b;
+          background: var(--orange);
+          color: #fff;
           font-size: 13px;
           font-weight: 800;
+          box-shadow: 0 10px 22px rgba(255, 122, 26, 0.4);
+          transition: background .2s ease, transform .2s ease;
+        }
+
+        .withdraw-btn:hover {
+          background: var(--orange-dark);
+          transform: translateY(-1px);
         }
 
         /* =========================
@@ -483,21 +542,31 @@ export default function Parrainage() {
         .stat-card {
           padding: 25px;
           background: white;
-          border: 1px solid #e7e9ee;
+          border: 1px solid var(--line);
+          border-bottom: 4px solid var(--blue-700);
           border-radius: 25px;
         }
 
+        .stat-card:nth-child(2) {
+          border-bottom-color: var(--orange);
+        }
+
         .stat-label {
-          color: #858b98;
+          color: var(--muted);
           font-size: 12px;
-          font-weight: 600;
+          font-weight: 700;
           margin-bottom: 10px;
         }
 
         .stat-value {
+          color: var(--blue-800);
           font-size: 27px;
           font-weight: 800;
           letter-spacing: -1px;
+        }
+
+        .stat-card:nth-child(2) .stat-value {
+          color: var(--orange-text);
         }
 
         /* =========================
@@ -507,18 +576,19 @@ export default function Parrainage() {
         .link-card {
           padding: 28px;
           background: white;
-          border: 1px solid #e7e9ee;
+          border: 1px solid var(--line);
           border-radius: 28px;
           margin-bottom: 20px;
         }
 
         .link-card h2 {
+          color: var(--blue-800);
           font-size: 20px;
           margin-bottom: 8px;
         }
 
         .link-card p {
-          color: #737a87;
+          color: var(--muted);
           font-size: 13px;
           line-height: 1.6;
           margin-bottom: 18px;
@@ -533,11 +603,12 @@ export default function Parrainage() {
           flex: 1;
           min-width: 0;
           padding: 14px 16px;
-          border: 1px solid #e3e5ea;
+          border: 1px dashed var(--orange);
           border-radius: 15px;
-          background: #f7f8fa;
-          color: #59606d;
-          font-size: 12px;
+          background: var(--orange-soft);
+          color: var(--blue-800);
+          font-size: 13px;
+          font-weight: 600;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -545,13 +616,19 @@ export default function Parrainage() {
 
         .copy-btn {
           border: none;
-          padding: 0 20px;
+          padding: 0 22px;
           border-radius: 15px;
-          background: #0b132b;
+          background: var(--orange);
           color: white;
-          font-size: 12px;
+          font-size: 13px;
           font-weight: 800;
           cursor: pointer;
+          box-shadow: 0 10px 22px rgba(255, 122, 26, 0.3);
+          transition: background .2s ease;
+        }
+
+        .copy-btn:hover {
+          background: var(--orange-dark);
         }
 
         /* =========================
@@ -561,7 +638,7 @@ export default function Parrainage() {
         .referrals-card {
           padding: 28px;
           background: white;
-          border: 1px solid #e7e9ee;
+          border: 1px solid var(--line);
           border-radius: 28px;
         }
 
@@ -573,12 +650,17 @@ export default function Parrainage() {
         }
 
         .referrals-header h2 {
+          color: var(--blue-800);
           font-size: 20px;
         }
 
         .referrals-header span {
-          color: #858b98;
+          padding: 5px 10px;
+          border-radius: 999px;
+          background: var(--blue-100);
+          color: var(--blue-800);
           font-size: 12px;
+          font-weight: 700;
         }
 
         .referral-list {
@@ -590,7 +672,7 @@ export default function Parrainage() {
         .referral-empty {
           padding: 25px 15px;
           text-align: center;
-          color: #858b98;
+          color: var(--muted);
           font-size: 13px;
           line-height: 1.6;
         }
@@ -601,8 +683,14 @@ export default function Parrainage() {
           justify-content: space-between;
           gap: 20px;
           padding: 17px;
-          border: 1px solid #eceef1;
+          border: 1px solid var(--line);
           border-radius: 18px;
+          transition: border-color .2s ease, box-shadow .2s ease;
+        }
+
+        .referral-row:hover {
+          border-color: rgba(255, 122, 26, 0.5);
+          box-shadow: 0 10px 24px rgba(10, 42, 102, 0.07);
         }
 
         .referral-user {
@@ -613,28 +701,29 @@ export default function Parrainage() {
         }
 
         .avatar {
-          width: 40px;
-          height: 40px;
+          width: 42px;
+          height: 42px;
           flex-shrink: 0;
           border-radius: 50%;
-          background: #f0f1f4;
+          background: var(--blue-800);
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 11px;
+          font-size: 12px;
           font-weight: 800;
-          color: #6b7280;
+          color: #FFB680;
         }
 
         .referral-name {
-          font-size: 13px;
+          color: var(--ink);
+          font-size: 14px;
           font-weight: 800;
           margin-bottom: 4px;
         }
 
         .referral-date {
-          color: #8a909b;
-          font-size: 11px;
+          color: var(--muted-2);
+          font-size: 12px;
         }
 
         .referral-right {
@@ -643,19 +732,25 @@ export default function Parrainage() {
         }
 
         .commission {
-          font-size: 13px;
+          color: var(--blue-800);
+          font-size: 14px;
           font-weight: 800;
           margin-bottom: 5px;
         }
 
         .status {
-          font-size: 10px;
+          display: inline-block;
+          padding: 3px 8px;
+          border-radius: 999px;
+          background: #EAF8F0;
+          font-size: 11px;
           font-weight: 700;
-          color: #71805c;
+          color: #167A48;
         }
 
         .status.pending {
-          color: #a17e19;
+          background: var(--orange-soft);
+          color: var(--orange-text);
         }
 
         /* =========================
@@ -666,8 +761,9 @@ export default function Parrainage() {
           margin-top: 20px;
           padding: 18px;
           border-radius: 18px;
-          background: #f0f1f4;
-          color: #747b87;
+          background: var(--blue-50);
+          border-left: 4px solid var(--blue-700);
+          color: var(--muted);
           font-size: 12px;
           line-height: 1.65;
         }
@@ -679,9 +775,8 @@ export default function Parrainage() {
         .referral-footer {
           padding: 30px 6%;
           text-align: center;
-          background: white;
-          border-top: 1px solid #e7e9ee;
-          color: #858b98;
+          background: var(--blue-900);
+          color: rgba(255, 255, 255, 0.6);
           font-size: 12px;
         }
 
@@ -742,7 +837,7 @@ export default function Parrainage() {
           }
 
           .copy-btn {
-            height: 45px;
+            height: 46px;
           }
 
           .referral-row {
@@ -897,12 +992,12 @@ export default function Parrainage() {
               <div
                 style={{
                   marginTop: "12px",
-                  color: "#858b98",
-                  fontSize: "11px",
+                  color: "#5F6E8A",
+                  fontSize: "12px",
                 }}
               >
                 Code de parrainage :{" "}
-                <strong style={{ color: "#0b132b" }}>
+                <strong style={{ color: "#0A2A66" }}>
                   {referralCode}
                 </strong>
               </div>
