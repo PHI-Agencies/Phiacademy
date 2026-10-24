@@ -107,6 +107,18 @@ function ConnexionParrainage() {
           margin-bottom: 24px;
         }
 
+        .parrainage-login-wordmark {
+          margin: 0 auto 14px;
+          color: var(--blue-800);
+          font-size: 24px;
+          font-weight: 800;
+          letter-spacing: -0.7px;
+        }
+
+        .parrainage-login-wordmark span {
+          color: var(--orange);
+        }
+
         .parrainage-login-logo {
           width: 62px;
           height: 62px;
@@ -288,11 +300,8 @@ function ConnexionParrainage() {
       <main className="parrainage-login-container">
 
         <div className="parrainage-login-top">
-          <div className="parrainage-login-logo">
-            <img
-              src="/images/logo/phi-logo.png"
-              alt="PHI Academy"
-            />
+          <div className="parrainage-login-wordmark">
+            PHI <span>ACADEMY</span>
           </div>
 
           <h1>Espace Parrainage</h1>
