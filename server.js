@@ -4,6 +4,10 @@ const crypto = require("crypto");
 const axios = require("axios");
 const cookieParser = require("cookie-parser");
 const { MongoClient, ObjectId } = require("mongodb");
+const {
+  registerWithdrawalRoutes,
+  ensureWithdrawalIndexes
+} = require("./withdrawals");
 require("dotenv").config();
 
 const app = express();
@@ -82,6 +86,8 @@ async function connectDB() {
   console.log("MongoDB connecté.");
 
   await createIndexes();
+
+  await ensureWithdrawalIndexes(db);
 
   console.log("Indexes MongoDB vérifiés.");
 
@@ -642,6 +648,105 @@ async function requireAdmin(
         "Erreur serveur."
     });
   }
+}
+
+/* =========================================================
+   ZONE PROTÉGÉE (PARRAINAGE ET RETRAITS)
+   ---------------------------------------------------------
+   - Le Cursus reste accessible avec la session longue (30 jours).
+   - Parrainage et retraits demandent en plus d'avoir saisi le
+     mot de passe récemment (page "Connexion parrainage").
+   - Cette autorisation dure SECURE_SESSION_MINUTES minutes
+     d'inactivité (30 par défaut) et se prolonge à chaque usage.
+========================================================= */
+
+const SECURE_SESSION_MINUTES = Math.max(
+  1,
+  Number(process.env.SECURE_SESSION_MINUTES) || 30
+);
+
+function secureCookieOptions() {
+  return {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax"
+  };
+}
+
+async function issueSecureSession(res, userId) {
+  const token = generateSessionToken();
+
+  const expiresAt = new Date(
+    Date.now() + SECURE_SESSION_MINUTES * 60 * 1000
+  );
+
+  await db.collection("users").updateOne(
+    { _id: userId },
+    {
+      $set: {
+        secureTokenHash: hashSessionToken(token),
+        secureUntil: expiresAt
+      }
+    }
+  );
+
+  res.cookie("phi_secure", token, {
+    ...secureCookieOptions(),
+    maxAge: SECURE_SESSION_MINUTES * 60 * 1000
+  });
+}
+
+function clearSecureCookie(res) {
+  res.clearCookie("phi_secure", secureCookieOptions());
+}
+
+async function requireSecureUser(req, res, next) {
+  return requireActiveUser(req, res, async () => {
+    try {
+      const token = req.cookies?.phi_secure;
+      const user = req.user;
+
+      const valid =
+        token &&
+        user.secureTokenHash &&
+        user.secureUntil &&
+        new Date(user.secureUntil).getTime() > Date.now() &&
+        hashSessionToken(token) === user.secureTokenHash;
+
+      if (!valid) {
+        return res.status(401).json({
+          success: false,
+          code: "SECURE_REQUIRED",
+          message:
+            "Veuillez saisir votre mot de passe pour accéder à cet espace."
+        });
+      }
+
+      // Prolongation à chaque usage
+      const expiresAt = new Date(
+        Date.now() + SECURE_SESSION_MINUTES * 60 * 1000
+      );
+
+      await db.collection("users").updateOne(
+        { _id: user._id },
+        { $set: { secureUntil: expiresAt } }
+      );
+
+      res.cookie("phi_secure", token, {
+        ...secureCookieOptions(),
+        maxAge: SECURE_SESSION_MINUTES * 60 * 1000
+      });
+
+      next();
+    } catch (error) {
+      console.error("Erreur zone protégée :", error);
+
+      return res.status(500).json({
+        success: false,
+        message: "Erreur serveur."
+      });
+    }
+  });
 }
 
 /* =========================================================
@@ -1987,6 +2092,15 @@ app.post(
         sessionToken
       );
 
+      if (
+        req.body.scope === "parrainage" &&
+        user.status === "active"
+      ) {
+        await issueSecureSession(res, user._id);
+      } else {
+        clearSecureCookie(res);
+      }
+
       return res.json({
         success:
           true,
@@ -2019,10 +2133,12 @@ app.post(
         },
 
         redirect:
-          user.status ===
+          user.status !==
           "active"
-            ? "/cursus"
-            : "/"
+            ? "/"
+            : req.body.scope === "parrainage"
+              ? "/parrainage"
+              : "/cursus"
       });
     } catch (error) {
       console.error(
@@ -2091,6 +2207,105 @@ app.get(
 );
 
 /* =========================================================
+   CHANGEMENT DE MOT DE PASSE
+========================================================= */
+
+app.post(
+  "/api/auth/change-password",
+  requireAuth,
+  async (req, res) => {
+    try {
+      const currentPassword = String(
+        req.body.currentPassword || ""
+      );
+
+      const newPassword = String(
+        req.body.newPassword || ""
+      );
+
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({
+          success: false,
+          message: "Tous les champs sont obligatoires."
+        });
+      }
+
+      if (newPassword.length < 8) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Le nouveau mot de passe doit contenir au moins 8 caractères."
+        });
+      }
+
+      if (newPassword.length > 200) {
+        return res.status(400).json({
+          success: false,
+          message: "Mot de passe trop long."
+        });
+      }
+
+      const valid = await verifyPassword(
+        currentPassword,
+        req.user.passwordHash
+      );
+
+      if (!valid) {
+        return res.status(401).json({
+          success: false,
+          message: "Mot de passe actuel incorrect."
+        });
+      }
+
+      if (currentPassword === newPassword) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Le nouveau mot de passe doit être différent de l'ancien."
+        });
+      }
+
+      const passwordHash = await hashPassword(newPassword);
+
+      /*
+       * Nouvelle session : toute autre session ouverte avec
+       * l'ancien mot de passe est déconnectée.
+       */
+      const sessionToken = generateSessionToken();
+
+      await db.collection("users").updateOne(
+        { _id: req.user._id },
+        {
+          $set: {
+            passwordHash,
+            sessionTokenHash: hashSessionToken(sessionToken),
+            secureTokenHash: null,
+            secureUntil: null,
+            passwordChangedAt: new Date(),
+            updatedAt: new Date()
+          }
+        }
+      );
+
+      setSessionCookie(res, sessionToken);
+      clearSecureCookie(res);
+
+      return res.json({
+        success: true,
+        message: "Mot de passe modifié."
+      });
+    } catch (error) {
+      console.error("Erreur changement mot de passe :", error);
+
+      return res.status(500).json({
+        success: false,
+        message: "Erreur serveur."
+      });
+    }
+  }
+);
+
+/* =========================================================
    DÉCONNEXION MEMBRE
 ========================================================= */
 
@@ -2110,6 +2325,12 @@ app.post(
             sessionTokenHash:
               null,
 
+            secureTokenHash:
+              null,
+
+            secureUntil:
+              null,
+
             updatedAt:
               new Date()
           }
@@ -2119,6 +2340,8 @@ app.post(
     clearSessionCookie(
       res
     );
+
+    clearSecureCookie(res);
 
     return res.json({
       success:
@@ -2354,7 +2577,7 @@ app.get(
 
 app.get(
   "/api/referral",
-  requireActiveUser,
+  requireSecureUser,
   async (req, res) => {
     try {
       const user =
@@ -2449,7 +2672,11 @@ app.get(
           user.pendingWithdrawal ||
           0,
 
-        referrals,
+        referrals: referrals.map((referral) => ({
+          ...referral,
+          status: "active",
+          commission: REFERRAL_COMMISSION
+        })),
 
         transactions,
 
@@ -2475,199 +2702,17 @@ app.get(
 );
 
 /* =========================================================
-   DEMANDE DE RETRAIT
+   RETRAITS (voir withdrawals.js)
 ========================================================= */
 
-app.post(
-  "/api/withdrawals",
-  requireActiveUser,
-  async (req, res) => {
-    const session =
-      mongoClient.startSession();
-
-    try {
-      const amount =
-        Number(
-          req.body.amount
-        );
-
-      if (
-        !Number.isFinite(
-          amount
-        ) ||
-        amount <= 0
-      ) {
-        return res.status(400).json({
-          success:
-            false,
-
-          message:
-            "Montant de retrait invalide."
-        });
-      }
-
-      if (
-        !Number.isInteger(
-          amount
-        )
-      ) {
-        return res.status(400).json({
-          success:
-            false,
-
-          message:
-            "Le montant doit être un nombre entier."
-        });
-      }
-
-      let withdrawal;
-
-      await session.withTransaction(
-        async () => {
-          const users =
-            db.collection(
-              "users"
-            );
-
-          const withdrawals =
-            db.collection(
-              "withdrawals"
-            );
-
-          const updateResult =
-            await users.updateOne(
-              {
-                _id:
-                  req.user._id,
-
-                $expr: {
-                  $gte: [
-                    {
-                      $subtract: [
-                        {
-                          $ifNull: [
-                            "$balance",
-                            0
-                          ]
-                        },
-
-                        {
-                          $ifNull: [
-                            "$pendingWithdrawal",
-                            0
-                          ]
-                        }
-                      ]
-                    },
-
-                    amount
-                  ]
-                }
-              },
-              {
-                $inc: {
-                  pendingWithdrawal:
-                    amount
-                },
-
-                $set: {
-                  updatedAt:
-                    new Date()
-                }
-              },
-              {
-                session
-              }
-            );
-
-          if (
-            updateResult.modifiedCount !==
-            1
-          ) {
-            throw new Error(
-              "SOLDE_INSUFFISANT"
-            );
-          }
-
-          const withdrawalDocument = {
-            userId:
-              req.user._id,
-
-            amount,
-
-            phone:
-              req.user.phone,
-
-            status:
-              "pending",
-
-            createdAt:
-              new Date(),
-
-            processedAt:
-              null
-          };
-
-          const result =
-            await withdrawals.insertOne(
-              withdrawalDocument,
-              {
-                session
-              }
-            );
-
-          withdrawal = {
-            id:
-              result.insertedId.toString(),
-
-            amount,
-
-            status:
-              "pending"
-          };
-        }
-      );
-
-      return res.status(201).json({
-        success:
-          true,
-
-        message:
-          "Demande de retrait enregistrée.",
-
-        withdrawal
-      });
-    } catch (error) {
-      if (
-        error.message ===
-        "SOLDE_INSUFFISANT"
-      ) {
-        return res.status(400).json({
-          success:
-            false,
-
-          message:
-            "Solde disponible insuffisant."
-        });
-      }
-
-      console.error(
-        "Erreur retrait :",
-        error
-      );
-
-      return res.status(500).json({
-        success:
-          false,
-
-        message:
-          "Impossible d'enregistrer le retrait."
-      });
-    } finally {
-      await session.endSession();
-    }
-  }
-);
+registerWithdrawalRoutes({
+  app,
+  getDb: () => db,
+  getClient: () => mongoClient,
+  requireSecureUser,
+  requireAdmin,
+  ObjectId
+});
 
 /* =========================================================
    HISTORIQUE FINANCIER
@@ -2675,7 +2720,7 @@ app.post(
 
 app.get(
   "/api/financial-history",
-  requireActiveUser,
+  requireSecureUser,
   async (req, res) => {
     try {
       const withdrawals =
@@ -3162,494 +3207,6 @@ app.get(
         message:
           "Impossible de charger les paiements."
       });
-    }
-  }
-);
-
-/* =========================================================
-   API ADMIN — RETRAITS
-========================================================= */
-
-app.get(
-  "/api/admin/withdrawals",
-  requireAdmin,
-  async (req, res) => {
-    try {
-      const withdrawals =
-        await db
-          .collection(
-            "withdrawals"
-          )
-          .aggregate([
-            {
-              $sort: {
-                createdAt:
-                  -1
-              }
-            },
-
-            {
-              $limit:
-                300
-            },
-
-            {
-              $lookup: {
-                from:
-                  "users",
-
-                localField:
-                  "userId",
-
-                foreignField:
-                  "_id",
-
-                as:
-                  "user"
-              }
-            },
-
-            {
-              $unwind: {
-                path:
-                  "$user",
-
-                preserveNullAndEmptyArrays:
-                  true
-              }
-            },
-
-            {
-              $project: {
-                amount:
-                  1,
-
-                phone:
-                  1,
-
-                status:
-                  1,
-
-                createdAt:
-                  1,
-
-                processedAt:
-                  1,
-
-                userId:
-                  1,
-
-                user: {
-                  firstName:
-                    "$user.firstName",
-
-                  lastName:
-                    "$user.lastName",
-
-                  email:
-                    "$user.email"
-                }
-              }
-            }
-          ])
-          .toArray();
-
-      return res.json({
-        success:
-          true,
-
-        withdrawals
-      });
-    } catch (error) {
-      console.error(
-        "Erreur retraits admin :",
-        error
-      );
-
-      return res.status(500).json({
-        success:
-          false,
-
-        message:
-          "Impossible de charger les retraits."
-      });
-    }
-  }
-);
-
-/* =========================================================
-   API ADMIN — TRAITER UN RETRAIT
-========================================================= */
-
-app.patch(
-  "/api/admin/withdrawals/:id",
-  requireAdmin,
-  async (req, res) => {
-    const withdrawalId =
-      req.params.id;
-
-    const action =
-      String(
-        req.body.action ||
-          ""
-      )
-        .trim()
-        .toLowerCase();
-
-    if (
-      !ObjectId.isValid(
-        withdrawalId
-      )
-    ) {
-      return res.status(400).json({
-        success:
-          false,
-
-        message:
-          "Identifiant de retrait invalide."
-      });
-    }
-
-    if (
-      action !== "paid" &&
-      action !== "rejected"
-    ) {
-      return res.status(400).json({
-        success:
-          false,
-
-        message:
-          "Action de retrait invalide."
-      });
-    }
-
-    const session =
-      mongoClient.startSession();
-
-    try {
-      const withdrawalObjectId =
-        new ObjectId(
-          withdrawalId
-        );
-
-      await session.withTransaction(
-        async () => {
-          const withdrawals =
-            db.collection(
-              "withdrawals"
-            );
-
-          const users =
-            db.collection(
-              "users"
-            );
-
-          const transactions =
-            db.collection(
-              "transactions"
-            );
-
-          const withdrawal =
-            await withdrawals.findOne(
-              {
-                _id:
-                  withdrawalObjectId
-              },
-              {
-                session
-              }
-            );
-
-          if (!withdrawal) {
-            throw new Error(
-              "RETRAIT_INTROUVABLE"
-            );
-          }
-
-          if (
-            withdrawal.status !==
-            "pending"
-          ) {
-            throw new Error(
-              "RETRAIT_DEJA_TRAITE"
-            );
-          }
-
-          const user =
-            await users.findOne(
-              {
-                _id:
-                  withdrawal.userId
-              },
-              {
-                session
-              }
-            );
-
-          if (!user) {
-            throw new Error(
-              "UTILISATEUR_INTROUVABLE"
-            );
-          }
-
-          if (
-            action ===
-            "paid"
-          ) {
-            const updateResult =
-              await users.updateOne(
-                {
-                  _id:
-                    user._id,
-
-                  $expr: {
-                    $gte: [
-                      {
-                        $ifNull: [
-                          "$balance",
-                          0
-                        ]
-                      },
-
-                      withdrawal.amount
-                    ]
-                  }
-                },
-                {
-                  $inc: {
-                    balance:
-                      -withdrawal.amount,
-
-                    pendingWithdrawal:
-                      -withdrawal.amount
-                  },
-
-                  $set: {
-                    updatedAt:
-                      new Date()
-                  }
-                },
-                {
-                  session
-                }
-              );
-
-            if (
-              updateResult.modifiedCount !==
-              1
-            ) {
-              throw new Error(
-                "SOLDE_INSUFFISANT"
-              );
-            }
-
-            await withdrawals.updateOne(
-              {
-                _id:
-                  withdrawalObjectId,
-
-                status:
-                  "pending"
-              },
-              {
-                $set: {
-                  status:
-                    "paid",
-
-                  processedAt:
-                    new Date(),
-
-                  processedBy:
-                    req.admin._id,
-
-                  updatedAt:
-                    new Date()
-                }
-              },
-              {
-                session
-              }
-            );
-
-            await transactions.insertOne(
-              {
-                userId:
-                  user._id,
-
-                type:
-                  "withdrawal_paid",
-
-                amount:
-                  -withdrawal.amount,
-
-                withdrawalId:
-                  withdrawal._id,
-
-                description:
-                  "Retrait payé",
-
-                createdAt:
-                  new Date()
-              },
-              {
-                session
-              }
-            );
-          } else {
-            await users.updateOne(
-              {
-                _id:
-                  user._id
-              },
-              {
-                $inc: {
-                  pendingWithdrawal:
-                    -withdrawal.amount
-                },
-
-                $set: {
-                  updatedAt:
-                    new Date()
-                }
-              },
-              {
-                session
-              }
-            );
-
-            await withdrawals.updateOne(
-              {
-                _id:
-                  withdrawalObjectId,
-
-                status:
-                  "pending"
-              },
-              {
-                $set: {
-                  status:
-                    "rejected",
-
-                  processedAt:
-                    new Date(),
-
-                  processedBy:
-                    req.admin._id,
-
-                  updatedAt:
-                    new Date()
-                }
-              },
-              {
-                session
-              }
-            );
-
-            await transactions.insertOne(
-              {
-                userId:
-                  user._id,
-
-                type:
-                  "withdrawal_rejected",
-
-                amount:
-                  0,
-
-                withdrawalId:
-                  withdrawal._id,
-
-                description:
-                  "Demande de retrait rejetée",
-
-                createdAt:
-                  new Date()
-              },
-              {
-                session
-              }
-            );
-          }
-        }
-      );
-
-      return res.json({
-        success:
-          true,
-
-        message:
-          action ===
-          "paid"
-            ? "Retrait marqué comme payé."
-            : "Retrait rejeté."
-      });
-    } catch (error) {
-      if (
-        error.message ===
-        "RETRAIT_INTROUVABLE"
-      ) {
-        return res.status(404).json({
-          success:
-            false,
-
-          message:
-            "Retrait introuvable."
-        });
-      }
-
-      if (
-        error.message ===
-        "RETRAIT_DEJA_TRAITE"
-      ) {
-        return res.status(409).json({
-          success:
-            false,
-
-          message:
-            "Ce retrait a déjà été traité."
-        });
-      }
-
-      if (
-        error.message ===
-        "UTILISATEUR_INTROUVABLE"
-      ) {
-        return res.status(404).json({
-          success:
-            false,
-
-          message:
-            "Utilisateur introuvable."
-        });
-      }
-
-      if (
-        error.message ===
-        "SOLDE_INSUFFISANT"
-      ) {
-        return res.status(400).json({
-          success:
-            false,
-
-          message:
-            "Le solde disponible est insuffisant pour traiter ce retrait."
-        });
-      }
-
-      console.error(
-        "Erreur traitement retrait admin :",
-        error
-      );
-
-      return res.status(500).json({
-        success:
-          false,
-
-        message:
-          "Impossible de traiter le retrait."
-      });
-    } finally {
-      await session.endSession();
     }
   }
 );
