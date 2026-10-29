@@ -1,8 +1,17 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import SupportButton from "../components/SupportButton";
 
 function ConnexionParrainage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Uniquement un chemin interne (jamais un autre site)
+  const requestedRedirect = searchParams.get("redirect") || "";
+  const redirectAfterLogin =
+    requestedRedirect.startsWith("/") && !requestedRedirect.startsWith("//")
+      ? requestedRedirect
+      : "/parrainage";
 
   const [formData, setFormData] = useState({
     email: "",
@@ -32,7 +41,7 @@ function ConnexionParrainage() {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, scope: "parrainage" }),
       });
 
       const data = await response.json();
@@ -44,11 +53,10 @@ function ConnexionParrainage() {
       }
 
       /*
-       * La connexion est commune avec l'espace Cursus.
-       * Ici, après authentification, on redirige simplement
-       * vers l'espace Parrainage.
+       * Le mot de passe saisi ici ouvre la zone protégée
+       * (parrainage et retraits) pour une durée limitée.
        */
-      navigate("/parrainage");
+      navigate(redirectAfterLogin);
     } catch (error) {
       setMessage(
         error.message ||
@@ -393,6 +401,8 @@ function ConnexionParrainage() {
         </Link>
 
       </main>
+
+      <SupportButton />
     </div>
   );
 }
