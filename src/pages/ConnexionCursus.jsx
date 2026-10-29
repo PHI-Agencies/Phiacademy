@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
+import SupportButton from "../components/SupportButton";
 
 function ConnexionCursus() {
   const navigate = useNavigate();
@@ -748,6 +749,8 @@ function ConnexionCursus() {
         </Link>
 
       </main>
+
+      <SupportButton />
     </div>
   );
 }
