@@ -5,11 +5,42 @@ import "react-phone-input-2/lib/style.css";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import SupportButton from "../components/SupportButton";
 
+const REFERRAL_STORAGE_KEY = "phi_referral_code";
+
+// Un code de parrainage ne contient que des lettres et des chiffres
+function cleanReferralCode(value) {
+  const code = String(value || "")
+    .trim()
+    .toUpperCase();
+
+  return /^[A-Z0-9]{4,20}$/.test(code) ? code : "";
+}
+
+function readSavedReferralCode() {
+  try {
+    return cleanReferralCode(
+      localStorage.getItem(REFERRAL_STORAGE_KEY)
+    );
+  } catch {
+    return "";
+  }
+}
+
 function ConnexionCursus() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const [mode, setMode] = useState("login");
+  // Code reçu par lien d'invitation (/r/CODE) ou déjà mémorisé
+  const invitationCode =
+    cleanReferralCode(searchParams.get("ref")) ||
+    readSavedReferralCode();
+
+  // L'onglet "Créer un compte" s'ouvre seulement via un lien d'invitation
+  const [mode, setMode] = useState(
+    searchParams.get("ref") || searchParams.get("mode") === "register"
+      ? "register"
+      : "login"
+  );
 
   const [loginData, setLoginData] = useState({
     email: "",
@@ -22,7 +53,7 @@ function ConnexionCursus() {
     phone: "",
     email: "",
     password: "",
-    referralCode: "",
+    referralCode: invitationCode,
   });
 
   const [message, setMessage] = useState("");
@@ -165,6 +196,13 @@ function ConnexionCursus() {
         throw new Error(
           "Le lien de paiement n'a pas été reçu."
         );
+      }
+
+      // Le code a servi : on ne le garde plus
+      try {
+        localStorage.removeItem(REFERRAL_STORAGE_KEY);
+      } catch {
+        /* ignoré */
       }
 
       window.location.href =
