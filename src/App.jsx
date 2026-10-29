@@ -6,6 +6,7 @@ import ConnexionParrainage from "./pages/ConnexionParrainage";
 import Cursus from "./pages/Cursus";
 import Services from "./pages/Services";
 import Parrainage from "./pages/Parrainage";
+import Invitation from "./pages/Invitation";
 import Retrait from "./pages/Retrait";
 import MotDePasse from "./pages/MotDePasse";
 import AdminLogin from "./pages/AdminLogin";
@@ -47,6 +48,11 @@ function App() {
         <Route
           path="/parrainage"
           element={<Parrainage />}
+        />
+
+        <Route
+          path="/r/:code"
+          element={<Invitation />}
         />
 
         <Route
