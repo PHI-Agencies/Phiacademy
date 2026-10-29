@@ -6,7 +6,10 @@ import ConnexionParrainage from "./pages/ConnexionParrainage";
 import Cursus from "./pages/Cursus";
 import Services from "./pages/Services";
 import Parrainage from "./pages/Parrainage";
+import Retrait from "./pages/Retrait";
+import MotDePasse from "./pages/MotDePasse";
 import AdminLogin from "./pages/AdminLogin";
+import AdminRetraits from "./pages/AdminRetraits";
 
 function App() {
   return (
@@ -46,6 +49,16 @@ function App() {
           element={<Parrainage />}
         />
 
+        <Route
+          path="/retrait"
+          element={<Retrait />}
+        />
+
+        <Route
+          path="/mot-de-passe"
+          element={<MotDePasse />}
+        />
+
         {/* =========================
             BACK-OFFICE
         ========================= */}
@@ -53,6 +66,11 @@ function App() {
         <Route
           path="/admin-login"
           element={<AdminLogin />}
+        />
+
+        <Route
+          path="/admin"
+          element={<AdminRetraits />}
         />
       </Routes>
     </BrowserRouter>
