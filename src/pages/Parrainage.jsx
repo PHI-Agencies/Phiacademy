@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Parrainage() {
   const navigate = useNavigate();
@@ -71,19 +71,33 @@ export default function Parrainage() {
   const referrals = referralData?.referrals || [];
   const transactions = referralData?.transactions || [];
 
-  const balance = Number(referralData?.balance || 0);
+  // Solde disponible = solde total - montants réservés par un retrait en attente
+  const balance = Math.max(
+    0,
+    Number(referralData?.balance || 0) -
+      Number(referralData?.pendingWithdrawal || 0)
+  );
 
   const generatedCommissions = useMemo(() => {
-    if (typeof referralData?.generatedCommissions === "number") {
-      return referralData.generatedCommissions;
-    }
+    const list = Array.isArray(referralData?.generatedCommissions)
+      ? referralData.generatedCommissions
+      : [];
 
-    return transactions.reduce((total, transaction) => {
+    return list.reduce((total, transaction) => {
       return total + Number(transaction.amount || 0);
     }, 0);
-  }, [referralData, transactions]);
+  }, [referralData]);
 
-  const withdrawals = Number(referralData?.withdrawals || 0);
+  // Total des retraits déjà payés
+  const withdrawals = useMemo(() => {
+    const list = Array.isArray(referralData?.withdrawals)
+      ? referralData.withdrawals
+      : [];
+
+    return list
+      .filter((item) => item.status === "paid")
+      .reduce((total, item) => total + Number(item.amount || 0), 0);
+  }, [referralData]);
 
   const referralCode = referralData?.referralCode || "";
 
@@ -513,6 +527,7 @@ export default function Parrainage() {
           position: relative;
           z-index: 2;
           display: inline-block;
+          text-decoration: none;
           padding: 14px 22px;
           border-radius: 50px;
           background: var(--orange);
@@ -873,6 +888,8 @@ export default function Parrainage() {
             >
               Parrainage
             </a>
+
+            <a href="/mot-de-passe">Mot de passe</a>
           </div>
         </nav>
 
@@ -918,9 +935,9 @@ export default function Parrainage() {
               <span>FCFA</span>
             </div>
 
-            <a href="#retrait" className="withdraw-btn">
+            <Link to="/retrait" className="withdraw-btn">
               Demander un retrait
-            </a>
+            </Link>
           </section>
 
           {/* STATS */}
@@ -1082,12 +1099,6 @@ export default function Parrainage() {
                   );
                 })
               )}
-            </div>
-
-            <div className="referral-info">
-              Les commissions et les soldes réels sont calculés
-              et validés côté serveur. L'interface ne peut pas
-              modifier directement les montants financiers.
             </div>
           </section>
         </main>
