@@ -48,13 +48,6 @@ function getConfig() {
   };
 }
 
-const ALLOWED_OPERATORS = [
-  "Orange Money",
-  "Moov Money",
-  "Wave",
-  "Autre"
-];
-
 /* =========================================================
    OUTILS
 ========================================================= */
@@ -229,15 +222,6 @@ function registerWithdrawalRoutes({
           });
         }
 
-        const operator = String(req.body.operator || "").trim();
-
-        if (!ALLOWED_OPERATORS.includes(operator)) {
-          return res.status(400).json({
-            success: false,
-            message: "Opérateur de paiement invalide."
-          });
-        }
-
         const parsedPhone = parsePhoneNumberFromString(
           String(req.body.phone || "").trim()
         );
@@ -306,7 +290,6 @@ function registerWithdrawalRoutes({
             fee,
             feePercent: config.feePercent,
             netAmount,
-            operator,
             phone,
             status: "pending",
             createdAt: new Date(),
