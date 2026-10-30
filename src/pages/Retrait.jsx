@@ -15,13 +15,6 @@ const DEFAULT_MIN_AMOUNT = 10000;
 const DEFAULT_FEE_PERCENT = 7;
 const PAYMENT_DELAY_HOURS = 72;
 
-const OPERATORS = [
-  "Orange Money",
-  "Moov Money",
-  "Wave",
-  "Autre",
-];
-
 const STATUS_LABELS = {
   pending: "En attente",
   paid: "Payé",
@@ -38,7 +31,6 @@ export default function Retrait() {
   const [step, setStep] = useState("form"); // form | confirm | done
 
   const [amount, setAmount] = useState("");
-  const [operator, setOperator] = useState("");
   const [phone, setPhone] = useState("");
 
   const [submitting, setSubmitting] = useState(false);
@@ -159,10 +151,6 @@ export default function Retrait() {
       return "Le montant demandé dépasse votre solde disponible.";
     }
 
-    if (!operator) {
-      return "Veuillez choisir votre opérateur de paiement.";
-    }
-
     const parsedPhone = parsePhoneNumberFromString(phone || "");
 
     if (!parsedPhone || !parsedPhone.isValid()) {
@@ -203,7 +191,6 @@ export default function Retrait() {
         credentials: "include",
         body: JSON.stringify({
           amount: amountNumber,
-          operator,
           phone,
         }),
       });
@@ -871,7 +858,7 @@ export default function Retrait() {
 
                 <p>
                   Vérifiez les informations ci-dessous avant de confirmer.
-                  Le paiement sera envoyé sur {operator} au {phone}.
+                  Le paiement sera envoyé au numéro {phone}.
                 </p>
 
                 {message.text && (
@@ -964,27 +951,7 @@ export default function Retrait() {
                   </div>
 
                   <div className="field">
-                    <label htmlFor="withdraw-operator">Opérateur de paiement</label>
-
-                    <select
-                      id="withdraw-operator"
-                      value={operator}
-                      onChange={(event) => setOperator(event.target.value)}
-                      disabled={balance < minAmount}
-                      required
-                    >
-                      <option value="">Choisir un opérateur</option>
-
-                      {OPERATORS.map((name) => (
-                        <option key={name} value={name}>
-                          {name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="field">
-                    <label htmlFor="withdraw-phone">Numéro de paiement</label>
+                    <label htmlFor="withdraw-phone">Numéro de dépôt</label>
 
                     <PhoneInput
                       country="bf"
@@ -1096,8 +1063,7 @@ export default function Retrait() {
                         </div>
 
                         <div>
-                          Paiement sur <strong>{item.operator}</strong> ·{" "}
-                          <strong>{item.phone}</strong>
+                          Dépôt au <strong>{item.phone}</strong>
                         </div>
 
                         {item.status === "pending" && (
