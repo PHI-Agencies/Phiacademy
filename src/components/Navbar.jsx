@@ -36,6 +36,10 @@ function Navbar() {
       label: "Parrainage",
       path: "/connexion-parrainage",
     },
+    {
+      label: "Mot de passe",
+      path: "/mot-de-passe",
+    },
   ];
 
   return (
