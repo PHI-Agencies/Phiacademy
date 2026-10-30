@@ -8,6 +8,7 @@ import {
   ChevronRight,
   ExternalLink,
   Info,
+  LockKeyhole,
   Menu,
   Play,
   ShieldCheck,
@@ -26,49 +27,47 @@ function Cursus() {
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
   const [selectedVideo, setSelectedVideo] = useState(null);
 
-  // Curriculum Trading progressif (Mix de coachs adaptés aux débutants)
+  // Curriculum Trading (Spécial Casper / SMC / Price Action)
   const tradingModules = [
     {
       number: "01",
-      title: "Les Bases Absolues du Trading",
+      title: "Introduction aux Marchés & SMC",
       description:
-        "Comprendre ce qu'est réellement le trading, le rôle des marchés financiers et comment un débutant doit aborder cet univers.",
+        "Comprendre le fonctionnement des marchés financiers et les bases de la méthode Smart Money Concepts (SMC).",
+      creator: "Kasper",
       lessons: [
         {
-          title: "Introduction rapide au Trading moderne (Débutant)",
-          duration: "9 min",
-          creator: "Jesse Rogers",
-          url: "https://www.youtube.com/watch?v=Q7Ryv1M7CvI",
-          embedId: "Q7Ryv1M7CvI",
-        },
-        {
-          title: "Les Concepts ICT/SMC expliqués de A à Z (Fondations)",
+          title: "Les Concepts ICT/SMC expliqués de A à Z",
           duration: "26 min",
-          creator: "Kasper",
           url: "https://www.youtube.com/watch?v=9Gt1v3NoVDQ",
           embedId: "9Gt1v3NoVDQ",
+        },
+        {
+          title: "Introduction rapide au Trading moderne",
+          duration: "9 min",
+          url: "https://www.youtube.com/watch?v=Q7Ryv1M7CvI",
+          embedId: "Q7Ryv1M7CvI",
         },
       ],
     },
     {
       number: "02",
-      title: "Lecture des Graphiques & Chandeliers",
+      title: "Structure du Marché & Liquidité",
       description:
-        "Apprendre à lire l'action du prix, décoder les chandeliers japonais et identifier les zones clés.",
+        "Identifier les points de structure (BOS, CHOCH) et repérer les zones de liquidité clé.",
+      creator: "Kasper / Casper",
       lessons: [
         {
-          title: "Comprendre les Chandeliers Japonais et Zones de Prix",
-          duration: "13 min",
-          creator: "Kasper",
-          url: "https://www.youtube.com/watch?v=P8ZmyVnS41M",
-          embedId: "P8ZmyVnS41M",
-        },
-        {
-          title: "La Stratégie SMC : Structure de marché et Order Blocks",
+          title: "La Stratégie SMC expliquée (Structure & Order Blocks)",
           duration: "31 min",
-          creator: "Kasper Trading SMC",
           url: "https://www.youtube.com/watch?v=FI8wVYJSng8",
           embedId: "FI8wVYJSng8",
+        },
+        {
+          title: "Comprendre les Chandelier Japonais et Zones de Prix",
+          duration: "13 min",
+          url: "https://www.youtube.com/watch?v=P8ZmyVnS41M",
+          embedId: "P8ZmyVnS41M",
         },
       ],
     },
@@ -76,19 +75,18 @@ function Cursus() {
       number: "03",
       title: "Gestion du Risque (Money Management)",
       description:
-        "Protéger son capital de départ, calculer ses positions et maîtriser le ratio risque/rendement.",
+        "Protéger son capital, calculer son risque par position et maîtriser le Ratio Risque/Rendement.",
+      creator: "Kasper",
       lessons: [
         {
           title: "Le Guide Complet du Money Management en Trading",
           duration: "25 min",
-          creator: "Kasper",
           url: "https://www.youtube.com/watch?v=ejSmop8j9hs",
           embedId: "ejSmop8j9hs",
         },
         {
-          title: "Pourquoi un Risk/Reward équilibré peut vous rendre rentable",
+          title: "Pourquoi un Risk/Reward de 1:1 peut te rendre rentable",
           duration: "9 min",
-          creator: "Kasper Trading SMC",
           url: "https://www.youtube.com/watch?v=cEYPvlxYqIM",
           embedId: "cEYPvlxYqIM",
         },
@@ -96,21 +94,20 @@ function Cursus() {
     },
     {
       number: "04",
-      title: "Psychologie & Discipline du Trader",
+      title: "Psychologie du Trader",
       description:
-        "Apprivoiser ses émotions, éviter les pièges psychologiques et bâtir une routine de trader rigoureuse.",
+        "Développer la discipline nécessaire, gérer les émotions et éviter le sur-trading.",
+      creator: "Kasper & Formateurs",
       lessons: [
         {
-          title: "4 Principes indispensables pour améliorer sa psychologie",
+          title: "4 Principes pour améliorer sa psychologie en trading",
           duration: "16 min",
-          creator: "Kasper",
           url: "https://www.youtube.com/watch?v=u79z2wuGkoI",
           embedId: "u79z2wuGkoI",
         },
         {
-          title: "La mentalité sans émotions à adopter face aux graphiques",
-          duration: "7 min",
-          creator: "Alexandre Senek",
+          title: "La mentalité à adopter face au marché",
+          duration: "8 min",
           url: "https://www.youtube.com/watch?v=jPeKzzAJaUM",
           embedId: "jPeKzzAJaUM",
         },
@@ -122,21 +119,20 @@ function Cursus() {
   const brvmModules = [
     {
       number: "01",
-      title: "Découvrir la BRVM",
+      title: "Comprendre le Marché de la BRVM",
       description:
-        "Comprendre le fonctionnement de la bourse régionale de l'UEMOA et l'intérêt d'y placer son argent.",
+        "Découvrir le fonctionnement global de la bourse commune de l'UEMOA.",
+      creator: "Sikarium & Experts",
       lessons: [
         {
-          title: "Comment investir à la BRVM : Guide complet débutant",
+          title: "Comment investir à la BRVM : Guide complet pour débutants",
           duration: "28 min",
-          creator: "Sikarium",
           url: "https://www.youtube.com/watch?v=JZEQimFU5c0",
           embedId: "JZEQimFU5c0",
         },
         {
-          title: "Pourquoi et comment investir concrètement à la BRVM",
+          title: "Pourquoi et comment investir à la BRVM",
           duration: "2 min",
-          creator: "Business Expertiz",
           url: "https://www.youtube.com/watch?v=2yV25LlrJxY",
           embedId: "2yV25LlrJxY",
         },
@@ -144,21 +140,20 @@ function Cursus() {
     },
     {
       number: "02",
-      title: "Choisir sa SGI & Passer à l'Action",
+      title: "Choisir sa SGI & Passer ses Ordres",
       description:
-        "Tout savoir sur les Sociétés de Gestion et d'Intermédiation (SGI) et l'achat de ses premières actions.",
+        "Comprendre le rôle des Sociétés de Gestion et d'Intermédiation pour ouvrir son compte-titres.",
+      creator: "Sikarium / LeyCom",
       lessons: [
         {
-          title: "Comment choisir la meilleure SGI pour investir en Afrique",
+          title: "Comment choisir la meilleure SGI pour investir",
           duration: "23 min",
-          creator: "Sikarium",
           url: "https://www.youtube.com/watch?v=RgtslHMkHMQ",
           embedId: "RgtslHMkHMQ",
         },
         {
-          title: "Comment acheter ses premières actions sur le marché",
+          title: "Acheter ses premières actions à la BRVM",
           duration: "8 min",
-          creator: "LeyCom",
           url: "https://www.youtube.com/watch?v=S2SJx7tR2oM",
           embedId: "S2SJx7tR2oM",
         },
@@ -166,21 +161,20 @@ function Cursus() {
     },
     {
       number: "03",
-      title: "Stratégies de Dividendes & Obligations",
+      title: "Stratégies Dividendes & Obligations",
       description:
-        "Créer des revenus réguliers grâce aux actions à dividendes et découvrir le marché obligataire.",
+        "Générer des revenus passifs grâce aux dividendes et au marché obligataire régional.",
+      creator: "L'École de la Bourse / Duareg",
       lessons: [
         {
-          title: "Investir avec un petit budget (ex: 10 000F/mois) à la BRVM",
-          duration: "4 min",
-          creator: "L'École de la Bourse",
+          title: "Investir avec de petits budgets à la BRVM",
+          duration: "5 min",
           url: "https://www.youtube.com/watch?v=ze7t4PiyS8k",
           embedId: "ze7t4PiyS8k",
         },
         {
-          title: "Le marché obligataire de la BRVM : Comment ça marche ?",
+          title: "Le marché obligataire de la BRVM : Investir concrètement",
           duration: "7 min",
-          creator: "Duareg",
           url: "https://www.youtube.com/watch?v=k1mBJWLjCTY",
           embedId: "k1mBJWLjCTY",
         },
@@ -220,15 +214,21 @@ function Cursus() {
             return;
           }
 
-          throw new Error(data.message || "Impossible de vérifier l'accès.");
+          throw new Error(
+            data.message || "Impossible de vérifier l'accès."
+          );
         }
 
         setAuthorized(true);
         setUser(data.user || null);
       } catch (error) {
         if (cancelled) return;
+
         console.error("Erreur de vérification :", error);
-        navigate("/connexion-cursus", { replace: true });
+
+        navigate("/connexion-cursus", {
+          replace: true,
+        });
       } finally {
         if (!cancelled) {
           setLoading(false);
@@ -245,11 +245,13 @@ function Cursus() {
 
   useEffect(() => {
     document.body.style.overflow = menuOpen || selectedVideo ? "hidden" : "";
+
     return () => {
       document.body.style.overflow = "";
     };
   }, [menuOpen, selectedVideo]);
 
+  // Réinitialiser l'index du module au changement d'onglet
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setActiveModuleIndex(0);
@@ -276,17 +278,38 @@ function Cursus() {
             color: #0A2A66;
             font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
           }
-          .loading-wordmark { font-size: 24px; font-weight: 800; color: #0A2A66; }
-          .loading-wordmark span { color: #FF7A1A; }
+
+          .loading-wordmark {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #0A2A66;
+          }
+
+          .loading-wordmark span {
+            color: #FF7A1A;
+          }
+
           .loading-spinner {
-            width: 26px; height: 26px;
+            width: 26px;
+            height: 26px;
             border: 3px solid rgba(10, 42, 102, 0.12);
             border-top-color: #FF7A1A;
             border-radius: 50%;
             animation: cursusSpin .8s linear infinite;
           }
-          .cursus-loading p { margin: 0; font-size: 13px; color: #5F6E8A; }
-          @keyframes cursusSpin { to { transform: rotate(360deg); } }
+
+          .cursus-loading p {
+            margin: 0;
+            font-size: 13px;
+            color: #5F6E8A;
+          }
+
+          @keyframes cursusSpin {
+            to {
+              transform: rotate(360deg);
+            }
+          }
         `}</style>
       </div>
     );
@@ -319,7 +342,9 @@ function Cursus() {
           </nav>
 
           <div className="desktop-account">
-            <span className="account-name">{user?.firstName || "Membre"}</span>
+            <span className="account-name">
+              {user?.firstName || "Membre"}
+            </span>
             <span className="active-dot" />
           </div>
 
@@ -328,6 +353,7 @@ function Cursus() {
             className={`mobile-menu-button ${menuOpen ? "open" : ""}`}
             onClick={() => setMenuOpen((value) => !value)}
             aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-expanded={menuOpen}
           >
             {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
@@ -340,13 +366,23 @@ function Cursus() {
             <Link to="/" onClick={() => setMenuOpen(false)}>
               Accueil
             </Link>
-            <Link to="/cursus" className="selected" onClick={() => setMenuOpen(false)}>
+            <Link
+              to="/cursus"
+              className="selected"
+              onClick={() => setMenuOpen(false)}
+            >
               Cursus
             </Link>
-            <Link to="/services" onClick={() => setMenuOpen(false)}>
+            <Link
+              to="/services"
+              onClick={() => setMenuOpen(false)}
+            >
               Services
             </Link>
-            <Link to="/connexion-parrainage?redirect=/parrainage" onClick={() => setMenuOpen(false)}>
+            <Link
+              to="/connexion-parrainage?redirect=/parrainage"
+              onClick={() => setMenuOpen(false)}
+            >
               Parrainage
             </Link>
           </nav>
@@ -354,7 +390,7 @@ function Cursus() {
       )}
 
       <main>
-        {/* INTRO */}
+        {/* SECTION INTRODUCTIVE */}
         <section className="cursus-intro">
           <div className="intro-inner">
             <Link to="/" className="back-link">
@@ -365,20 +401,20 @@ function Cursus() {
             <div className="intro-copy">
               <div className="eyebrow">
                 <BookOpen size={15} />
-                ESPACE APPRENTISSAGE PÉDAGOGIQUE
+                ESPACE APPRENTISSAGE INTERACTIF
               </div>
 
               <h1>
-                Débuter.
+                Explorer.
                 <br />
                 <span>Comprendre.</span>
                 <br />
-                Maîtriser les bases pas à pas.
+                Se former intelligemment.
               </h1>
 
               <p>
-                Un cursus progressif combinant les meilleurs formateurs pour
-                permettre à chaque débutant de se retrouver facilement.
+                Un parcours guidé et structuré combinant les meilleures
+                ressources sélectionnées pour décrypter le Trading et la BRVM.
               </p>
             </div>
 
@@ -389,21 +425,20 @@ function Cursus() {
           </div>
         </section>
 
-        {/* MENTION SPÉCIALE & AVERTISSEMENT */}
+        {/* ENCART MENTION SPECIALE / DISCLAIMER */}
         <section className="disclaimer-banner">
           <div className="disclaimer-inner">
             <Info size={20} className="disclaimer-icon" />
             <p>
-              <strong>Avertissement important :</strong> Ce cursus est proposé à
-              titre <strong>strictement informatif et éducatif</strong>. Il ne
-              s'agit en aucun cas de conseils en investissement. Ces ressources
-              sont conçues pour vous armer de connaissances solides et éviter
-              toute tentative d'escroquerie par de prétendus gourous.
+              <strong>Mention d’information importante :</strong> Les contenus
+              regroupés dans cet espace sont proposés à titre strictement
+              éducatif et informatif. Ils ne constituent en aucun cas des
+              conseils en investissement ni des incitations financières.
             </p>
           </div>
         </section>
 
-        {/* SELECTEUR DE DOMAINE */}
+        {/* SELECTION DE DOMAINE (TAB SWITCHER) */}
         <section className="domain-selector-section">
           <div className="selector-container">
             <button
@@ -413,8 +448,8 @@ function Cursus() {
             >
               <TrendingUp size={20} />
               <div>
-                <strong>Étudier le Trading</strong>
-                <span>De zéro aux concepts avancés (SMC, Risque, Psycho)</span>
+                <strong>Etudier le Trading</strong>
+                <span>Analyse technique, SMC, Risk Management</span>
               </div>
             </button>
 
@@ -425,42 +460,42 @@ function Cursus() {
             >
               <Building2 size={20} />
               <div>
-                <strong>Étudier la BRVM</strong>
-                <span>Bourse régionale, SGI, actions et dividendes</span>
+                <strong>Etudier la BRVM</strong>
+                <span>Bourse Régionale UEMOA, Actions, SGI</span>
               </div>
             </button>
           </div>
         </section>
 
-        {/* SECTION DES MODULES */}
+        {/* SECTION CURRICULUM DYNAMIQUE */}
         <section className="learning-section">
           <div className="section-heading">
             <div>
               <span className="section-kicker">
-                {activeTab === "trading" ? "CURSUS TRADING ÉTAPE PAR ÉTAPE" : "CURSUS BRVM GUIDÉ"}
+                {activeTab === "trading" ? "PARCOURS TRADING" : "PARCOURS BRVM"}
               </span>
 
               <h2>
                 {activeTab === "trading" ? (
                   <>
-                    Apprentissage du <span>Trading.</span>
+                    Analyse & <span>Trading.</span>
                   </>
                 ) : (
                   <>
-                    Investir sur la <span>BRVM.</span>
+                    Marché & <span>Investissement BRVM.</span>
                   </>
                 )}
               </h2>
             </div>
 
             <p>
-              Suivez les modules dans l'ordre logique établi pour progresser sereinement,
-              avec des vidéos courtes et ciblées (moins de 30 minutes).
+              Sélectionnez un module pour consulter la suite logique de vidéos
+              et développer vos compétences à votre rythme.
             </p>
           </div>
 
           <div className="learning-layout">
-            {/* LISTE DES MODULES */}
+            {/* LISTE DES MODULES DU PARCOURS */}
             <div className="module-list">
               {currentModules.map((module, index) => {
                 const isActive = index === activeModuleIndex;
@@ -476,7 +511,7 @@ function Cursus() {
 
                     <span className="module-main">
                       <strong>{module.title}</strong>
-                      <small>{module.lessons.length} étapes logiques</small>
+                      <small>{module.lessons.length} vidéos guidées</small>
                     </span>
 
                     <ChevronRight size={18} className="module-arrow" />
@@ -485,7 +520,7 @@ function Cursus() {
               })}
             </div>
 
-            {/* DÉTAIL DU MODULE ACTIF */}
+            {/* DETAIL DU MODULE ACTIF */}
             <div className="module-detail">
               <div className="detail-header">
                 <div>
@@ -501,6 +536,7 @@ function Cursus() {
                 </div>
               </div>
 
+              {/* LISTE DES LEÇONS VIDÉOS */}
               <div className="lesson-list">
                 {currentModule.lessons.map((lesson, index) => (
                   <div className="lesson-card" key={lesson.title}>
@@ -511,7 +547,8 @@ function Cursus() {
                     <div className="lesson-content">
                       <strong>{lesson.title}</strong>
                       <span>
-                        ⏱ {lesson.duration} • 👤 Intervenant : {lesson.creator}
+                        Durée estimée : {lesson.duration} • Formateur :{" "}
+                        {currentModule.creator}
                       </span>
                     </div>
 
@@ -530,15 +567,15 @@ function Cursus() {
               <div className="resource-note">
                 <ExternalLink size={16} />
                 <p>
-                  Vues et organisées par PHI Academy pour structurer l'apprentissage
-                  des débutants sans désordre.
+                  Les vidéos sont hébergées sur leurs chaînes YouTube d'origine.
+                  PHI Academy structure et organise la progression pédagogique.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* FOOTER BAS DE PAGE */}
+        {/* SECTION FOOTER DE NAVIGATION */}
         <section className="bottom-information">
           <div className="information-card">
             <div className="information-icon">
@@ -546,10 +583,11 @@ function Cursus() {
             </div>
 
             <div>
-              <strong>Sécurité & Autonomie</strong>
+              <strong>Apprentissage autonome & sécurisé</strong>
               <p>
-                Prenez le temps d'assimiler chaque module. Aucune pression, vous
-                progressez à votre propre rythme.
+                Parcourez les modules selon vos besoins. Ne partagez jamais vos
+                accès personnels et prenez le temps de valider vos
+                connaissances théoriques.
               </p>
             </div>
           </div>
@@ -561,7 +599,7 @@ function Cursus() {
         </section>
       </main>
 
-      {/* MODALE DE LECTURE VIDÉO */}
+      {/* LECTEUR LECTURE MODALE INTERACTIVE */}
       {selectedVideo && (
         <div
           className="video-modal-overlay"
@@ -605,7 +643,7 @@ function Cursus() {
         </div>
       )}
 
-      {/* STYLES CSS */}
+      {/* STYLES CSS COMPLET ET OPTIMISE */}
       <style>{`
         .cursus-page {
           --blue-900: #061A4A;
@@ -613,17 +651,21 @@ function Cursus() {
           --blue-700: #103A8C;
           --blue-100: #E6EEFC;
           --blue-50:  #F1F5FD;
+
           --orange: #FF7A1A;
           --orange-dark: #E86405;
           --orange-text: #D9590A;
           --orange-soft: #FFF0E3;
+
           --ink: #0A1B44;
           --muted: #5F6E8A;
           --line: #DFE6F2;
           --bg: #F4F7FC;
         }
 
-        * { box-sizing: border-box; }
+        * {
+          box-sizing: border-box;
+        }
 
         .cursus-page {
           min-height: 100vh;
@@ -633,6 +675,7 @@ function Cursus() {
           font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
 
+        /* HEADER */
         .cursus-header {
           position: sticky;
           top: 0;
@@ -652,23 +695,79 @@ function Cursus() {
           gap: 24px;
         }
 
-        .brand { display: inline-flex; align-items: center; text-decoration: none; }
-        .brand-text strong { font-size: 17px; font-weight: 800; color: var(--blue-800); }
-        .brand-text span { font-size: 15px; font-weight: 600; color: var(--orange-text); }
-
-        .desktop-nav { display: flex; align-items: center; gap: 8px; }
-        .desktop-nav a { padding: 9px 13px; color: var(--muted); font-size: 13px; font-weight: 600; text-decoration: none; border-radius: 10px; transition: 0.2s ease; }
-        .desktop-nav a.active { color: var(--blue-800); font-weight: 800; }
-
-        .desktop-account { display: flex; align-items: center; gap: 8px; }
-        .account-name { color: var(--blue-800); font-size: 12px; font-weight: 700; }
-        .active-dot { width: 7px; height: 7px; border-radius: 50%; background: #1FAE63; }
-
-        .mobile-menu-button {
-          display: none; width: 42px; height: 42px; border: 0; border-radius: 12px;
-          background: var(--blue-50); color: var(--blue-800); align-items: center; justify-content: center; cursor: pointer;
+        .brand {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          text-decoration: none;
         }
 
+        .brand-text strong {
+          font-size: 17px;
+          font-weight: 800;
+          color: var(--blue-800);
+        }
+
+        .brand-text span {
+          font-size: 15px;
+          font-weight: 600;
+          color: var(--orange-text);
+        }
+
+        .desktop-nav {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .desktop-nav a {
+          padding: 9px 13px;
+          color: var(--muted);
+          font-size: 13px;
+          font-weight: 600;
+          text-decoration: none;
+          border-radius: 10px;
+          transition: 0.2s ease;
+        }
+
+        .desktop-nav a.active {
+          color: var(--blue-800);
+          font-weight: 800;
+        }
+
+        .desktop-account {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .account-name {
+          color: var(--blue-800);
+          font-size: 12px;
+          font-weight: 700;
+        }
+
+        .active-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #1FAE63;
+        }
+
+        .mobile-menu-button {
+          display: none;
+          width: 42px;
+          height: 42px;
+          border: 0;
+          border-radius: 12px;
+          background: var(--blue-50);
+          color: var(--blue-800);
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+        }
+
+        /* INTRO */
         .cursus-intro {
           background: radial-gradient(700px 300px at 100% 0%, rgba(255,122,26,0.12), transparent 60%), #fff;
           border-bottom: 1px solid var(--line);
@@ -682,118 +781,532 @@ function Cursus() {
         }
 
         .back-link {
-          display: inline-flex; align-items: center; gap: 7px; color: var(--muted);
-          text-decoration: none; font-size: 13px; font-weight: 700; margin-bottom: 24px;
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          color: var(--muted);
+          text-decoration: none;
+          font-size: 13px;
+          font-weight: 700;
+          margin-bottom: 24px;
         }
 
         .eyebrow {
-          display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px;
-          border-radius: 999px; background: var(--orange-soft); color: var(--orange-text);
-          font-size: 11px; font-weight: 800; letter-spacing: .13em; margin-bottom: 16px;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 7px 12px;
+          border-radius: 999px;
+          background: var(--orange-soft);
+          color: var(--orange-text);
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: .13em;
+          margin-bottom: 16px;
         }
 
-        .intro-copy h1 { margin: 0; color: var(--blue-800); font-size: clamp(34px, 5vw, 58px); line-height: 1.1; font-weight: 800; }
-        .intro-copy h1 span { color: var(--orange); }
-        .intro-copy p { max-width: 610px; margin: 18px 0 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
+        .intro-copy h1 {
+          margin: 0;
+          color: var(--blue-800);
+          font-size: clamp(34px, 5vw, 58px);
+          line-height: 1.1;
+          font-weight: 800;
+        }
+
+        .intro-copy h1 span {
+          color: var(--orange);
+        }
+
+        .intro-copy p {
+          max-width: 610px;
+          margin: 18px 0 0;
+          color: var(--muted);
+          font-size: 15px;
+          line-height: 1.6;
+        }
 
         .access-badge {
-          position: absolute; right: 0; bottom: 50px; display: inline-flex; align-items: center; gap: 7px;
-          padding: 9px 13px; border-radius: 999px; background: #EAF8F0; color: #167A48; font-size: 12px; font-weight: 700;
+          position: absolute;
+          right: 0;
+          bottom: 50px;
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          padding: 9px 13px;
+          border-radius: 999px;
+          background: #EAF8F0;
+          color: #167A48;
+          font-size: 12px;
+          font-weight: 700;
           border: 1px solid rgba(22,122,72,0.15);
         }
 
-        .disclaimer-banner { width: min(1180px, calc(100% - 32px)); margin: 24px auto 0; }
-        .disclaimer-inner {
-          display: flex; align-items: flex-start; gap: 14px; padding: 16px 20px;
-          border-radius: 16px; background: #FFF8EE; border: 1px solid #FFE0B2; color: #8C4A00;
+        /* BANNIERE DISCLAIMER */
+        .disclaimer-banner {
+          width: min(1180px, calc(100% - 32px));
+          margin: 24px auto 0;
         }
-        .disclaimer-icon { flex-shrink: 0; color: var(--orange); margin-top: 2px; }
-        .disclaimer-inner p { margin: 0; font-size: 13px; line-height: 1.5; }
 
-        .domain-selector-section { width: min(1180px, calc(100% - 32px)); margin: 28px auto 0; }
-        .selector-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .disclaimer-inner {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          padding: 16px 20px;
+          border-radius: 16px;
+          background: #FFF8EE;
+          border: 1px solid #FFE0B2;
+          color: #8C4A00;
+        }
+
+        .disclaimer-icon {
+          flex-shrink: 0;
+          color: var(--orange);
+        }
+
+        .disclaimer-inner p {
+          margin: 0;
+          font-size: 13px;
+          line-height: 1.5;
+        }
+
+        /* SELECTEUR DE DOMAINE */
+        .domain-selector-section {
+          width: min(1180px, calc(100% - 32px));
+          margin: 32px auto 0;
+        }
+
+        .selector-container {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 16px;
+        }
 
         .domain-tab {
-          display: flex; align-items: center; gap: 16px; padding: 20px; border-radius: 20px;
-          background: #fff; border: 2px solid var(--line); color: var(--muted); text-align: left; cursor: pointer; transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          padding: 20px;
+          border-radius: 20px;
+          background: #fff;
+          border: 2px solid var(--line);
+          color: var(--muted);
+          text-align: left;
+          cursor: pointer;
+          transition: all 0.2s ease;
         }
-        .domain-tab:hover { border-color: rgba(255, 122, 26, 0.4); }
-        .domain-tab.active { border-color: var(--orange); background: #fff; color: var(--blue-800); box-shadow: 0 10px 25px rgba(255,122,26,0.12); }
-        .domain-tab strong { display: block; font-size: 16px; color: var(--blue-800); }
-        .domain-tab span { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
 
-        .learning-section { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 40px 0; }
-        .section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: 28px; }
-        .section-kicker { display: block; color: var(--orange-text); font-size: 11px; letter-spacing: .15em; font-weight: 800; margin-bottom: 8px; }
-        .section-heading h2 { margin: 0; color: var(--blue-800); font-size: clamp(26px, 3.5vw, 40px); line-height: 1.1; }
-        .section-heading h2 span { color: var(--orange); }
-        .section-heading > p { max-width: 390px; margin: 0; color: var(--muted); font-size: 14px; }
+        .domain-tab:hover {
+          border-color: rgba(255, 122, 26, 0.4);
+        }
 
-        .learning-layout { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 18px; align-items: start; }
-        .module-list { display: flex; flex-direction: column; gap: 8px; }
+        .domain-tab.active {
+          border-color: var(--orange);
+          background: #fff;
+          color: var(--blue-800);
+          box-shadow: 0 10px 25px rgba(255,122,26,0.12);
+        }
+
+        .domain-tab strong {
+          display: block;
+          font-size: 16px;
+          color: var(--blue-800);
+        }
+
+        .domain-tab span {
+          display: block;
+          font-size: 12px;
+          color: var(--muted);
+          margin-top: 2px;
+        }
+
+        /* APPRENTISSAGE & MODULES */
+        .learning-section {
+          width: min(1180px, calc(100% - 32px));
+          margin: 0 auto;
+          padding: 40px 0;
+        }
+
+        .section-heading {
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          gap: 40px;
+          margin-bottom: 28px;
+        }
+
+        .section-kicker {
+          display: block;
+          color: var(--orange-text);
+          font-size: 11px;
+          letter-spacing: .15em;
+          font-weight: 800;
+          margin-bottom: 8px;
+        }
+
+        .section-heading h2 {
+          margin: 0;
+          color: var(--blue-800);
+          font-size: clamp(26px, 3.5vw, 40px);
+          line-height: 1.1;
+        }
+
+        .section-heading h2 span {
+          color: var(--orange);
+        }
+
+        .section-heading > p {
+          max-width: 390px;
+          margin: 0;
+          color: var(--muted);
+          font-size: 14px;
+        }
+
+        .learning-layout {
+          display: grid;
+          grid-template-columns: 330px minmax(0, 1fr);
+          gap: 18px;
+          align-items: start;
+        }
+
+        .module-list {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
 
         .module-item {
-          width: 100%; display: grid; grid-template-columns: 40px minmax(0, 1fr) 20px; align-items: center; gap: 10px;
-          padding: 15px 14px; border: 1px solid var(--line); border-radius: 15px; background: #fff; color: var(--ink); text-align: left; cursor: pointer; transition: all .2s ease;
+          width: 100%;
+          display: grid;
+          grid-template-columns: 40px minmax(0, 1fr) 20px;
+          align-items: center;
+          gap: 10px;
+          padding: 15px 14px;
+          border: 1px solid var(--line);
+          border-radius: 15px;
+          background: #fff;
+          color: var(--ink);
+          text-align: left;
+          cursor: pointer;
+          transition: all .2s ease;
         }
-        .module-item:hover { border-color: rgba(255,122,26,.5); }
-        .module-item.active { border-color: var(--orange); box-shadow: 0 10px 25px rgba(10,42,102,.06); }
-        .module-number { font-size: 13px; font-weight: 800; color: var(--orange-text); }
-        .module-main strong { display: block; font-size: 14px; color: var(--blue-800); }
-        .module-main small { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
-        .module-arrow { color: var(--muted); }
 
-        .module-detail { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 28px; }
-        .detail-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--line); margin-bottom: 20px; }
-        .detail-number { font-size: 11px; font-weight: 800; color: var(--orange); letter-spacing: 0.1em; }
-        .detail-header h3 { margin: 6px 0 8px; font-size: 22px; color: var(--blue-800); }
-        .detail-header p { margin: 0; font-size: 14px; color: var(--muted); }
-        .detail-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--blue-50); color: var(--blue-800); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .module-item:hover {
+          border-color: rgba(255,122,26,.5);
+        }
 
-        .lesson-list { display: flex; flex-direction: column; gap: 12px; }
-        .lesson-card { display: flex; align-items: center; gap: 16px; padding: 16px; border-radius: 14px; background: var(--bg); border: 1px solid var(--line); }
-        .lesson-index { font-size: 12px; font-weight: 800; color: var(--orange-text); }
-        .lesson-content { flex: 1; }
-        .lesson-content strong { display: block; font-size: 14px; color: var(--blue-800); }
-        .lesson-content span { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; }
+        .module-item.active {
+          border-color: var(--orange);
+          box-shadow: 0 10px 25px rgba(10,42,102,.06);
+        }
+
+        .module-number {
+          font-size: 13px;
+          font-weight: 800;
+          color: var(--orange-text);
+        }
+
+        .module-main strong {
+          display: block;
+          font-size: 14px;
+          color: var(--blue-800);
+        }
+
+        .module-main small {
+          display: block;
+          font-size: 12px;
+          color: var(--muted);
+          margin-top: 2px;
+        }
+
+        .module-arrow {
+          color: var(--muted);
+        }
+
+        .module-detail {
+          background: #fff;
+          border: 1px solid var(--line);
+          border-radius: 20px;
+          padding: 28px;
+        }
+
+        .detail-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 20px;
+          padding-bottom: 20px;
+          border-bottom: 1px solid var(--line);
+          margin-bottom: 20px;
+        }
+
+        .detail-number {
+          font-size: 11px;
+          font-weight: 800;
+          color: var(--orange);
+          letter-spacing: 0.1em;
+        }
+
+        .detail-header h3 {
+          margin: 6px 0 8px;
+          font-size: 22px;
+          color: var(--blue-800);
+        }
+
+        .detail-header p {
+          margin: 0;
+          font-size: 14px;
+          color: var(--muted);
+        }
+
+        .detail-icon {
+          width: 44px;
+          height: 44px;
+          border-radius: 12px;
+          background: var(--blue-50);
+          color: var(--blue-800);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+
+        /* LISTE LEÇONS */
+        .lesson-list {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .lesson-card {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          padding: 16px;
+          border-radius: 14px;
+          background: var(--bg);
+          border: 1px solid var(--line);
+        }
+
+        .lesson-index {
+          font-size: 12px;
+          font-weight: 800;
+          color: var(--orange-text);
+        }
+
+        .lesson-content {
+          flex: 1;
+        }
+
+        .lesson-content strong {
+          display: block;
+          font-size: 14px;
+          color: var(--blue-800);
+        }
+
+        .lesson-content span {
+          display: block;
+          font-size: 12px;
+          color: var(--muted);
+          margin-top: 3px;
+        }
 
         .lesson-action {
-          width: 38px; height: 38px; border-radius: 50%; background: var(--orange); color: #fff; border: 0;
-          display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s ease;
+          width: 38px;
+          height: 38px;
+          border-radius: 50%;
+          background: var(--orange);
+          color: #fff;
+          border: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: transform 0.2s ease;
         }
-        .lesson-action:hover { transform: scale(1.08); background: var(--orange-dark); }
 
-        .resource-note { display: flex; align-items: center; gap: 10px; margin-top: 24px; padding-top: 16px; border-top: 1px dashed var(--line); color: var(--muted); }
-        .resource-note p { margin: 0; font-size: 12px; }
+        .lesson-action:hover {
+          transform: scale(1.08);
+          background: var(--orange-dark);
+        }
 
+        .resource-note {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-top: 24px;
+          padding-top: 16px;
+          border-top: 1px dashed var(--line);
+          color: var(--muted);
+        }
+
+        .resource-note p {
+          margin: 0;
+          font-size: 12px;
+        }
+
+        /* MODALE VIDEO INTERACTIVE */
         .video-modal-overlay {
-          position: fixed; inset: 0; background: rgba(6, 26, 74, 0.82); backdrop-filter: blur(6px);
-          z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px;
+          position: fixed;
+          inset: 0;
+          background: rgba(6, 26, 74, 0.82);
+          backdrop-filter: blur(6px);
+          z-index: 200;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
         }
-        .video-modal-container { width: min(840px, 100%); background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
-        .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--line); }
-        .modal-header h4 { margin: 0; font-size: 15px; color: var(--blue-800); }
-        .close-modal { background: transparent; border: 0; color: var(--muted); cursor: pointer; }
-        .modal-video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; background: #000; }
-        .modal-video-wrapper iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-        .modal-footer { padding: 12px 20px; background: var(--bg); display: flex; justify-content: flex-end; }
-        .external-yt-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--orange-text); text-decoration: none; }
 
-        .bottom-information { width: min(1180px, calc(100% - 32px)); margin: 0 auto 60px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-        .information-card { display: flex; align-items: center; gap: 16px; }
-        .information-icon { width: 42px; height: 42px; border-radius: 12px; background: #EAF8F0; color: #167A48; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .information-card strong { display: block; font-size: 14px; color: var(--blue-800); }
-        .information-card p { margin: 2px 0 0; font-size: 13px; color: var(--muted); }
-        .services-link { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 12px; background: var(--blue-800); color: #fff; text-decoration: none; font-size: 13px; font-weight: 700; white-space: nowrap; }
+        .video-modal-container {
+          width: min(840px, 100%);
+          background: #fff;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
 
+        .modal-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 16px 20px;
+          border-bottom: 1px solid var(--line);
+        }
+
+        .modal-header h4 {
+          margin: 0;
+          font-size: 15px;
+          color: var(--blue-800);
+        }
+
+        .close-modal {
+          background: transparent;
+          border: 0;
+          color: var(--muted);
+          cursor: pointer;
+        }
+
+        .modal-video-wrapper {
+          position: relative;
+          padding-bottom: 56.25%;
+          height: 0;
+          background: #000;
+        }
+
+        .modal-video-wrapper iframe {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          border: 0;
+        }
+
+        .modal-footer {
+          padding: 12px 20px;
+          background: var(--bg);
+          display: flex;
+          justify-content: flex-end;
+        }
+
+        .external-yt-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 12px;
+          font-weight: 700;
+          color: var(--orange-text);
+          text-decoration: none;
+        }
+
+        /* BOTTOM SECTION */
+        .bottom-information {
+          width: min(1180px, calc(100% - 32px));
+          margin: 0 auto 60px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 20px;
+        }
+
+        .information-card {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .information-icon {
+          width: 42px;
+          height: 42px;
+          border-radius: 12px;
+          background: #EAF8F0;
+          color: #167A48;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+
+        .information-card strong {
+          display: block;
+          font-size: 14px;
+          color: var(--blue-800);
+        }
+
+        .information-card p {
+          margin: 2px 0 0;
+          font-size: 13px;
+          color: var(--muted);
+        }
+
+        .services-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 12px 20px;
+          border-radius: 12px;
+          background: var(--blue-800);
+          color: #fff;
+          text-decoration: none;
+          font-size: 13px;
+          font-weight: 700;
+          white-space: nowrap;
+        }
+
+        /* RESPONSIVE DESIGN */
         @media (max-width: 900px) {
-          .selector-container { grid-template-columns: 1fr; }
-          .learning-layout { grid-template-columns: 1fr; }
-          .section-heading { flex-direction: column; align-items: flex-start; gap: 12px; }
-          .bottom-information { flex-direction: column; align-items: flex-start; }
-          .access-badge { position: relative; bottom: auto; right: auto; margin-top: 20px; }
-          .desktop-nav, .desktop-account { display: none; }
-          .mobile-menu-button { display: flex; }
+          .selector-container {
+            grid-template-columns: 1fr;
+          }
+
+          .learning-layout {
+            grid-template-columns: 1fr;
+          }
+
+          .section-heading {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+          }
+
+          .bottom-information {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          .access-badge {
+            position: relative;
+            bottom: auto;
+            right: auto;
+            margin-top: 20px;
+          }
+
+          .desktop-nav, .desktop-account {
+            display: none;
+          }
+
+          .mobile-menu-button {
+            display: flex;
+          }
         }
       `}</style>
     </div>
