@@ -813,7 +813,7 @@ export default function AdminRetraits() {
 
                       <div className="ar-box">
                         <small>
-                          Numéro · {item.operator || "Opérateur"}
+                          Numéro de dépôt
                         </small>
                         <strong>{item.phone}</strong>
 
@@ -924,8 +924,7 @@ export default function AdminRetraits() {
               <div className="ar-recap">
                 <strong>{getMemberName(modal.item)}</strong>
                 <br />
-                {formatAmount(getNet(modal.item))} · {modal.item.operator} ·{" "}
-                {modal.item.phone}
+                {formatAmount(getNet(modal.item))} · {modal.item.phone}
               </div>
 
               {modalError && (
