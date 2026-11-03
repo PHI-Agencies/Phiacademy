@@ -32,18 +32,18 @@ export const TRACKS = [
         lessons: [
           {
             title: "Le trading, c'est quoi ?",
-            video: "rEmTLttPGUA",
+            video: "iWqYXlVwAR8",
             lang: "FR",
           },
           {
             title: "Les risques du trading",
-            video: "6FpN8_khgSs",
+            video: "jtMX-02oV4Q",
             channel: "Autorité des marchés financiers (Consomag)",
             lang: "FR",
           },
           {
-            title: "Pip, lot, levier : le vocabulaire",
-            video: "WjCVkeQ4RBo",
+            title: "le vocabulaire du debutant",
+            video: "B4kWgeiF_Bc",
             lang: "FR",
           },
         ],
