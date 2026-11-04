@@ -1,20 +1,3 @@
-/* =========================================================
-   CONTENU DU CURSUS
-   ---------------------------------------------------------
-   Pour modifier le parcours, changez uniquement ce fichier :
-
-   - "video"   : l'identifiant YouTube (les 11 caractères après
-                 "v=" dans l'adresse de la vidéo) ;
-   - "title"   : le titre de la leçon affiché sur le site ;
-   - "channel" : le nom de la chaîne (laissez vide si inconnu) ;
-   - "lang"    : "FR" ou "EN" (une étiquette "En anglais" est
-                 alors affichée, avec le conseil d'activer les
-                 sous-titres).
-
-   Les vidéos sont publiées par des créateurs indépendants. Elles
-   sont lues depuis YouTube, PHI Academy ne les héberge pas.
-========================================================= */
-
 export const TRACKS = [
   {
     id: "trading",
