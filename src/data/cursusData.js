@@ -65,7 +65,7 @@ export const TRACKS = [
           },
           {
             title: "Fausses plateformes et deepfakes",
-            video: "SpVkhVU_tiM",
+            video: "9mOIVKEO0rM",
             lang: "FR",
           },
         ],
@@ -77,17 +77,17 @@ export const TRACKS = [
         lessons: [
           {
             title: "Les marchés financiers",
-            video: "q9MNaZ8CrJM",
+            video: "ruPNWEuwrcg",
             lang: "FR",
           },
           {
             title: "L'offre et la demande",
-            video: "T1Zle7QnGWo",
+            video: "h62PMKoNwbI",
             lang: "FR",
           },
           {
             title: "Les types d'ordres",
-            video: "POrSM1dwuSY",
+            video: "ruPNWEuwrcg",
             lang: "FR",
           },
         ],
@@ -99,22 +99,22 @@ export const TRACKS = [
         lessons: [
           {
             title: "Les chandeliers japonais",
-            video: "caBnCzGyh0s",
+            video: "Lfz9DVjpYxw",
             lang: "FR",
           },
           {
             title: "Tendances haussière, baissière et range",
-            video: "aogo3af9-1w",
+            video: "eYwf79sk7B8",
             lang: "FR",
           },
           {
-            title: "Supports et résistances",
-            video: "CnRVH8AxQgw",
+            title: "Supports et résistances et trendlines",
+            video: "9pM8WJw5pDU",
             lang: "FR",
           },
           {
             title: "Les unités de temps",
-            video: "-mQV1eosdDg",
+            video: "0b7VBLxn2jc",
             lang: "FR",
           },
         ],
@@ -126,17 +126,17 @@ export const TRACKS = [
         lessons: [
           {
             title: "Comprendre la structure de marché",
-            video: "3br6QspAHJo",
+            video: "XagLzmfh3a0",
             lang: "FR",
           },
           {
             title: "Les moyennes mobiles",
-            video: "FFvTmD4x7OM",
+            video: "q-uA6dYhjDg",
             lang: "FR",
           },
           {
             title: "Le RSI pour débutants",
-            video: "MJzjcsiRkZQ",
+            video: "a64p7fioplw",
             lang: "FR",
           },
         ],
@@ -148,17 +148,17 @@ export const TRACKS = [
         lessons: [
           {
             title: "Qu'est-ce que le price action ?",
-            video: "TCFA7R4_4vE",
+            video: "D7plmzhFlSw",
             lang: "FR",
           },
           {
             title: "Les zones en trading",
-            video: "6V50TkPhPfo",
+            video: "dPFKMZYk_Kc",
             lang: "FR",
           },
           {
             title: "Repérer un faux breakout",
-            video: "lzsy00rBZCE",
+            video: "C1s3339RvBs",
             lang: "FR",
           },
         ],
@@ -169,28 +169,28 @@ export const TRACKS = [
           "Structure du marché, liquidité, déséquilibres et order blocks : les concepts du « smart money », expliqués en français.",
         lessons: [
           {
-            title: "Le SMC expliqué de A à Z",
-            video: "ERPZUSc4zjA",
-            lang: "FR",
-          },
-          {
             title: "CHoCH et BOS : la structure",
-            video: "slzCMYy5iYI",
-            lang: "FR",
-          },
-          {
-            title: "La liquidité",
-            video: "wCvD7TXyCyA",
-            lang: "FR",
-          },
-          {
-            title: "Les déséquilibres (FVG)",
-            video: "U4-T6XaD8jE",
+            video: "hC4goqpwF0w",
             lang: "FR",
           },
           {
             title: "Les order blocks",
-            video: "ftAuQSy8S_g",
+            video: "1uAcXoVzmZs",
+            lang: "FR",
+          },
+          {
+            title: "La liquidité",
+            video: "ykIG3OIb7IE",
+            lang: "FR",
+          },
+          {
+            title: "Les déséquilibres (FVG)",
+            video: "x7ChUc7oGKU",
+            lang: "FR",
+          },
+          {
+            title: "Le SMC expliqué de A à Z",
+            video: "9Gt1v3NoVDQ",
             lang: "FR",
           },
         ],
@@ -224,39 +224,44 @@ export const TRACKS = [
         lessons: [
           {
             title: "Le piège de la peur et du FOMO",
-            video: "C7TRkHSRBv8",
+            video: "YX9U97AWWAo",
             lang: "FR",
           },
           {
             title: "La psychologie qui ruine un trader",
-            video: "-HQqkHg9zkY",
+            video: "jPeKzzAJaUM",
             lang: "FR",
           },
           {
             title: "Psychologie et trading",
-            video: "IZwqt_HxhBg",
+            video: "0ggmYGiTu0M",
             lang: "FR",
           },
         ],
       },
       {
-        title: "Construire son plan",
+        title: "Construire son plan et maîtrise des outils de Trading",
         description:
-          "Journal de trading et tests sur le passé : s'entraîner avant de risquer de l'argent réel.",
+          "Journal de trading et tests sur le passé : s'entraîner avant de risquer de l'argent réel. Et maîtrise des outils de Trading",
         lessons: [
           {
             title: "Tenir un journal de trading",
-            video: "oz5-X2aquW4",
+            video: "u8HW6YjPdlI",
             lang: "FR",
           },
           {
             title: "Comment bien backtester",
-            video: "ldg_Xu8klVw",
+            video: "6-0vWdRAs58",
             lang: "FR",
           },
           {
-            title: "Backtester sa stratégie",
-            video: "2BDKZCN8PGM",
+            title: "Maîtriser MT5 (Meta Trader 5)",
+            video: "RWrHimN3Ius",
+            lang: "FR",
+          },
+           {
+            title: "Maîtriser Trading View",
+            video: "zsZBQn-WLVI",
             lang: "FR",
           },
         ],
