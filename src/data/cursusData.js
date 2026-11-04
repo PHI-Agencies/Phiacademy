@@ -202,17 +202,17 @@ export const TRACKS = [
         lessons: [
           {
             title: "Limiter ses pertes",
-            video: "GL_YSlxzICg",
+            video: "Hxe9sD_nOwA",
             lang: "FR",
           },
           {
             title: "Le stop loss",
-            video: "uEjU1tZoknY",
+            video: "Z_UwOj4Fw7E",
             lang: "FR",
           },
           {
             title: "Calculer sa taille de position",
-            video: "aX63-wkpGb8",
+            video: "lxTsqDWs6so",
             lang: "FR",
           },
         ],
