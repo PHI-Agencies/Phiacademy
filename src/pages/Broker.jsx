@@ -57,6 +57,34 @@ function whatsappLink(message) {
   )}`;
 }
 
+/*
+ * Logo réel du broker : 1) /public/brokers/<id>.png si vous l'ajoutez,
+ * 2) à défaut l'icône officielle du site, 3) sinon les initiales.
+ */
+function BrokerLogo({ broker }) {
+  const sources = [
+    broker.logo,
+    `https://www.google.com/s2/favicons?domain=${broker.domain}&sz=128`,
+  ].filter(Boolean);
+
+  const [index, setIndex] = useState(0);
+
+  if (index >= sources.length) {
+    return <span className="b-logo b-logo-text">{broker.initials}</span>;
+  }
+
+  return (
+    <span className="b-logo">
+      <img
+        src={sources[index]}
+        alt={`Logo ${broker.name}`}
+        loading="lazy"
+        onError={() => setIndex((value) => value + 1)}
+      />
+    </span>
+  );
+}
+
 function Broker() {
   const [filter, setFilter] = useState("all");
 
@@ -136,7 +164,7 @@ function Broker() {
                   className={`b-card ${broker.region}`}
                 >
                   <div className="b-card-top">
-                    <span className="b-logo">{broker.initials}</span>
+                    <BrokerLogo broker={broker} />
 
                     <div>
                       <h3>{broker.name}</h3>
@@ -195,8 +223,8 @@ function Broker() {
 
           <p className="b-help-text">
             Pas à l'aise avec l'inscription, la vérification ou le premier
-            dépôt ? Nous vous accompagnons à chaque étape, en direct sur
-            WhatsApp.
+            dépôt ? Nous vous accompagnons à chaque étape, en direct, par
+            appel vidéo WhatsApp avec partage d'écran.
           </p>
 
           <ol className="b-steps">
@@ -273,6 +301,11 @@ function Broker() {
 
       <style>{`
         .broker-page {
+          --green-900: #063D2A;
+          --green-800: #0B5D3B;
+          --green-700: #0F7A4F;
+          --green-100: #DDF3E8;
+          --green-50:  #F0FAF5;
           --blue-900: #061A4A;
           --blue-800: #0A2A66;
           --blue-700: #103A8C;
@@ -282,7 +315,7 @@ function Broker() {
           --orange-dark: #E86405;
           --orange-text: #D9590A;
           --orange-soft: #FFF0E3;
-          --green: #167A48;
+          --green: #0F7A4F;
           --ink: #0A1B44;
           --muted: #5F6E8A;
           --line: #DFE6F2;
@@ -360,9 +393,9 @@ function Broker() {
           border-radius: 24px;
           color: #fff;
           background:
-            radial-gradient(circle at 100% 0%, rgba(255,122,26,.3), transparent 50%),
-            linear-gradient(135deg, var(--blue-900), var(--blue-800) 55%, var(--blue-700));
-          box-shadow: 0 16px 38px rgba(10,42,102,.22);
+            radial-gradient(circle at 100% 0%, rgba(255,255,255,.16), transparent 50%),
+            linear-gradient(135deg, var(--green-900), var(--green-800) 55%, var(--green-700));
+          box-shadow: 0 16px 38px rgba(11,93,59,.28);
         }
 
         .b-eyebrow {
@@ -370,7 +403,7 @@ function Broker() {
           align-items: center;
           gap: 6px;
           margin-bottom: 12px;
-          color: #FFB680;
+          color: #A8F0CB;
           font-size: 11px;
           font-weight: 800;
           letter-spacing: .14em;
@@ -386,13 +419,13 @@ function Broker() {
 
         .b-hero h1 span {
           display: block;
-          color: var(--orange);
+          color: #8EF0BE;
         }
 
         .b-hero p {
           max-width: 600px;
           margin: 14px 0 20px;
-          color: #C9D6F2;
+          color: #D4F1E2;
           font-size: 15px;
           line-height: 1.65;
         }
@@ -411,7 +444,7 @@ function Broker() {
         .b-help-label {
           display: block;
           margin-bottom: 4px;
-          color: var(--orange-text);
+          color: var(--green-700);
           font-size: 11px;
           font-weight: 800;
           letter-spacing: .15em;
@@ -419,7 +452,7 @@ function Broker() {
 
         .b-section-head h2 {
           margin: 0 0 14px;
-          color: var(--blue-800);
+          color: var(--green-900);
           font-size: 26px;
           letter-spacing: -.035em;
         }
@@ -447,8 +480,8 @@ function Broker() {
         }
 
         .b-filters button.on {
-          background: var(--blue-800);
-          border-color: var(--blue-800);
+          background: var(--green-800);
+          border-color: var(--green-800);
           color: #fff;
         }
 
@@ -462,15 +495,13 @@ function Broker() {
           border-radius: 22px;
           background: #fff;
           border: 1px solid var(--line);
-          border-top: 5px solid var(--blue-700);
+          border-top: 5px solid var(--green-700);
           box-shadow: 0 10px 28px rgba(10,42,102,.07);
           display: flex;
           flex-direction: column;
           gap: 12px;
         }
 
-        .b-card.africa { border-top-color: var(--orange); }
-        .b-card.crypto { border-top-color: var(--blue-900); }
 
         .b-card-top {
           display: flex;
@@ -479,24 +510,36 @@ function Broker() {
         }
 
         .b-logo {
-          width: 50px;
-          height: 50px;
+          width: 56px;
+          height: 56px;
           flex: none;
-          border-radius: 14px;
+          border-radius: 15px;
           display: grid;
           place-items: center;
-          background: var(--blue-800);
-          color: #fff;
-          font-size: 15px;
-          font-weight: 800;
-          letter-spacing: .03em;
+          overflow: hidden;
+          background: #fff;
+          border: 1px solid var(--line);
+          box-shadow: 0 4px 12px rgba(10,42,102,.08);
         }
 
-        .b-card.africa .b-logo { background: var(--orange); }
+        .b-logo img {
+          width: 38px;
+          height: 38px;
+          object-fit: contain;
+          display: block;
+        }
+
+        .b-logo-text {
+          background: var(--green-800);
+          border-color: var(--green-800);
+          color: #fff;
+          font-size: 16px;
+          font-weight: 800;
+        }
 
         .b-card h3 {
           margin: 0;
-          color: var(--blue-800);
+          color: var(--green-900);
           font-size: 21px;
           letter-spacing: -.02em;
         }
@@ -511,15 +554,10 @@ function Broker() {
           align-self: flex-start;
           padding: 5px 11px;
           border-radius: 999px;
-          background: var(--blue-100);
-          color: var(--blue-800);
+          background: var(--green-100);
+          color: var(--green-800);
           font-size: 12px;
           font-weight: 700;
-        }
-
-        .b-card.africa .b-tag {
-          background: var(--orange-soft);
-          color: var(--orange-text);
         }
 
         .b-card p {
@@ -570,9 +608,9 @@ function Broker() {
           color: #fff;
           scroll-margin-top: 92px;
           background:
-            radial-gradient(circle at 100% 0%, rgba(255,255,255,.18), transparent 50%),
-            linear-gradient(135deg, #C85200, var(--orange-dark) 50%, #FF8F3D);
-          box-shadow: 0 16px 38px rgba(232,100,5,.28);
+            radial-gradient(circle at 100% 0%, rgba(255,122,26,.3), transparent 50%),
+            linear-gradient(135deg, var(--blue-900), var(--blue-800) 55%, var(--blue-700));
+          box-shadow: 0 16px 38px rgba(10,42,102,.28);
         }
 
         .b-help-head {
@@ -591,7 +629,7 @@ function Broker() {
           background: rgba(255,255,255,.2);
         }
 
-        .b-help-label { color: #FFE2CC; }
+        .b-help-label { color: #FFB680; }
 
         .b-help h2 {
           margin: 0;
@@ -630,7 +668,7 @@ function Broker() {
           display: grid;
           place-items: center;
           background: #fff;
-          color: var(--orange-text);
+          color: var(--blue-800);
           font-size: 14px;
           font-weight: 800;
         }
@@ -647,14 +685,14 @@ function Broker() {
         .b-price {
           padding: 16px;
           border-radius: 18px;
-          background: var(--blue-900);
+          background: var(--green-900);
           display: grid;
           gap: 14px;
         }
 
         .b-price small {
           display: block;
-          color: #FFB680;
+          color: #A8F0CB;
           font-size: 12px;
           font-weight: 700;
         }
@@ -668,7 +706,7 @@ function Broker() {
 
         .b-price span {
           display: block;
-          color: #C9D6F2;
+          color: #D4F1E2;
           font-size: 12px;
           line-height: 1.55;
         }
@@ -683,7 +721,7 @@ function Broker() {
           border-radius: 20px;
           background: #fff;
           border: 1px solid var(--line);
-          border-left: 5px solid var(--blue-800);
+          border-left: 5px solid var(--green-700);
         }
 
         .b-safe-icon {
@@ -693,13 +731,13 @@ function Broker() {
           border-radius: 13px;
           display: grid;
           place-items: center;
-          background: var(--blue-800);
-          color: var(--orange);
+          background: var(--green-800);
+          color: #fff;
         }
 
         .b-safe h2 {
           margin: 0 0 10px;
-          color: var(--blue-800);
+          color: var(--green-900);
           font-size: 18px;
         }
 
@@ -722,7 +760,7 @@ function Broker() {
         .b-safe li svg {
           flex: none;
           margin-top: 3px;
-          color: var(--orange);
+          color: var(--green-700);
         }
 
         .b-risk {
