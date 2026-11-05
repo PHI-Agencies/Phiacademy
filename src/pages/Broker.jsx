@@ -301,11 +301,11 @@ function Broker() {
 
       <style>{`
         .broker-page {
-          --green-900: #063D2A;
-          --green-800: #0B5D3B;
-          --green-700: #0F7A4F;
-          --green-100: #DDF3E8;
-          --green-50:  #F0FAF5;
+          --green-900: #061A4A;
+          --green-800: #0A2A66;
+          --green-700: #103A8C;
+          --green-100: #E6EEFC;
+          --green-50:  #F1F5FD;
           --blue-900: #061A4A;
           --blue-800: #0A2A66;
           --blue-700: #103A8C;
@@ -315,7 +315,7 @@ function Broker() {
           --orange-dark: #E86405;
           --orange-text: #D9590A;
           --orange-soft: #FFF0E3;
-          --green: #0F7A4F;
+          --green: #103A8C;
           --ink: #0A1B44;
           --muted: #5F6E8A;
           --line: #DFE6F2;
@@ -393,9 +393,9 @@ function Broker() {
           border-radius: 24px;
           color: #fff;
           background:
-            radial-gradient(circle at 100% 0%, rgba(255,255,255,.16), transparent 50%),
+            radial-gradient(circle at 100% 0%, rgba(255,122,26,.3), transparent 50%),
             linear-gradient(135deg, var(--green-900), var(--green-800) 55%, var(--green-700));
-          box-shadow: 0 16px 38px rgba(11,93,59,.28);
+          box-shadow: 0 16px 38px rgba(10,42,102,.28);
         }
 
         .b-eyebrow {
@@ -403,7 +403,7 @@ function Broker() {
           align-items: center;
           gap: 6px;
           margin-bottom: 12px;
-          color: #A8F0CB;
+          color: #FFB680;
           font-size: 11px;
           font-weight: 800;
           letter-spacing: .14em;
@@ -419,13 +419,13 @@ function Broker() {
 
         .b-hero h1 span {
           display: block;
-          color: #8EF0BE;
+          color: #FF7A1A;
         }
 
         .b-hero p {
           max-width: 600px;
           margin: 14px 0 20px;
-          color: #D4F1E2;
+          color: #C9D6F2;
           font-size: 15px;
           line-height: 1.65;
         }
@@ -692,7 +692,7 @@ function Broker() {
 
         .b-price small {
           display: block;
-          color: #A8F0CB;
+          color: #FFB680;
           font-size: 12px;
           font-weight: 700;
         }
@@ -706,7 +706,7 @@ function Broker() {
 
         .b-price span {
           display: block;
-          color: #D4F1E2;
+          color: #C9D6F2;
           font-size: 12px;
           line-height: 1.55;
         }
