@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 export default function Parrainage() {
   const navigate = useNavigate();
@@ -338,6 +339,13 @@ export default function Parrainage() {
         .referral-page {
           min-height: 100vh;
           background: var(--bg);
+          padding-top: 76px;
+        }
+
+        @media (max-width: 520px) {
+          .referral-page {
+            padding-top: 68px;
+          }
         }
 
         /* =========================
@@ -868,30 +876,7 @@ export default function Parrainage() {
       <div className="referral-page">
         {/* NAVIGATION */}
 
-        <nav className="referral-navbar">
-          <a href="/" className="referral-logo">
-            PHI <span>ACADEMY</span>
-          </a>
-
-          <div className="referral-nav">
-            <a href="/">Accueil</a>
-
-            <a href="/connexion-cursus?redirect=/cursus">
-              Cursus
-            </a>
-
-            <a href="/services">Services</a>
-
-            <a
-              href="/parrainage"
-              className="active"
-            >
-              Parrainage
-            </a>
-
-            <a href="/mot-de-passe">Mot de passe</a>
-          </div>
-        </nav>
+        <Navbar />
 
         {/* HEADER */}
 
