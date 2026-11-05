@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -61,6 +61,24 @@ function ConnexionCursus() {
 
   const redirectAfterLogin =
     searchParams.get("redirect") || "/cursus";
+
+  // Déjà connecté avec accès : on ouvre directement le cursus
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch("/api/cursus/access", { credentials: "include" })
+      .then((response) => {
+        if (!cancelled && response.ok) {
+          navigate(redirectAfterLogin, { replace: true });
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleLoginChange = (event) => {
     setLoginData({
