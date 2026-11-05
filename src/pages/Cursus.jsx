@@ -321,7 +321,7 @@ function Cursus() {
               <button
                 key={item.id}
                 type="button"
-                className={`c-track ${active ? "active" : ""}`}
+                className={`c-track ${item.id} ${active ? "active" : ""}`}
                 aria-pressed={active}
                 onClick={() => selectTrack(item.id)}
               >
@@ -333,11 +333,15 @@ function Cursus() {
                 <span className="c-track-count">
                   {done}/{total} vidéos
                 </span>
+                <span className="c-track-state">
+                  {active ? "Parcours ouvert ▾" : "Choisir ce parcours"}
+                </span>
               </button>
             );
           })}
         </section>
 
+        <div className="c-panel" data-track={track.id}>
         <section className="c-track-intro">
           <h2>{track.label}</h2>
           <p>{track.description}</p>
@@ -431,6 +435,7 @@ function Cursus() {
             );
           })}
         </section>
+        </div>
       </main>
 
       {/* ---------- Lecteur ---------- */}
@@ -554,24 +559,29 @@ function Cursus() {
         .c-notice p{margin:8px 0 0;color:var(--muted);font-size:13px;line-height:1.6}
 
         .c-tracks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
-        .c-track{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;background:#fff;border:2px solid var(--line);border-radius:16px;padding:14px;color:var(--ink);transition:border-color .15s,box-shadow .15s}
-        .c-track.active{border-color:var(--or);box-shadow:0 6px 18px rgba(255,122,26,.18)}
-        .c-track-icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--b1);color:var(--b8);margin-bottom:4px}
-        .c-track.active .c-track-icon{background:var(--or);color:#fff}
-        .c-track-title{font-size:18px;font-weight:800;color:var(--b8)}
-        .c-track-sub{font-size:12px;color:var(--muted);line-height:1.35}
-        .c-track-count{margin-top:4px;font-size:12px;font-weight:700;color:var(--ord)}
+        .c-track{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;border:3px solid transparent;border-radius:18px;padding:14px;color:#fff;transition:transform .15s,box-shadow .15s,opacity .15s;opacity:.72}
+        .c-track.trading{background:linear-gradient(135deg,#061A4A,#103A8C)}
+        .c-track.brvm{background:linear-gradient(135deg,#E86405,#FF8F3D)}
+        .c-track.active{opacity:1;border-color:#fff;box-shadow:0 0 0 3px var(--or),0 10px 24px rgba(6,26,74,.28);transform:translateY(-2px)}
+        .c-track.brvm.active{box-shadow:0 0 0 3px var(--b8),0 10px 24px rgba(232,100,5,.35)}
+        .c-track-icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.2);color:#fff;margin-bottom:4px}
+        .c-track-title{font-size:20px;font-weight:800;color:#fff}
+        .c-track-sub{font-size:12px;color:rgba(255,255,255,.88);line-height:1.35}
+        .c-track-count{margin-top:4px;font-size:12px;font-weight:700;color:#fff;background:rgba(255,255,255,.2);padding:3px 9px;border-radius:999px}
+        .c-track-state{margin-top:6px;font-size:12px;font-weight:800;color:#fff;text-decoration:underline;text-underline-offset:3px}
 
-        .c-track-intro{margin:22px 0 12px}
-        .c-track-intro h2{margin:0 0 6px;font-size:22px;letter-spacing:-.4px;color:var(--b8)}
-        .c-track-intro p{margin:0 0 6px;color:var(--muted);font-size:14px;line-height:1.55}
-        .c-track-intro small{color:var(--muted);font-weight:600;font-size:12px}
+        .c-panel{--acc:#0A2A66;--acc2:#103A8C;--acc-soft:#E6EEFC;margin-top:18px}
+        .c-panel[data-track="brvm"]{--acc:#E86405;--acc2:#FF8F3D;--acc-soft:#FFF0E3}
+        .c-track-intro{margin:0 0 12px;padding:18px 18px 16px;border-radius:18px;color:#fff;background:linear-gradient(135deg,var(--acc),var(--acc2))}
+        .c-track-intro h2{margin:0 0 6px;font-size:22px;letter-spacing:-.4px;color:#fff}
+        .c-track-intro p{margin:0 0 8px;color:rgba(255,255,255,.92);font-size:14px;line-height:1.55}
+        .c-track-intro small{color:#fff;font-weight:700;font-size:12px;background:rgba(255,255,255,.2);padding:3px 9px;border-radius:999px}
 
         .c-modules{display:flex;flex-direction:column;gap:10px}
-        .c-module{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}
-        .c-module.open{border-color:#C9D6F2}
+        .c-module{background:#fff;border:1px solid var(--line);border-left:5px solid var(--acc);border-radius:16px;overflow:hidden}
+        .c-module.open{border-color:var(--acc);background:var(--acc-soft)}
         .c-module-head{width:100%;display:flex;align-items:center;gap:12px;background:none;border:0;padding:14px;text-align:left;color:var(--ink)}
-        .c-num{flex:none;width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:var(--b1);color:var(--b8);font-weight:800;font-size:13px}
+        .c-num{flex:none;width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:var(--acc);color:#fff;font-weight:800;font-size:13px}
         .c-num.ok{background:var(--green);color:#fff}
         .c-module-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
         .c-module-text strong{font-size:15px;line-height:1.3}
@@ -584,10 +594,11 @@ function Cursus() {
         .c-lessons{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
         .c-lessons li{display:flex;align-items:center;gap:8px}
         .c-lesson{flex:1;min-width:0;display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px;text-align:left;color:var(--ink)}
-        .c-lesson:hover{border-color:var(--or)}
+        .c-lesson{background:#fff}
+        .c-lesson:hover{border-color:var(--acc)}
         .c-thumb{position:relative;flex:none;width:108px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:var(--b8)}
         .c-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-        .c-play{position:absolute;right:6px;bottom:6px;width:24px;height:24px;border-radius:50%;background:var(--or);color:#fff;display:grid;place-items:center}
+        .c-play{position:absolute;right:6px;bottom:6px;width:24px;height:24px;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center}
         .c-lesson-text{min-width:0;display:flex;flex-direction:column;gap:3px}
         .c-lesson-text strong{font-size:14px;line-height:1.3}
         .c-lesson-text small{color:var(--muted);font-size:12px}
@@ -614,7 +625,7 @@ function Cursus() {
           .c-main{padding:28px 24px 80px}
           .c-hero{padding:38px 40px}
           .c-track{padding:20px}
-          .c-track-title{font-size:22px}
+          .c-track-title{font-size:24px}
           .c-thumb{width:160px}
           .c-player{padding:20px}
         }
