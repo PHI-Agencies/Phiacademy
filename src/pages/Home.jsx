@@ -1,312 +1,152 @@
-import React, { useState } from "react";
 import {
   ArrowRight,
   BookOpen,
-  ChevronRight,
   Home as HomeIcon,
-  ShoppingBag,
-  UsersRound,
+  Landmark,
   Play,
-  X,
-  Search,
+  ShieldCheck,
+  ShoppingBag,
+  TrendingUp,
+  UsersRound,
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
 
 import Navbar from "../components/Navbar";
+import { TRACKS } from "../data/cursusData";
+
+const TRACK_STYLE = {
+  trading: { Icon: TrendingUp, cta: "Apprendre le trading" },
+  brvm: { Icon: Landmark, cta: "Comprendre la BRVM" },
+};
 
 function Home() {
   const navigate = useNavigate();
 
-  const [searchOpen, setSearchOpen] = useState(false);
+  // Le cursus est ouvert directement : la page /cursus redirige vers la
+  // connexion seulement si le client n'est pas encore connecté.
+  const goCursus = () => navigate("/cursus");
 
-  const modules = [
-    {
-      number: "01",
-      title: "Comprendre le trading",
-      description:
-        "Découvrez les bases du trading et le fonctionnement des marchés.",
-      lessons: 6,
-    },
-    {
-      number: "02",
-      title: "Lire un graphique",
-      description:
-        "Apprenez à comprendre les chandeliers, les mouvements et la structure d'un graphique.",
-      lessons: 7,
-    },
-    {
-      number: "03",
-      title: "Analyse technique",
-      description:
-        "Découvrez les principaux outils utilisés pour analyser les marchés.",
-      lessons: 8,
-    },
-    {
-      number: "04",
-      title: "Price Action",
-      description:
-        "Comprenez le comportement du prix et les structures importantes.",
-      lessons: 6,
-    },
-    {
-      number: "05",
-      title: "Gestion du risque",
-      description:
-        "Apprenez à protéger votre capital et à gérer votre exposition.",
-      lessons: 5,
-    },
-    {
-      number: "06",
-      title: "Psychologie du trader",
-      description:
-        "Travaillez votre discipline et votre rapport aux décisions de trading.",
-      lessons: 5,
-    },
-  ];
+  const tracks = TRACKS.map((track) => ({
+    ...track,
+    lessonCount: track.modules.reduce(
+      (total, module) => total + module.lessons.length,
+      0
+    ),
+  }));
 
   return (
     <div className="phi-app">
       <Navbar />
 
-       {/* =========================
-          MOBILE APP HEADER
-      ========================= */}
-
-      <header className="mobile-header">
-        <div className="brand-area">
-          <div className="brand-wordmark">
-            PHI <span>ACADEMY</span>
-          </div>
-        </div>
-
-        <div className="header-actions">
-          <button
-            className="header-icon"
-            onClick={() => setSearchOpen(!searchOpen)}
-            aria-label="Rechercher"
-          >
-            {searchOpen ? <X size={20} /> : <Search size={20} />}
-          </button>
-        </div>
-      </header>
-
-      {/* =========================
-          SEARCH
-      ========================= */}
-
-      {searchOpen && (
-        <div className="search-panel">
-          <div className="search-box">
-            <Search size={18} />
-
-            <input
-              type="text"
-              placeholder="Rechercher une leçon..."
-              autoFocus
-            />
-          </div>
-        </div>
-      )}
-
       <main className="app-main">
-        {/* =========================
-            WELCOME
-        ========================= */}
+        {/* ===== ACCUEIL ===== */}
 
         <section className="welcome">
-          <span className="welcome-label">
-            PHI ACADEMY
-          </span>
+          <span className="welcome-label">PHI ACADEMY</span>
 
           <h1>
-            Prêt à apprendre
+            Apprenez le <span>trading</span>
             <br />
-            le <span>trading</span> ?
+            et la <b>BRVM</b>.
           </h1>
 
           <p>
-            Un parcours structuré pour apprendre les bases
-            du trading, étape par étape.
+            Deux parcours en vidéo, étape par étape, pour comprendre
+            avant d'investir.
           </p>
         </section>
 
-        {/* =========================
-            MAIN LEARNING CARD
-        ========================= */}
+        {/* ===== LES DEUX PARCOURS ===== */}
 
-        <section className="learning-card">
-          <div className="learning-content">
-            <div className="learning-icon">
-              <BookOpen size={23} />
-            </div>
+        <section className="tracks">
+          {tracks.map((track) => {
+            const { Icon, cta } = TRACK_STYLE[track.id];
 
-            <span className="card-label">
-              VOTRE PARCOURS
-            </span>
-
-            <h2>
-              Apprendre le trading
-            </h2>
-
-            <p>
-              Découvrez les différents thèmes et choisissez
-              la partie que vous souhaitez étudier.
-            </p>
-
-            <button
-              className="primary-button"
-              onClick={() => navigate("/connexion-cursus")}
-            >
-              <span>Voir le parcours</span>
-              <ArrowRight size={18} />
-            </button>
-          </div>
-
-          {/* Illustration */}
-
-          <div className="learning-visual">
-            <div className="chart-grid" />
-
-            <svg
-              viewBox="0 0 220 140"
-              className="chart-svg"
-              aria-hidden="true"
-            >
-              <line
-                x1="15"
-                y1="115"
-                x2="205"
-                y2="115"
-                className="chart-axis"
-              />
-
-              <line
-                x1="15"
-                y1="30"
-                x2="15"
-                y2="115"
-                className="chart-axis"
-              />
-
-              <polyline
-                points="
-                  18,102
-                  39,94
-                  56,98
-                  72,76
-                  91,84
-                  108,60
-                  126,67
-                  143,43
-                  160,49
-                  181,25
-                  202,31
-                "
-                className="chart-line"
-              />
-
-              <circle
-                cx="181"
-                cy="25"
-                r="4"
-                className="chart-point"
-              />
-            </svg>
-
-            <div className="chart-tag">
-              TRADING
-            </div>
-          </div>
-        </section>
-
-        {/* =========================
-            CURSUS
-        ========================= */}
-
-        <section className="section">
-          <div className="section-header">
-            <div>
-              <span>APPRENTISSAGE</span>
-              <h2>Votre parcours</h2>
-            </div>
-
-            <button
-              onClick={() => navigate("/connexion-cursus")}
-              className="section-link"
-            >
-              Tout voir
-              <ChevronRight size={16} />
-            </button>
-          </div>
-
-          <div className="module-list">
-            {modules.map((module) => (
-              <button
-                key={module.number}
-                className="module"
-                onClick={() => navigate("/connexion-cursus")}
+            return (
+              <article
+                key={track.id}
+                className={`track-card ${track.id}`}
               >
-                <div className="module-number">
-                  {module.number}
-                </div>
+                <div className="track-head">
+                  <span className="track-icon">
+                    <Icon size={24} />
+                  </span>
 
-                <div className="module-info">
-                  <h3>
-                    {module.title}
-                  </h3>
-
-                  <p>
-                    {module.description}
-                  </p>
-
-                  <span className="lesson-count">
-                    {module.lessons} ressources
+                  <span className="track-count">
+                    {track.modules.length} modules · {track.lessonCount}{" "}
+                    vidéos
                   </span>
                 </div>
 
-                <ChevronRight
-                  size={18}
-                  className="module-arrow"
-                />
-              </button>
-            ))}
-          </div>
+                <h2>{track.label}</h2>
+
+                <p>{track.tagline}</p>
+
+                <ul className="track-topics">
+                  {track.modules.slice(0, 4).map((module) => (
+                    <li key={module.title}>{module.title}</li>
+                  ))}
+
+                  {track.modules.length > 4 && (
+                    <li className="more">
+                      +{track.modules.length - 4} autres
+                    </li>
+                  )}
+                </ul>
+
+                <button
+                  type="button"
+                  className="track-button"
+                  onClick={goCursus}
+                >
+                  {cta}
+                  <ArrowRight size={17} />
+                </button>
+              </article>
+            );
+          })}
         </section>
 
-        {/* =========================
-            YOUTUBE EXPLANATION
-        ========================= */}
+        {/* ===== COMMENT ÇA MARCHE ===== */}
 
-        <section className="resource-info-card">
-          <div className="youtube-icon">
-            <Play
-              size={18}
-              fill="currentColor"
-            />
+        <section className="info-card">
+          <div className="info-icon">
+            <Play size={18} fill="currentColor" />
           </div>
 
           <div>
-            <span>
-              RESSOURCES
-            </span>
+            <span>RESSOURCES</span>
 
-            <h2>
-              Apprenez directement auprès
-              de ressources sélectionnées.
-            </h2>
+            <h2>Des vidéos sélectionnées, dans un ordre logique.</h2>
 
             <p>
-              Chaque partie du parcours vous propose
-              des vidéos et ressources externes sélectionnées
-              pour vous aider à apprendre.
+              Chaque module réunit des vidéos de formateurs différents,
+              en français. Vous cochez ce que vous avez vu et vous
+              reprenez quand vous voulez.
             </p>
           </div>
         </section>
 
-        {/* =========================
-            SERVICES
-        ========================= */}
+        <section className="info-card warning">
+          <div className="info-icon">
+            <ShieldCheck size={19} />
+          </div>
+
+          <div>
+            <span>À SAVOIR</span>
+
+            <h2>Contenu informatif, pas de conseil financier.</h2>
+
+            <p>
+              Le trading comporte un risque de perte. Méfiez-vous de
+              toute personne qui promet des gains garantis ou qui vous
+              demande de lui confier de l'argent.
+            </p>
+          </div>
+        </section>
+
+        {/* ===== SERVICES ===== */}
 
         <section className="space-card">
           <div className="space-icon">
@@ -314,32 +154,20 @@ function Home() {
           </div>
 
           <div className="space-content">
-            <span>
-              ESPACE SERVICES
-            </span>
+            <span>ESPACE SERVICES</span>
 
-            <h2>
-              Guides, formations
-              et accompagnement.
-            </h2>
+            <h2>Guides, formations et accompagnement.</h2>
 
-            <p>
-              Découvrez les services proposés
-              par PHI Academy.
-            </p>
+            <p>Découvrez les services proposés par PHI Academy.</p>
 
-            <button
-              onClick={() => navigate("/services")}
-            >
+            <button type="button" onClick={() => navigate("/services")}>
               Découvrir
               <ArrowRight size={16} />
             </button>
           </div>
         </section>
 
-        {/* =========================
-            PARRAINAGE
-        ========================= */}
+        {/* ===== PARRAINAGE ===== */}
 
         <section className="space-card referral">
           <div className="space-icon">
@@ -347,21 +175,17 @@ function Home() {
           </div>
 
           <div className="space-content">
-            <span>
-              ESPACE PARRAINAGE
-            </span>
+            <span>ESPACE PARRAINAGE</span>
 
-            <h2>
-              Développez votre
-              réseau avec PHI Academy.
-            </h2>
+            <h2>Développez votre réseau avec PHI Academy.</h2>
 
             <p>
-              Retrouvez votre lien de parrainage,
-              vos filleuls et vos commissions.
+              Retrouvez votre lien de parrainage, vos filleuls et vos
+              commissions.
             </p>
 
             <button
+              type="button"
               onClick={() => navigate("/connexion-parrainage")}
             >
               Mon parrainage
@@ -369,892 +193,323 @@ function Home() {
             </button>
           </div>
         </section>
-
-        <div className="bottom-space" />
       </main>
 
-      {/* =========================
-          MOBILE BOTTOM NAV
-      ========================= */}
+      {/* ===== MENU DU BAS (téléphone) ===== */}
 
       <nav className="bottom-nav">
         <button
+          type="button"
           className="active"
           onClick={() => navigate("/")}
         >
           <HomeIcon size={20} />
-
-          <span>
-            Accueil
-          </span>
+          <span>Accueil</span>
         </button>
 
-        <button
-          onClick={() => navigate("/connexion-cursus")}
-        >
+        <button type="button" onClick={goCursus}>
           <BookOpen size={20} />
-
-          <span>
-            Apprendre
-          </span>
+          <span>Apprendre</span>
         </button>
 
-        <button
-          onClick={() => navigate("/services")}
-        >
+        <button type="button" onClick={() => navigate("/services")}>
           <ShoppingBag size={20} />
-
-          <span>
-            Services
-          </span>
+          <span>Services</span>
         </button>
 
         <button
+          type="button"
           onClick={() => navigate("/connexion-parrainage")}
         >
           <UsersRound size={20} />
-
-          <span>
-            Parrainage
-          </span>
+          <span>Parrainage</span>
         </button>
       </nav>
 
       <style>{`
-
-        /* =========================
-           PALETTE : BLEU • BLANC • ORANGE
-        ========================= */
-
         .phi-app {
           --blue-900: #061A4A;
-          --blue-800: #0A2A6B;
+          --blue-800: #0A2A66;
           --blue-700: #103A8C;
           --blue-100: #E6EEFC;
           --blue-50:  #F1F5FD;
-
           --orange: #FF7A1A;
+          --orange-dark: #E86405;
           --orange-text: #D9590A;
           --orange-soft: #FFF0E3;
-
           --ink: #0A1B44;
           --muted: #5F6E8A;
           --muted-2: #8794AD;
           --line: #DFE6F2;
           --bg: #F4F7FC;
-        }
 
-        * {
-          box-sizing: border-box;
-        }
-
-        body {
-          margin: 0;
-          background: #F4F7FC;
-          color: #0A1B44;
-
-          font-family:
-            Inter,
-            -apple-system,
-            BlinkMacSystemFont,
-            "Segoe UI",
-            sans-serif;
-
+          min-height: 100vh;
+          min-height: 100dvh;
+          background: var(--bg);
+          color: var(--ink);
+          font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
           -webkit-font-smoothing: antialiased;
         }
 
-        button {
-          font: inherit;
+        .phi-app *,
+        .phi-app *::before,
+        .phi-app *::after {
+          box-sizing: border-box;
         }
 
-        /* =========================
-           APP
-        ========================= */
-
-        .phi-app {
-          min-height: 100vh;
-          background: var(--bg);
+        .phi-app button {
+          font-family: inherit;
         }
 
+        /* La barre du haut est fixe (68 px sur téléphone, 76 px ailleurs) */
         .app-main {
           width: 100%;
-          max-width: 620px;
-
+          max-width: 760px;
           margin: 0 auto;
-
-          padding:
-            18px
-            16px
-            105px;
+          padding: 92px 16px 110px;
         }
 
-        /* =========================
-           MOBILE HEADER
-        ========================= */
-
-        .mobile-header {
-          position: sticky;
-          top: 0;
-          z-index: 50;
-
-          height: 67px;
-
-          padding: 0 16px;
-
-          background:
-            rgba(255,255,255,0.94);
-
-          border-bottom:
-            1px solid var(--line);
-
-          backdrop-filter: blur(18px);
-
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-
-        .brand-area {
-          display: flex;
-          align-items: center;
-          gap: 9px;
-        }
-
-        .mobile-logo {
-          width: 39px;
-          height: 39px;
-
-          flex: 0 0 auto;
-
-          border-radius: 12px;
-
-          overflow: hidden;
-
-          background: var(--blue-800);
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          border: 2px solid var(--orange);
-
-          box-shadow:
-            0 5px 15px
-            rgba(10,42,107,0.2);
-        }
-
-        .mobile-logo img {
-          width: 100%;
-          height: 100%;
-
-          display: block;
-
-          object-fit: cover;
-        }
-
-        .brand-name {
-          display: flex;
-          flex-direction: column;
-          line-height: 1;
-        }
-
-        .brand-name strong {
-          color: var(--blue-800);
-
-          font-size: 14px;
-
-          letter-spacing: 0.08em;
-        }
-
-        .brand-name span {
-          margin-top: 3px;
-
-          color: var(--orange-text);
-
-          font-size: 8px;
-          font-weight: 800;
-
-          letter-spacing: 0.18em;
-        }
-
-        .brand-wordmark {
-          color: var(--blue-800);
-
-          font-size: 20px;
-          font-weight: 800;
-
-          letter-spacing: -0.5px;
-        }
-
-        .brand-wordmark span {
-          color: var(--orange);
-        }
-
-        .header-actions {
-          display: flex;
-          align-items: center;
-        }
-
-        .header-icon {
-          width: 40px;
-          height: 40px;
-
-          border: 0;
-          border-radius: 12px;
-
-          background: var(--blue-50);
-
-          color: var(--blue-800);
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          cursor: pointer;
-
-          transition: background 160ms ease, color 160ms ease;
-        }
-
-        .header-icon:hover {
-          background: var(--orange-soft);
-          color: var(--orange-text);
-        }
-
-        /* =========================
-           SEARCH
-        ========================= */
-
-        .search-panel {
-          padding:
-            10px
-            16px
-            2px;
-
-          background: #fff;
-        }
-
-        .search-box {
-          height: 46px;
-
-          padding: 0 14px;
-
-          border:
-            1px solid var(--line);
-
-          border-radius: 13px;
-
-          background: var(--blue-50);
-
-          color: var(--muted-2);
-
-          display: flex;
-          align-items: center;
-          gap: 9px;
-        }
-
-        .search-box:focus-within {
-          border-color: var(--orange);
-          background: #fff;
-        }
-
-        .search-box input {
-          width: 100%;
-
-          border: 0;
-          outline: 0;
-
-          background: transparent;
-
-          color: var(--ink);
-
-          font-size: 13px;
-        }
-
-        /* =========================
-           WELCOME
-        ========================= */
+        /* ===== ACCUEIL ===== */
 
         .welcome {
-          padding:
-            17px
-            2px
-            22px;
+          padding: 4px 2px 22px;
         }
 
         .welcome-label {
           display: inline-block;
-
-          margin-bottom: 10px;
-
-          padding: 5px 10px;
-
+          margin-bottom: 12px;
+          padding: 6px 12px;
           border-radius: 999px;
-
           background: var(--orange-soft);
-
           color: var(--orange-text);
-
-          font-size: 9px;
-          font-weight: 900;
-
-          letter-spacing: 0.16em;
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: .15em;
         }
 
         .welcome h1 {
           margin: 0;
-
           color: var(--blue-800);
-
-          font-size: 31px;
-          line-height: 1.1;
-
-          letter-spacing: -0.045em;
-
+          font-size: clamp(32px, 8vw, 46px);
+          line-height: 1.08;
+          letter-spacing: -.045em;
           font-weight: 500;
         }
 
         .welcome h1 span {
+          color: var(--blue-800);
+          font-weight: 800;
+        }
+
+        .welcome h1 b {
           color: var(--orange);
           font-weight: 800;
         }
 
         .welcome p {
-          max-width: 360px;
-
-          margin:
-            12px 0 0;
-
+          max-width: 440px;
+          margin: 14px 0 0;
           color: var(--muted);
+          font-size: 15px;
+          line-height: 1.6;
+        }
 
+        /* ===== LES DEUX PARCOURS ===== */
+
+        .tracks {
+          display: grid;
+          gap: 14px;
+        }
+
+        .track-card {
+          position: relative;
+          overflow: hidden;
+          padding: 22px;
+          border-radius: 24px;
+          color: #fff;
+          box-shadow: 0 16px 38px rgba(10, 42, 102, .22);
+        }
+
+        .track-card.trading {
+          background:
+            radial-gradient(circle at 100% 0%, rgba(255,122,26,.3), transparent 50%),
+            linear-gradient(135deg, var(--blue-900), var(--blue-800) 55%, var(--blue-700));
+        }
+
+        .track-card.brvm {
+          background:
+            radial-gradient(circle at 100% 0%, rgba(255,255,255,.18), transparent 50%),
+            linear-gradient(135deg, #C85200, var(--orange-dark) 50%, #FF8F3D);
+          box-shadow: 0 16px 38px rgba(232, 100, 5, .3);
+        }
+
+        .track-head {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          margin-bottom: 16px;
+        }
+
+        .track-icon {
+          width: 46px;
+          height: 46px;
+          border-radius: 14px;
+          display: grid;
+          place-items: center;
+          background: rgba(255,255,255,.18);
+          color: #fff;
+        }
+
+        .track-count {
+          padding: 6px 11px;
+          border-radius: 999px;
+          background: rgba(255,255,255,.18);
+          font-size: 12px;
+          font-weight: 700;
+        }
+
+        .track-card h2 {
+          margin: 0 0 6px;
+          font-size: 26px;
+          line-height: 1.1;
+          letter-spacing: -.035em;
+        }
+
+        .track-card > p {
+          margin: 0 0 16px;
+          color: rgba(255,255,255,.88);
+          font-size: 14px;
+          line-height: 1.5;
+        }
+
+        .track-topics {
+          list-style: none;
+          margin: 0 0 20px;
+          padding: 0;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 7px;
+        }
+
+        .track-topics li {
+          padding: 6px 11px;
+          border-radius: 999px;
+          background: rgba(255,255,255,.14);
+          font-size: 12px;
+          font-weight: 600;
+        }
+
+        .track-topics li.more {
+          background: transparent;
+          border: 1px dashed rgba(255,255,255,.45);
+        }
+
+        .track-button {
+          width: 100%;
+          min-height: 48px;
+          border: 0;
+          border-radius: 13px;
+          background: #fff;
+          color: var(--blue-800);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          font-size: 14px;
+          font-weight: 800;
+          cursor: pointer;
+          transition: transform .16s ease;
+        }
+
+        .track-card.brvm .track-button {
+          color: var(--orange-text);
+        }
+
+        .track-button:hover {
+          transform: translateY(-1px);
+        }
+
+        /* ===== BLOCS D'INFORMATION ===== */
+
+        .info-card {
+          margin-top: 14px;
+          padding: 18px;
+          display: flex;
+          gap: 14px;
+          border: 1px solid var(--line);
+          border-radius: 20px;
+          background: #fff;
+        }
+
+        .info-card:first-of-type {
+          margin-top: 26px;
+        }
+
+        .info-icon {
+          width: 42px;
+          height: 42px;
+          flex: 0 0 auto;
+          border-radius: 12px;
+          display: grid;
+          place-items: center;
+          background: var(--blue-800);
+          color: #fff;
+        }
+
+        .info-card.warning {
+          border-left: 4px solid var(--orange);
+        }
+
+        .info-card.warning .info-icon {
+          background: var(--orange-soft);
+          color: var(--orange-text);
+        }
+
+        .info-card span {
+          display: block;
+          margin-bottom: 5px;
+          color: var(--orange-text);
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: .14em;
+        }
+
+        .info-card h2 {
+          margin: 0;
+          color: var(--blue-800);
+          font-size: 16px;
+          line-height: 1.35;
+        }
+
+        .info-card p {
+          margin: 7px 0 0;
+          color: var(--muted);
           font-size: 13px;
           line-height: 1.6;
         }
 
-        /* =========================
-           LEARNING CARD
-        ========================= */
-
-        .learning-card {
-          position: relative;
-
-          min-height: 245px;
-
-          overflow: hidden;
-
-          padding: 22px;
-
-          border-radius: 24px;
-
-          background:
-            radial-gradient(
-              circle at 100% 0%,
-              rgba(255,122,26,0.28),
-              transparent 55%
-            ),
-            linear-gradient(
-              135deg,
-              var(--blue-900) 0%,
-              var(--blue-800) 55%,
-              var(--blue-700) 100%
-            );
-
-          box-shadow:
-            0 18px 45px
-            rgba(10,42,107,0.28);
-
-          display: flex;
-          justify-content: space-between;
-          gap: 10px;
-        }
-
-        .learning-content {
-          position: relative;
-          z-index: 2;
-
-          width: 62%;
-        }
-
-        .learning-icon {
-          width: 42px;
-          height: 42px;
-
-          margin-bottom: 16px;
-
-          border-radius: 12px;
-
-          background:
-            rgba(255,122,26,0.18);
-
-          color: var(--orange);
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .card-label {
-          display: block;
-
-          margin-bottom: 7px;
-
-          color: #FFB680;
-
-          font-size: 9px;
-          font-weight: 900;
-
-          letter-spacing: 0.16em;
-        }
-
-        .learning-content h2 {
-          margin: 0;
-
-          color: #fff;
-
-          font-size: 21px;
-          line-height: 1.15;
-
-          letter-spacing: -0.03em;
-        }
-
-        .learning-content p {
-          margin:
-            9px 0 17px;
-
-          color: #C3D0EC;
-
-          font-size: 11px;
-          line-height: 1.55;
-        }
-
-        .primary-button {
-          min-height: 42px;
-
-          padding: 0 15px;
-
-          border: 0;
-          border-radius: 11px;
-
-          background: var(--orange);
-          color: #fff;
-
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-
-          font-size: 11px;
-          font-weight: 800;
-
-          cursor: pointer;
-
-          box-shadow:
-            0 10px 22px
-            rgba(255,122,26,0.4);
-
-          transition: transform 160ms ease, background 160ms ease;
-        }
-
-        .primary-button:hover {
-          background: #E86405;
-          transform: translateY(-1px);
-        }
-
-        /* =========================
-           CHART
-        ========================= */
-
-        .learning-visual {
-          position: absolute;
-
-          right: -5px;
-          bottom: 0;
-
-          width: 45%;
-          height: 100%;
-
-          opacity: 0.95;
-        }
-
-        .chart-grid {
-          position: absolute;
-          inset: 0;
-
-          background-image:
-            linear-gradient(
-              rgba(255,255,255,0.06) 1px,
-              transparent 1px
-            ),
-            linear-gradient(
-              90deg,
-              rgba(255,255,255,0.06) 1px,
-              transparent 1px
-            );
-
-          background-size:
-            27px 27px;
-
-          mask-image:
-            linear-gradient(
-              90deg,
-              transparent,
-              black
-            );
-        }
-
-        .chart-svg {
-          position: absolute;
-
-          right: -12px;
-          bottom: 15px;
-
-          width: 240px;
-          height: 155px;
-        }
-
-        .chart-axis {
-          stroke: rgba(255,255,255,0.14);
-          stroke-width: 1;
-        }
-
-        .chart-line {
-          fill: none;
-
-          stroke: var(--orange);
-
-          stroke-width: 2.6;
-
-          stroke-linecap: round;
-          stroke-linejoin: round;
-        }
-
-        .chart-point {
-          fill: #fff;
-          stroke: var(--orange);
-          stroke-width: 2;
-
-          filter:
-            drop-shadow(
-              0 0 8px
-              rgba(255,122,26,0.9)
-            );
-        }
-
-        .chart-tag {
-          position: absolute;
-
-          right: 17px;
-          top: 19px;
-
-          padding:
-            5px 8px;
-
-          border:
-            1px solid
-            rgba(255,255,255,0.25);
-
-          border-radius: 6px;
-
-          background:
-            rgba(255,255,255,0.1);
-
-          color: #fff;
-
-          font-size: 8px;
-          font-weight: 900;
-
-          letter-spacing: 0.12em;
-        }
-
-        /* =========================
-           SECTION
-        ========================= */
-
-        .section {
-          margin-top: 34px;
-        }
-
-        .section-header {
-          margin-bottom: 14px;
-
-          display: flex;
-          align-items: flex-end;
-          justify-content: space-between;
-          gap: 10px;
-        }
-
-        .section-header span {
-          display: block;
-
-          margin-bottom: 4px;
-
-          color: var(--orange-text);
-
-          font-size: 9px;
-          font-weight: 900;
-
-          letter-spacing: 0.17em;
-        }
-
-        .section-header h2 {
-          margin: 0;
-
-          color: var(--blue-800);
-
-          font-size: 21px;
-
-          letter-spacing: -0.035em;
-        }
-
-        .section-link {
-          border: 0;
-          background: var(--orange-soft);
-
-          padding: 7px 10px;
-          border-radius: 999px;
-
-          color: var(--orange-text);
-
-          display: flex;
-          align-items: center;
-          gap: 2px;
-
-          font-size: 11px;
-          font-weight: 800;
-
-          cursor: pointer;
-        }
-
-        /* =========================
-           MODULES
-        ========================= */
-
-        .module-list {
-          display: grid;
-          gap: 9px;
-        }
-
-        .module {
-          width: 100%;
-
-          min-height: 92px;
-
-          padding: 13px;
-
-          border:
-            1px solid var(--line);
-
-          border-left:
-            4px solid var(--blue-700);
-
-          border-radius: 17px;
-
-          background: #fff;
-
-          display: flex;
-          align-items: center;
-          gap: 12px;
-
-          text-align: left;
-
-          cursor: pointer;
-
-          transition:
-            transform 160ms ease,
-            box-shadow 160ms ease,
-            border-color 160ms ease;
-        }
-
-        .module:nth-child(even) {
-          border-left-color: var(--orange);
-        }
-
-        .module:hover {
-          transform: translateY(-2px);
-
-          border-color:
-            var(--orange);
-
-          box-shadow:
-            0 10px 26px
-            rgba(10,42,107,0.1);
-        }
-
-        .module-number {
-          width: 40px;
-          height: 40px;
-
-          flex: 0 0 auto;
-
-          border-radius: 12px;
-
-          background: var(--blue-100);
-
-          color: var(--blue-800);
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          font-size: 11px;
-          font-weight: 900;
-        }
-
-        .module:nth-child(even) .module-number {
-          background:
-            var(--orange-soft);
-
-          color:
-            var(--orange-text);
-        }
-
-        .module-info {
-          min-width: 0;
-          flex: 1;
-        }
-
-        .module-info h3 {
-          margin: 0;
-
-          color: var(--ink);
-
-          font-size: 13px;
-          line-height: 1.3;
-
-          font-weight: 800;
-        }
-
-        .module-info p {
-          margin:
-            4px 0;
-
-          color: var(--muted);
-
-          font-size: 11px;
-          line-height: 1.45;
-        }
-
-        .lesson-count {
-          display: block;
-
-          color: var(--orange-text);
-
-          font-size: 10px;
-          font-weight: 800;
-        }
-
-        .module-arrow {
-          flex: 0 0 auto;
-
-          color: var(--muted-2);
-        }
-
-        /* =========================
-           RESOURCE INFO
-        ========================= */
-
-        .resource-info-card {
-          margin-top: 34px;
-
-          padding: 18px;
-
-          border:
-            1px solid var(--line);
-
-          border-radius: 19px;
-
-          background: #fff;
-
-          display: flex;
-          gap: 13px;
-        }
-
-        .youtube-icon {
-          width: 40px;
-          height: 40px;
-
-          flex: 0 0 auto;
-
-          border-radius: 11px;
-
-          background: var(--orange);
-
-          color: #fff;
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          box-shadow:
-            0 8px 18px
-            rgba(255,122,26,0.35);
-        }
-
-        .resource-info-card span {
-          display: block;
-
-          margin-bottom: 5px;
-
-          color: var(--orange-text);
-
-          font-size: 9px;
-          font-weight: 900;
-
-          letter-spacing: 0.15em;
-        }
-
-        .resource-info-card h2 {
-          margin: 0;
-
-          color: var(--blue-800);
-
-          font-size: 14px;
-          line-height: 1.35;
-        }
-
-        .resource-info-card p {
-          margin:
-            7px 0 0;
-
-          color: var(--muted);
-
-          font-size: 11px;
-          line-height: 1.55;
-        }
-
-        /* =========================
-           SPACES
-        ========================= */
+        /* ===== SERVICES & PARRAINAGE ===== */
 
         .space-card {
-          margin-top: 12px;
-
+          margin-top: 14px;
           padding: 19px;
-
-          border:
-            1px solid var(--line);
-
-          border-radius: 20px;
-
-          background: #fff;
-
           display: flex;
-          gap: 13px;
+          gap: 14px;
+          border: 1px solid var(--line);
+          border-radius: 20px;
+          background: #fff;
         }
 
         .space-icon {
-          width: 42px;
-          height: 42px;
-
+          width: 44px;
+          height: 44px;
           flex: 0 0 auto;
-
-          border-radius: 12px;
-
+          border-radius: 13px;
+          display: grid;
+          place-items: center;
           background: var(--blue-800);
-
           color: var(--orange);
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
         }
 
         .space-content {
@@ -1263,56 +518,41 @@ function Home() {
 
         .space-content span {
           display: block;
-
           margin-bottom: 5px;
-
           color: var(--orange-text);
-
-          font-size: 9px;
-          font-weight: 900;
-
-          letter-spacing: 0.15em;
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: .14em;
         }
 
         .space-content h2 {
           margin: 0;
-
           color: var(--blue-800);
-
-          font-size: 15px;
+          font-size: 17px;
           line-height: 1.35;
         }
 
         .space-content p {
-          margin:
-            7px 0 12px;
-
+          margin: 7px 0 14px;
           color: var(--muted);
-
-          font-size: 11px;
-          line-height: 1.55;
+          font-size: 13px;
+          line-height: 1.6;
         }
 
         .space-content button {
-          padding: 9px 13px;
-
+          min-height: 42px;
+          padding: 0 16px;
           border: 0;
-          border-radius: 10px;
-
+          border-radius: 11px;
           background: var(--blue-800);
-
           color: #fff;
-
           display: inline-flex;
           align-items: center;
           gap: 7px;
-
-          font-size: 11px;
+          font-size: 13px;
           font-weight: 800;
-
           cursor: pointer;
-
-          transition: background 160ms ease;
+          transition: background .16s ease;
         }
 
         .space-content button:hover {
@@ -1320,14 +560,8 @@ function Home() {
         }
 
         .referral {
-          border-color: rgba(255,122,26,0.4);
-
-          background:
-            linear-gradient(
-              135deg,
-              #ffffff,
-              var(--orange-soft)
-            );
+          border-color: rgba(255,122,26,.4);
+          background: linear-gradient(135deg, #fff, var(--orange-soft));
         }
 
         .referral .space-icon {
@@ -1340,72 +574,42 @@ function Home() {
         }
 
         .referral .space-content button:hover {
-          background: #E86405;
+          background: var(--orange-dark);
         }
 
-        .bottom-space {
-          height: 12px;
-        }
-
-        /* =========================
-           BOTTOM NAV
-        ========================= */
+        /* ===== MENU DU BAS ===== */
 
         .bottom-nav {
           position: fixed;
-
           z-index: 100;
-
           right: 0;
           bottom: 0;
           left: 0;
-
           height: 70px;
-
-          padding:
-            7px
-            max(10px, env(safe-area-inset-left))
-            max(7px, env(safe-area-inset-bottom))
-            max(10px, env(safe-area-inset-right));
-
-          border-top:
-            1px solid var(--line);
-
-          background:
-            rgba(255,255,255,0.96);
-
-          backdrop-filter:
-            blur(18px);
-
-          -webkit-backdrop-filter:
-            blur(18px);
-
+          padding: 7px 10px max(7px, env(safe-area-inset-bottom));
+          border-top: 1px solid var(--line);
+          background: rgba(255,255,255,.96);
+          backdrop-filter: blur(18px);
+          -webkit-backdrop-filter: blur(18px);
           display: grid;
-
-          grid-template-columns:
-            repeat(4, 1fr);
+          grid-template-columns: repeat(4, 1fr);
         }
 
         .bottom-nav button {
           position: relative;
-
           border: 0;
           background: transparent;
-
           color: var(--muted-2);
-
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-
           gap: 4px;
-
           cursor: pointer;
         }
 
         .bottom-nav button span {
-          font-size: 9px;
+          font-size: 11px;
           font-weight: 700;
         }
 
@@ -1419,112 +623,48 @@ function Home() {
 
         .bottom-nav button.active::before {
           content: "";
-
           position: absolute;
-
           top: -7px;
-
           width: 24px;
           height: 3px;
-
           border-radius: 999px;
-
           background: var(--orange);
         }
 
-        /* =========================
-           TABLET / DESKTOP
-        ========================= */
+        /* ===== TABLETTE / ORDINATEUR ===== */
 
         @media (min-width: 768px) {
-
-          .mobile-header {
-            display: none;
-          }
-
           .app-main {
-            max-width: 760px;
-
-            padding-top: 50px;
+            padding-top: 116px;
           }
 
-          .module-list {
+          .tracks {
             grid-template-columns: 1fr 1fr;
           }
 
           .bottom-nav {
-            width: 620px;
-
-            right: 50%;
-            left: auto;
-
-            transform:
-              translateX(50%);
-
-            bottom: 15px;
-
-            border:
-              1px solid var(--line);
-
-            border-radius: 19px;
-
-            box-shadow:
-              0 15px 45px
-              rgba(10,42,107,0.14);
+            display: none;
           }
-        }
-
-        /* =========================
-           SMALL PHONES
-        ========================= */
-
-        @media (max-width: 360px) {
 
           .app-main {
-            padding-left: 13px;
-            padding-right: 13px;
-          }
-
-          .welcome h1 {
-            font-size: 27px;
-          }
-
-          .learning-card {
-            min-height: 265px;
-            padding: 18px;
-          }
-
-          .learning-content {
-            width: 68%;
-          }
-
-          .learning-visual {
-            width: 46%;
-          }
-
-          .learning-content h2 {
-            font-size: 18px;
-          }
-
-          .module-info p {
-            font-size: 10px;
+            padding-bottom: 70px;
           }
         }
 
-        /* =========================
-           REDUCED MOTION
-        ========================= */
+        @media (max-width: 520px) {
+          .app-main {
+            padding-top: 84px;
+          }
+        }
 
         @media (prefers-reduced-motion: reduce) {
-
-          *,
-          *::before,
-          *::after {
+          .phi-app *,
+          .phi-app *::before,
+          .phi-app *::after {
             transition: none !important;
             animation: none !important;
           }
         }
-
       `}</style>
     </div>
   );
