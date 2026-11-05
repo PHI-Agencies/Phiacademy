@@ -679,7 +679,7 @@ function Navbar() {
           className="phi-mobile-nav"
           aria-label="Navigation mobile"
         >
-          {navItems.map((item, index) => (
+          {navItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
@@ -691,11 +691,7 @@ function Navbar() {
               }
               onClick={() => setMenuOpen(false)}
             >
-              <span>
-                {String(index + 1).padStart(2, "0")}
-                {"  "}
-                {item.label}
-              </span>
+              <span>{item.label}</span>
 
               <span className="phi-mobile-arrow">
                 →
