@@ -26,7 +26,7 @@ function Navbar() {
     },
     {
       label: "Cursus",
-      path: "/connexion-cursus",
+      path: "/cursus",
     },
     {
       label: "Services",
