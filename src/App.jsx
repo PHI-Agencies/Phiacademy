@@ -5,6 +5,7 @@ import ConnexionCursus from "./pages/ConnexionCursus";
 import ConnexionParrainage from "./pages/ConnexionParrainage";
 import Cursus from "./pages/Cursus";
 import Services from "./pages/Services";
+import Broker from "./pages/Broker";
 import Parrainage from "./pages/Parrainage";
 import Invitation from "./pages/Invitation";
 import Retrait from "./pages/Retrait";
@@ -43,6 +44,11 @@ function App() {
         <Route
           path="/services"
           element={<Services />}
+        />
+
+        <Route
+          path="/broker"
+          element={<Broker />}
         />
 
         <Route
