@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 import {
   BookOpen,
   Check,
@@ -7,7 +8,6 @@ import {
   ChevronRight,
   ExternalLink,
   Landmark,
-  Menu,
   Play,
   ShieldCheck,
   TrendingUp,
@@ -52,7 +52,6 @@ function Cursus() {
 
   const [authorized, setAuthorized] = useState(false);
   const [firstName, setFirstName] = useState("");
-  const [menuOpen, setMenuOpen] = useState(false);
 
   const [trackId, setTrackId] = useState("trading");
   const [openModule, setOpenModule] = useState(0);
@@ -110,11 +109,11 @@ function Cursus() {
   /* ---------- Scroll bloqué + Échap ---------- */
 
   useEffect(() => {
-    document.body.style.overflow = menuOpen || player ? "hidden" : "";
+    document.body.style.overflow = player ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [menuOpen, player]);
+  }, [player]);
 
   useEffect(() => {
     if (!player) return undefined;
@@ -212,71 +211,7 @@ function Cursus() {
 
   return (
     <div className="cursus-page">
-      <header className="c-header">
-        <div className="c-header-in">
-          <Link to="/" className="c-brand">
-            <strong>PHI</strong> <span>ACADEMY</span>
-          </Link>
-
-          <nav className="c-nav">
-            <Link to="/">Accueil</Link>
-            <Link to="/cursus" className="on">
-              Cursus
-            </Link>
-            <Link to="/services">Services</Link>
-            <Link to="/connexion-parrainage?redirect=/parrainage">
-              Parrainage
-            </Link>
-            <Link to="/mot-de-passe">Mot de passe</Link>
-          </nav>
-
-          <button
-            type="button"
-            className="c-burger"
-            aria-label="Menu"
-            onClick={() => setMenuOpen(true)}
-          >
-            <Menu size={22} />
-          </button>
-        </div>
-      </header>
-
-      {menuOpen && (
-        <div className="c-overlay" onClick={() => setMenuOpen(false)}>
-          <nav className="c-mobile" onClick={(e) => e.stopPropagation()}>
-            <button
-              type="button"
-              className="c-close"
-              aria-label="Fermer"
-              onClick={() => setMenuOpen(false)}
-            >
-              <X size={22} />
-            </button>
-            <Link to="/" onClick={() => setMenuOpen(false)}>
-              Accueil
-            </Link>
-            <Link
-              to="/cursus"
-              className="on"
-              onClick={() => setMenuOpen(false)}
-            >
-              Cursus
-            </Link>
-            <Link to="/services" onClick={() => setMenuOpen(false)}>
-              Services
-            </Link>
-            <Link
-              to="/connexion-parrainage?redirect=/parrainage"
-              onClick={() => setMenuOpen(false)}
-            >
-              Parrainage
-            </Link>
-            <Link to="/mot-de-passe" onClick={() => setMenuOpen(false)}>
-              Mot de passe
-            </Link>
-          </nav>
-        </div>
-      )}
+      <Navbar />
 
       <main className="c-main">
         <section className="c-hero">
@@ -524,7 +459,7 @@ function Cursus() {
           -webkit-font-smoothing:antialiased;
         }
         .cursus-page *{box-sizing:border-box}
-        .cursus-page a{text-decoration:none;color:inherit}
+        .c-main a{text-decoration:none;color:inherit}
         .cursus-page button{font-family:inherit;cursor:pointer}
 
         .c-header{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line)}
@@ -542,7 +477,7 @@ function Cursus() {
         .c-mobile .c-close{position:absolute;top:12px;right:12px}
         .c-close{border:0;background:var(--b1);color:var(--b8);width:38px;height:38px;border-radius:10px;display:grid;place-items:center;flex:none}
 
-        .c-main{max-width:1100px;margin:0 auto;padding:20px 16px 60px}
+        .c-main{max-width:1100px;margin:0 auto;padding:92px 16px 60px}
 
         .c-hero{background:linear-gradient(135deg,var(--b9),var(--b7));color:#fff;border-radius:20px;padding:24px 20px}
         .c-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;letter-spacing:1.2px;color:#FFB27A;margin-bottom:10px}
@@ -622,7 +557,7 @@ function Cursus() {
         @media (min-width:760px){
           .c-nav{display:flex}
           .c-burger{display:none}
-          .c-main{padding:28px 24px 80px}
+          .c-main{padding:106px 24px 80px}
           .c-hero{padding:38px 40px}
           .c-track{padding:20px}
           .c-track-title{font-size:24px}
