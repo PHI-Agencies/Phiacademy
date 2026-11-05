@@ -29,6 +29,10 @@ function Navbar() {
       path: "/cursus",
     },
     {
+      label: "Broker",
+      path: "/broker",
+    },
+    {
       label: "Services",
       path: "/services",
     },
