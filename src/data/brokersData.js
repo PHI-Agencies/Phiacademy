@@ -1,4 +1,10 @@
-
+/*
+ * Brokers recommandés par PHI Academy.
+ *
+ * ► Pour activer vos codes partenaires : collez votre lien partenaire dans
+ *   `partnerUrl` de chaque broker. Tant qu'il est vide, le bouton ouvre le
+ *   site officiel (sans code partenaire).
+ */
 
 export const SUPPORT_WHATSAPP = "22603031400";
 
@@ -29,7 +35,7 @@ export const BROKERS = [
     domain: "exness.com",
     logo: "/brokers/exness.png",
     officialUrl: "https://www.exness.com",
-    partnerUrl: "",
+    partnerUrl: "https://one.toexness.com/a/e0oe858o1q",
   },
   {
     id: "weltrade",
@@ -48,7 +54,7 @@ export const BROKERS = [
     domain: "weltrade.com",
     logo: "/brokers/weltrade.png",
     officialUrl: "https://www.weltrade.com",
-    partnerUrl: "",
+    partnerUrl: "https://track.gowt.me/visit/?bta=94078&brand=weltrade",
   },
   {
     id: "ig",
@@ -86,7 +92,7 @@ export const BROKERS = [
     domain: "binance.com",
     logo: "/brokers/binance.png",
     officialUrl: "https://www.binance.com",
-    partnerUrl: "",
+    partnerUrl: "https://www.binance.com/referral/earn-together/refer2earn-usdc/claim?hl=fr&ref=GRO_28502_1DEGP&utm_source=referral_entrance",
   },
   {
     id: "xm",
