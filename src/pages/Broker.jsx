@@ -1,11 +1,3 @@
-/*
- * Brokers recommandés par PHI Academy.
- *
- * ► Pour activer vos codes partenaires : collez votre lien partenaire dans
- *   `partnerUrl` de chaque broker. Tant qu'il est vide, le bouton ouvre le
- *   site officiel (sans code partenaire).
- */
-
 export const SUPPORT_WHATSAPP = "22603031400";
 
 export const ACCOMPANIMENT_PRICE = 5000; // FCFA
