@@ -186,7 +186,7 @@ function ConnexionCursus() {
        * "pending".
        *
        * On demande ensuite au serveur de créer
-       * la facture PayDunya de 10 000 FCFA.
+       * la facture PayDunya de 15 000 FCFA.
        */
       const paymentResponse = await fetch(
         "/api/payment/create",
@@ -638,7 +638,7 @@ function ConnexionCursus() {
             >
               <div className="connexion-info">
                 L’accès à PHI Academy coûte{" "}
-                <strong>10 000 FCFA</strong>.
+                <strong>15 000 FCFA</strong>.
                 <br />
                 Un code de parrainage valide est
                 obligatoire pour créer votre compte.
@@ -781,7 +781,7 @@ function ConnexionCursus() {
 
               <div className="connexion-price">
                 Montant de l’accès :{" "}
-                <strong>10 000 FCFA</strong>
+                <strong>15 000 FCFA</strong>
               </div>
 
               <button
