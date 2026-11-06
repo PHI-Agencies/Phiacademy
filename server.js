@@ -28,6 +28,10 @@ const PAYDUNYA_MASTER_KEY = process.env.MASTER_KEY;
 const PAYDUNYA_PRIVATE_KEY = process.env.PRIVATE_KEY;
 const PAYDUNYA_TOKEN = process.env.TOKEN;
 
+// Un compte créé mais jamais payé est supprimé après ce délai (en minutes)
+const PENDING_ACCOUNT_MINUTES =
+  Number(process.env.PENDING_ACCOUNT_MINUTES) || 30;
+
 const CALLBACK_URL = process.env.CALLBACK_URL;
 const RETURN_URL = process.env.RETURN_URL;
 const CANCEL_URL =
@@ -39,8 +43,12 @@ const ADMIN_EMAIL = String(process.env.ADMIN_EMAIL || "")
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
 
-const MEMBERSHIP_PRICE = 500;
-const REFERRAL_COMMISSION = 100;
+const MEMBERSHIP_PRICE = 15000;
+// Commission de parrainage : 3 000 FCFA pour les 10 premiers filleuls,
+// puis 5 000 FCFA à partir du 11e.
+const REFERRAL_COMMISSION = 3000;
+const REFERRAL_COMMISSION_BONUS = 5000;
+const REFERRAL_BONUS_THRESHOLD = 10;
 
 /* =========================================================
    EXPRESS
@@ -930,6 +938,27 @@ async function processReferralCommission(
     return false;
   }
 
+  const previousCommissions =
+    await db
+      .collection("transactions")
+      .countDocuments(
+        {
+          userId:
+            referrer._id,
+
+          type:
+            "referral_commission"
+        },
+        {
+          session
+        }
+      );
+
+  const commissionToPay =
+    previousCommissions >= REFERRAL_BONUS_THRESHOLD
+      ? REFERRAL_COMMISSION_BONUS
+      : REFERRAL_COMMISSION;
+
   await db
     .collection("users")
     .updateOne(
@@ -940,7 +969,7 @@ async function processReferralCommission(
       {
         $inc: {
           balance:
-            REFERRAL_COMMISSION
+            commissionToPay
         },
 
         $set: {
@@ -964,7 +993,7 @@ async function processReferralCommission(
           "referral_commission",
 
         amount:
-          REFERRAL_COMMISSION,
+          commissionToPay,
 
         paymentId:
           payment._id,
@@ -996,7 +1025,7 @@ async function processReferralCommission(
             "paid",
 
           commissionAmount:
-            REFERRAL_COMMISSION,
+            commissionToPay,
 
           commissionPaidAt:
             new Date(),
@@ -1287,30 +1316,40 @@ app.post(
         });
       }
 
-      const existingUser =
-        await db
-          .collection("users")
-          .findOne({
-            $or: [
-              {
-                email:
-                  cleanEmail
-              },
+      // Comptes déjà existants avec cet e-mail ou ce numéro
+      const matches = await db
+        .collection("users")
+        .find({
+          $or: [
+            { email: cleanEmail },
+            { phone: cleanPhone }
+          ]
+        })
+        .toArray();
 
-              {
-                phone:
-                  cleanPhone
-              }
-            ]
+      // Un compte actif (ou un paiement déjà réussi) bloque l'inscription
+      for (const match of matches) {
+        const hasPaid = await db
+          .collection("payments")
+          .findOne({
+            userId: match._id,
+            status: "completed"
           });
 
-      if (existingUser) {
-        return res.status(409).json({
-          success:
-            false,
+        if (match.status !== "pending" || hasPaid) {
+          return res.status(409).json({
+            success: false,
+            message:
+              "Un compte existe déjà avec cet email ou ce numéro. Connectez-vous."
+          });
+        }
+      }
 
-          message:
-            "Un compte existe déjà avec cet email ou ce numéro."
+      // Anciennes inscriptions jamais payées : on repart de zéro
+      if (matches.length > 0) {
+        await db.collection("users").deleteMany({
+          _id: { $in: matches.map((match) => match._id) },
+          status: "pending"
         });
       }
 
@@ -2672,11 +2711,19 @@ app.get(
           user.pendingWithdrawal ||
           0,
 
-        referrals: referrals.map((referral) => ({
-          ...referral,
-          status: "active",
-          commission: REFERRAL_COMMISSION
-        })),
+        referrals: referrals.map((referral, index) => {
+          // La liste est triée du plus récent au plus ancien :
+          // le rang d'ancienneté du filleul détermine la commission.
+          const rank = referrals.length - index;
+          return {
+            ...referral,
+            status: "active",
+            commission:
+              rank > REFERRAL_BONUS_THRESHOLD
+                ? REFERRAL_COMMISSION_BONUS
+                : REFERRAL_COMMISSION
+          };
+        }),
 
         transactions,
 
@@ -3648,12 +3695,79 @@ process.on(
 );
 
 /* =========================================================
+   NETTOYAGE DES INSCRIPTIONS NON PAYÉES
+========================================================= */
+
+async function cleanupUnpaidAccounts() {
+  try {
+    if (!db) return;
+
+    const cutoff = new Date(
+      Date.now() - PENDING_ACCOUNT_MINUTES * 60 * 1000
+    );
+
+    const candidates = await db
+      .collection("users")
+      .find(
+        {
+          status: "pending",
+          updatedAt: { $lt: cutoff }
+        },
+        { projection: { _id: 1 } }
+      )
+      .limit(200)
+      .toArray();
+
+    if (candidates.length === 0) return;
+
+    const ids = candidates.map((user) => user._id);
+
+    // On ne touche jamais à un compte qui a un paiement réussi
+    const paid = await db
+      .collection("payments")
+      .find({
+        userId: { $in: ids },
+        status: "completed"
+      })
+      .project({ userId: 1 })
+      .toArray();
+
+    const paidIds = new Set(
+      paid.map((payment) => String(payment.userId))
+    );
+
+    const toDelete = ids.filter(
+      (id) => !paidIds.has(String(id))
+    );
+
+    if (toDelete.length === 0) return;
+
+    const result = await db.collection("users").deleteMany({
+      _id: { $in: toDelete },
+      status: "pending"
+    });
+
+    if (result.deletedCount > 0) {
+      console.log(
+        `[NETTOYAGE] ${result.deletedCount} inscription(s) non payée(s) supprimée(s).`
+      );
+    }
+  } catch (error) {
+    console.error("Erreur nettoyage inscriptions :", error);
+  }
+}
+
+/* =========================================================
    DÉMARRAGE
 ========================================================= */
 
 async function startServer() {
   try {
     await connectDB();
+
+    // Nettoyage au démarrage puis toutes les 5 minutes
+    cleanupUnpaidAccounts();
+    setInterval(cleanupUnpaidAccounts, 5 * 60 * 1000);
 
     app.listen(
       PORT,
