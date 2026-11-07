@@ -152,6 +152,14 @@ function ConnexionCursus() {
       return;
     }
 
+    if (!/^[^\s@]+@(gmail|googlemail)\.com$/i.test(registerData.email.trim())) {
+      setMessage(
+        "Une adresse Gmail est obligatoire (exemple : nom@gmail.com)."
+      );
+      setLoading(false);
+      return;
+    }
+
     const parsedPhone = parsePhoneNumberFromString(registerData.phone);
 
   if (!parsedPhone || !parsedPhone.isValid()) {
@@ -461,6 +469,28 @@ function ConnexionCursus() {
           line-height: 1.45;
         }
 
+        .connexion-hint {
+          display: block;
+          margin-top: 6px;
+          font-size: 12px;
+          line-height: 1.5;
+          color: #5F6E8A;
+        }
+
+        .connexion-forgot {
+          display: block;
+          text-align: center;
+          margin-top: 4px;
+          font-size: 14px;
+          font-weight: 700;
+          color: #103A8C;
+          text-decoration: none;
+        }
+
+        .connexion-forgot:hover {
+          text-decoration: underline;
+        }
+
         .connexion-submit {
           height: 52px;
           border: 0;
@@ -630,6 +660,13 @@ function ConnexionCursus() {
                   ? "Connexion..."
                   : "Se connecter"}
               </button>
+
+              <Link
+                to="/mot-de-passe-oublie"
+                className="connexion-forgot"
+              >
+                Mot de passe oublié ?
+              </Link>
             </form>
           ) : (
             <form
@@ -740,9 +777,13 @@ function ConnexionCursus() {
                   autoComplete="email"
                   value={registerData.email}
                   onChange={handleRegisterChange}
-                  placeholder="votre@email.com"
+                  placeholder="votre.nom@gmail.com"
                   required
                 />
+                <small className="connexion-hint">
+                  Une adresse Gmail est obligatoire. Elle servira à retrouver
+                  votre compte si vous oubliez votre mot de passe.
+                </small>
               </div>
 
               <div className="connexion-field">
