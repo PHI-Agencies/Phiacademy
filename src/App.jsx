@@ -12,6 +12,7 @@ import Retrait from "./pages/Retrait";
 import MotDePasse from "./pages/MotDePasse";
 import AdminLogin from "./pages/AdminLogin";
 import AdminRetraits from "./pages/AdminRetraits";
+import TermsGate from "./components/TermsGate";
 
 function App() {
   return (
@@ -85,6 +86,8 @@ function App() {
           element={<AdminRetraits />}
         />
       </Routes>
+
+      <TermsGate />
     </BrowserRouter>
   );
 }
