@@ -233,6 +233,20 @@ function ConnexionParrainage() {
           line-height: 1.45;
         }
 
+        .parrainage-login-forgot {
+          display: block;
+          text-align: center;
+          margin-top: 4px;
+          font-size: 14px;
+          font-weight: 700;
+          color: var(--blue-700);
+          text-decoration: none;
+        }
+
+        .parrainage-login-forgot:hover {
+          text-decoration: underline;
+        }
+
         .parrainage-login-submit {
           height: 52px;
           border: 0;
@@ -381,6 +395,13 @@ function ConnexionParrainage() {
                 ? "Connexion..."
                 : "Accéder au parrainage"}
             </button>
+
+            <Link
+              to="/mot-de-passe-oublie?scope=parrainage"
+              className="parrainage-login-forgot"
+            >
+              Mot de passe oublié ?
+            </Link>
           </form>
 
           <div className="parrainage-login-register">
