@@ -21,7 +21,7 @@ const POINTS = [
   },
   {
     title: "Vos données",
-    text: "Nom, email, téléphone et mot de passe chiffré, utilisés uniquement pour faire fonctionner votre compte. Jamais vendus. Les paiements sont traités par PayDunya.",
+    text: "Nom, Gmail, téléphone et mot de passe chiffré, utilisés uniquement pour faire fonctionner votre compte. Jamais vendus. Les paiements sont traités par PayDunya.",
   },
   {
     title: "Cookies",
