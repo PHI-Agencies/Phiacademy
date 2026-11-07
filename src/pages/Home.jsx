@@ -10,7 +10,7 @@ import {
   UsersRound,
 } from "lucide-react";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import Navbar from "../components/Navbar";
 import { TRACKS } from "../data/cursusData";
@@ -193,6 +193,14 @@ function Home() {
             </button>
           </div>
         </section>
+
+        <p className="legal-links">
+          <Link to="/conditions">Conditions d’utilisation</Link>
+          <span>·</span>
+          <Link to="/confidentialite">Confidentialité</Link>
+          <span>·</span>
+          <Link to="/confidentialite#cookies">Cookies</Link>
+        </p>
       </main>
 
       {/* ===== MENU DU BAS (téléphone) ===== */}
@@ -629,6 +637,28 @@ function Home() {
           height: 3px;
           border-radius: 999px;
           background: var(--orange);
+        }
+
+
+        .legal-links {
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin: 26px 0 0;
+          font-size: 13px;
+          color: #8794AD;
+        }
+
+        .legal-links a {
+          color: #5F6E8A;
+          text-decoration: none;
+          font-weight: 600;
+        }
+
+        .legal-links a:hover {
+          color: #103A8C;
+          text-decoration: underline;
         }
 
         /* ===== TABLETTE / ORDINATEUR ===== */
