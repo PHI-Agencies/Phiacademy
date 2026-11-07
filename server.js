@@ -3,6 +3,9 @@ const path = require("path");
 const crypto = require("crypto");
 const axios = require("axios");
 const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+const { OAuth2Client } = require("google-auth-library");
 const { MongoClient, ObjectId } = require("mongodb");
 const {
   registerWithdrawalRoutes,
@@ -43,6 +46,12 @@ const ADMIN_EMAIL = String(process.env.ADMIN_EMAIL || "")
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
 
+// Identifiant client Google (Console Google Cloud > Identifiants)
+const GOOGLE_CLIENT_ID = String(process.env.GOOGLE_CLIENT_ID || "").trim();
+const googleClient = GOOGLE_CLIENT_ID
+  ? new OAuth2Client(GOOGLE_CLIENT_ID)
+  : null;
+
 const MEMBERSHIP_PRICE = 15000;
 // Commission de parrainage : 3 000 FCFA pour les 10 premiers filleuls,
 // puis 5 000 FCFA à partir du 11e.
@@ -54,9 +63,63 @@ const REFERRAL_BONUS_THRESHOLD = 10;
    EXPRESS
 ========================================================= */
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Render place le serveur derrière un proxy : nécessaire pour lire la vraie IP
+app.set("trust proxy", 1);
+
+app.use(
+  helmet({
+    // La politique de contenu sera définie lors de l'audit de sécurité
+    contentSecurityPolicy: false,
+    // Autorise la fenêtre de connexion Google
+    crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
+    crossOriginEmbedderPolicy: false
+  })
+);
+
+app.use(express.json({ limit: "100kb" }));
+app.use(express.urlencoded({ extended: true, limit: "100kb" }));
 app.use(cookieParser());
+
+/* =========================================================
+   LIMITES DE TENTATIVES
+========================================================= */
+
+function makeLimiter(windowMinutes, limit, message, skipSuccess = false) {
+  return rateLimit({
+    windowMs: windowMinutes * 60 * 1000,
+    limit,
+    standardHeaders: true,
+    legacyHeaders: false,
+    skipSuccessfulRequests: skipSuccess,
+    message: { success: false, message }
+  });
+}
+
+const loginLimiter = makeLimiter(
+  15,
+  10,
+  "Trop de tentatives. Réessayez dans 15 minutes.",
+  true
+);
+
+const registerLimiter = makeLimiter(
+  60,
+  10,
+  "Trop d'inscriptions depuis cette connexion. Réessayez dans une heure."
+);
+
+const recoveryLimiter = makeLimiter(
+  15,
+  10,
+  "Trop de tentatives. Réessayez dans 15 minutes."
+);
+
+const adminLoginLimiter = makeLimiter(
+  15,
+  5,
+  "Trop de tentatives. Réessayez dans 15 minutes.",
+  true
+);
 
 app.use(
   "/images",
@@ -123,6 +186,17 @@ async function createIndexes() {
   await users.createIndex(
     { phone: 1 },
     { unique: true }
+  );
+
+  // Clé Gmail normalisée : un seul compte par boîte Gmail
+  await users.createIndex(
+    { emailKey: 1 },
+    {
+      unique: true,
+      partialFilterExpression: {
+        emailKey: { $type: "string" }
+      }
+    }
   );
 
   await users.createIndex(
@@ -214,6 +288,37 @@ function normalizeEmail(email) {
     .trim()
     .toLowerCase();
 }
+
+/*
+ * Gmail ignore les points et la partie après "+" :
+ * jean.dupont+x@gmail.com et jeandupont@gmail.com sont la même boîte.
+ * On calcule une clé unique pour empêcher les comptes en double.
+ * Retourne "" si l'adresse n'est pas une adresse Gmail.
+ */
+function gmailKey(email) {
+  const clean = normalizeEmail(email);
+  const at = clean.lastIndexOf("@");
+
+  if (at < 1) return "";
+
+  const domain = clean.slice(at + 1);
+
+  if (domain !== "gmail.com" && domain !== "googlemail.com") {
+    return "";
+  }
+
+  const local = clean
+    .slice(0, at)
+    .split("+")[0]
+    .replace(/\./g, "");
+
+  if (!/^[a-z0-9]{3,64}$/.test(local)) return "";
+
+  return `${local}@gmail.com`;
+}
+
+const GMAIL_REQUIRED_MESSAGE =
+  "Une adresse Gmail est obligatoire (exemple : nom@gmail.com).";
 
 function normalizePhone(phone) {
   return String(phone || "")
@@ -1217,6 +1322,7 @@ app.get(
 
 app.post(
   "/api/auth/register",
+  registerLimiter,
   async (req, res) => {
     try {
       const {
@@ -1270,6 +1376,21 @@ app.post(
         });
       }
 
+      const cleanEmailKey =
+        gmailKey(
+          cleanEmail
+        );
+
+      if (!cleanEmailKey) {
+        return res.status(400).json({
+          success:
+            false,
+
+          message:
+            GMAIL_REQUIRED_MESSAGE
+        });
+      }
+
       if (
         String(password).length <
         8
@@ -1304,6 +1425,12 @@ app.post(
       if (
         referrer.email ===
           cleanEmail ||
+        referrer.emailKey ===
+          cleanEmailKey ||
+        gmailKey(
+          referrer.email
+        ) ===
+          cleanEmailKey ||
         referrer.phone ===
           cleanPhone
       ) {
@@ -1322,6 +1449,7 @@ app.post(
         .find({
           $or: [
             { email: cleanEmail },
+            { emailKey: cleanEmailKey },
             { phone: cleanPhone }
           ]
         })
@@ -1400,6 +1528,9 @@ app.post(
 
         email:
           cleanEmail,
+
+        emailKey:
+          cleanEmailKey,
 
         passwordHash,
 
@@ -2041,6 +2172,7 @@ app.get(
 
 app.post(
   "/api/auth/login",
+  loginLimiter,
   async (req, res) => {
     try {
       const {
@@ -2282,6 +2414,229 @@ app.post(
 );
 
 /* =========================================================
+   MOT DE PASSE OUBLIÉ — confirmation par Google
+   Le client prouve qu'il possède la boîte Gmail de son compte.
+========================================================= */
+
+const GOOGLE_PROOF_MAX_AGE_SECONDS = 10 * 60;
+
+const NO_ACCOUNT_MESSAGE =
+  "Aucun compte PHI Academy actif n'est lié à cette adresse Gmail. Contactez le service client.";
+
+async function verifyGoogleCredential(credential) {
+  if (!googleClient) {
+    const error = new Error("google_not_configured");
+    error.code = "NOT_CONFIGURED";
+    throw error;
+  }
+
+  const ticket = await googleClient.verifyIdToken({
+    idToken: String(credential || ""),
+    audience: GOOGLE_CLIENT_ID
+  });
+
+  const payload = ticket.getPayload();
+
+  if (!payload?.email || payload.email_verified !== true) {
+    throw new Error("email_not_verified");
+  }
+
+  const ageSeconds =
+    Math.floor(Date.now() / 1000) - Number(payload.iat || 0);
+
+  if (ageSeconds > GOOGLE_PROOF_MAX_AGE_SECONDS) {
+    const error = new Error("proof_too_old");
+    error.code = "TOO_OLD";
+    throw error;
+  }
+
+  return {
+    email: normalizeEmail(payload.email),
+    key: gmailKey(payload.email)
+  };
+}
+
+async function findAccountForGoogle(identity) {
+  if (!identity.key) return null;
+
+  let user = await db.collection("users").findOne({
+    $or: [
+      { emailKey: identity.key },
+      { email: identity.email }
+    ]
+  });
+
+  /*
+   * Anciens comptes créés avant la clé Gmail : on compare en
+   * ignorant points et "+" sur les adresses Gmail existantes.
+   */
+  if (!user) {
+    const legacy = await db
+      .collection("users")
+      .find({
+        emailKey: { $exists: false },
+        email: { $regex: "@(gmail|googlemail)\\.com$" }
+      })
+      .limit(5000)
+      .toArray();
+
+    user =
+      legacy.find((candidate) => gmailKey(candidate.email) === identity.key) ||
+      null;
+  }
+
+  return user && user.status === "active" ? user : null;
+}
+
+function googleErrorResponse(res, error) {
+  if (error?.code === "NOT_CONFIGURED") {
+    return res.status(503).json({
+      success: false,
+      message:
+        "La confirmation par Google n'est pas encore disponible. Contactez le service client."
+    });
+  }
+
+  if (error?.code === "TOO_OLD") {
+    return res.status(401).json({
+      success: false,
+      message: "La confirmation a expiré. Recommencez avec Google."
+    });
+  }
+
+  return res.status(401).json({
+    success: false,
+    message: "Confirmation Google invalide. Recommencez."
+  });
+}
+
+app.post(
+  "/api/auth/google-check",
+  recoveryLimiter,
+  async (req, res) => {
+    try {
+      const identity = await verifyGoogleCredential(
+        req.body.credential
+      );
+
+      if (!identity.key) {
+        return res.status(400).json({
+          success: false,
+          message: GMAIL_REQUIRED_MESSAGE
+        });
+      }
+
+      const user = await findAccountForGoogle(identity);
+
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: NO_ACCOUNT_MESSAGE
+        });
+      }
+
+      return res.json({
+        success: true,
+        firstName: user.firstName,
+        email: identity.email
+      });
+    } catch (error) {
+      if (!error?.code) {
+        console.error("Erreur vérification Google :", error.message);
+      }
+      return googleErrorResponse(res, error);
+    }
+  }
+);
+
+app.post(
+  "/api/auth/google-reset",
+  recoveryLimiter,
+  async (req, res) => {
+    try {
+      const newPassword = String(req.body.newPassword || "");
+
+      if (newPassword.length < 8) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Le mot de passe doit contenir au moins 8 caractères."
+        });
+      }
+
+      if (newPassword.length > 200) {
+        return res.status(400).json({
+          success: false,
+          message: "Mot de passe trop long."
+        });
+      }
+
+      const identity = await verifyGoogleCredential(
+        req.body.credential
+      );
+
+      const user = await findAccountForGoogle(identity);
+
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: NO_ACCOUNT_MESSAGE
+        });
+      }
+
+      const passwordHash = await hashPassword(newPassword);
+      const sessionToken = generateSessionToken();
+
+      await db.collection("users").updateOne(
+        { _id: user._id },
+        {
+          $set: {
+            passwordHash,
+            sessionTokenHash: hashSessionToken(sessionToken),
+            secureTokenHash: null,
+            secureUntil: null,
+            passwordChangedAt: new Date(),
+            updatedAt: new Date(),
+            // Mémorise la clé Gmail pour les comptes plus anciens
+            emailKey: identity.key
+          }
+        }
+      );
+
+      setSessionCookie(res, sessionToken);
+
+      const scope =
+        req.body.scope === "parrainage" ? "parrainage" : "cursus";
+
+      if (scope === "parrainage") {
+        await issueSecureSession(res, user._id);
+      } else {
+        clearSecureCookie(res);
+      }
+
+      return res.json({
+        success: true,
+        message: "Mot de passe modifié. Vous êtes connecté.",
+        redirect: scope === "parrainage" ? "/parrainage" : "/cursus"
+      });
+    } catch (error) {
+      if (error?.code === 11000) {
+        return res.status(409).json({
+          success: false,
+          message: "Cette adresse Gmail est déjà liée à un autre compte."
+        });
+      }
+
+      if (!error?.code) {
+        console.error("Erreur réinitialisation Google :", error.message);
+      }
+
+      return googleErrorResponse(res, error);
+    }
+  }
+);
+
+/* =========================================================
    CHANGEMENT DE MOT DE PASSE
 ========================================================= */
 
@@ -2434,6 +2789,7 @@ app.post(
 
 app.post(
   "/api/admin/login",
+  adminLoginLimiter,
   async (req, res) => {
     try {
       const {
