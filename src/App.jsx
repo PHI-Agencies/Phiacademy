@@ -12,6 +12,8 @@ import Retrait from "./pages/Retrait";
 import MotDePasse from "./pages/MotDePasse";
 import AdminLogin from "./pages/AdminLogin";
 import AdminRetraits from "./pages/AdminRetraits";
+import MotDePasseOublie from "./pages/MotDePasseOublie";
+import { Conditions, Confidentialite } from "./pages/Legal";
 import TermsGate from "./components/TermsGate";
 
 function App() {
@@ -65,6 +67,21 @@ function App() {
         <Route
           path="/retrait"
           element={<Retrait />}
+        />
+
+        <Route
+          path="/conditions"
+          element={<Conditions />}
+        />
+
+        <Route
+          path="/confidentialite"
+          element={<Confidentialite />}
+        />
+
+        <Route
+          path="/mot-de-passe-oublie"
+          element={<MotDePasseOublie />}
         />
 
         <Route
