@@ -2239,9 +2239,45 @@ app.get(
           0,
 
         referralCode:
-          user.referralCode
+          user.referralCode,
+
+        termsAccepted:
+          Boolean(user.termsAcceptedAt)
       }
     });
+  }
+);
+
+/* =========================================================
+   ACCEPTATION DES CONDITIONS (première connexion)
+========================================================= */
+
+const TERMS_VERSION = "2026-11";
+
+app.post(
+  "/api/auth/accept-terms",
+  requireAuth,
+  async (req, res) => {
+    try {
+      await db.collection("users").updateOne(
+        { _id: req.user._id },
+        {
+          $set: {
+            termsAcceptedAt: new Date(),
+            termsVersion: TERMS_VERSION,
+            updatedAt: new Date()
+          }
+        }
+      );
+
+      return res.json({ success: true });
+    } catch (error) {
+      console.error("Erreur acceptation conditions :", error);
+      return res.status(500).json({
+        success: false,
+        message: "Impossible d'enregistrer votre acceptation."
+      });
+    }
   }
 );
 
